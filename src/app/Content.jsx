@@ -70,7 +70,7 @@ function Content (props) {
             showMenu = <ContactsFrame menu={props.menu} data={props.data} alert={props.alert} popup={props.popup} />;
             break;
         case 'rooms':
-            showMenu = <RoomsFrame menu={props.menu} data={props.data} alert={props.alert} />;
+            showMenu = <RoomsFrame menu={props.menu} data={props.data} alert={props.alert} popup={props.popup} />;
             break;
         case 'settings':
             showMenu = <SettingsFrame data={props.data} setAuth={props.setAuth} alert={props.alert} />;

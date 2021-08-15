@@ -40,8 +40,9 @@ function SideBar (props) {
             b = b.history && b.history.length ? b.history[b.history.length-1].timestamp : 0;
             return b - a;
         }).map((v, i) => {
+            if (v.id === data.user.id) return;
             const lastMessage = v.history && v.history[0] ? v.history[v.history.length-1] : '';
-
+            
             if (props.data.socket.callData.current === v.id && props.data.socket.callData.state === 2 && !callTimeInt) { 
                 setCallTimeInt(setInterval(() => {
                     if (callTimeRef.current) callTimeRef.current.innerHTML = callTimeCount(props.data.socket.callData.timestamp);
@@ -61,7 +62,8 @@ function SideBar (props) {
             || lastMessage.text 
             || (lastMessage && lastMessage.files[0] ? (lastMessage.files[0][1].startsWith('image') ? 'Image':'File'):'')
             || (lastMessage && lastMessage.audio.uri ? 'Audio Message':'')
-            || (lastMessage && lastMessage.geo.lat ? 'Geolocation':''));
+            || (lastMessage && lastMessage.geo.lat ? 'Geolocation':''))
+            || (searchInput ? ' ':'');
 
             return (
                 <div key={i} className='sidebar-chat' onClick={() => setMenu(v.id)} style={{ backgroundColor: ['contacts', 'rooms'].includes(props.menu.get.type) && v.id === props.menu.get.id ? 'var(--blue-mid)':'inherit' }}>

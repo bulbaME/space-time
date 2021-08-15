@@ -68,7 +68,7 @@ class Socket {
                 case 'rooms':
                     temp = newData.rooms;
                     const loadProfiles = (v) => {
-                        if (!newData.profiles[v]) this.loadData({ type: 'profile', id: v })
+                        if (!newData.profiles[v] && v !== newData.user.id) this.loadData({ type: 'profile', id: v })
                     }
                 case 'chats':
                     if (!temp) temp = newData.chats;

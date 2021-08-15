@@ -205,6 +205,10 @@ const init = (io, db) => {
                     switch(reqData.type) {
                         case 'new':
                             let postBody = reqData.data;
+                            postBody.title = postBody.title ? postBody.title : '';
+                            postBody.text = postBody.text ? postBody.text : '';
+                            postBody.files = postBody.files ? postBody.files : [];
+
                             if (postBody.title.length <= 30 && postBody.text.length <= 1500 && (postBody.title || postBody.text || postBody.files.length))
                                 clientSocket.emit('main-data', { type: 'post', data: await db.user.post.new(userId, postBody)});
                             break;

@@ -2496,8 +2496,8 @@ textarea::-moz-scrollbar-thumb:hover {
 .profile-post-time {
     position: absolute;
     display: inline-block;
-    margin: 1vh;
-    margin-top: 1.3vh;
+    margin-left: 5vh;
+    margin-top: -3.5vh;
     margin-bottom: 0.5vh;
     font-family: 'DM Mono', monospace;
     font-weight: 300;
@@ -2535,8 +2535,8 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .profile-post-delete {
     position: absolute;
-    margin-left: 52.3vh;
-    margin-top: 0.8vh;
+    margin-left: 56.3vh;
+    margin-top: -4vh;
     fill: none;
     width: 2.5vh;
     height: 2.5vh;

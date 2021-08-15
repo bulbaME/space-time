@@ -11,7 +11,7 @@ const Socket = require('./modules/socket.js')
 const App = express();
 App.use(express.json());  // for parsing application/json
 App.use(express.urlencoded({ extended: true }));  // for parsing application/x-www-form-urlencoded
-App.use(express.static('public'));  // send page
+App.use(express.static(__dirname + '/public'));  // send page
 
 const PORT = process.env.PORT || 2007;
 const REDIS_PORT = process.env.REDIS_URL || 6379; 

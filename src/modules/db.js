@@ -218,7 +218,7 @@ class DB {
 				// create new post
 				async new(userId, content) {
 					// check for file size
-					if (content.files.reduce((p, c) => p + c) > content.files.length * MAX_FILE_SIZE) return;
+					if (content.files.length && content.files.reduce((p, c) => p + c) > content.files.length * MAX_FILE_SIZE) return;
 
 					const postId = `${userId}-${generateId(5)}`;
 					const files = [];
