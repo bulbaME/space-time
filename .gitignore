@@ -1,0 +1,8 @@
+# secrets 👀
+*-secret.json
+
+# node js modules
+node_modules
+
+# vs code data
+.vscode

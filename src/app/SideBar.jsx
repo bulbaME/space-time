@@ -1,0 +1,192 @@
+const React = require('react');
+
+import SearchIcon from './graphics/icon-search.jsx';
+import NotifIcon2 from './graphics/icon-notification2.jsx';
+import AddIcon from './graphics/icon-add.jsx';
+const Avatar = require('./Avatar.jsx');
+
+function SideBar (props) {
+    const data = props.data.get;
+    if (!data.user) return <></>;
+    const [sidebar, setSidebar] = React.useState({ type: 'contacts', id: ''});
+    const [searchInput, setSearchInput] = React.useState('');
+    const [searchTimeout, setSearchTimeout] = React.useState(0);
+    const [callTimeInt, setCallTimeInt] = React.useState(0);
+    const callTimeRef = React.useRef();
+
+    const callTimeCount = (timestamp) => {
+        let time = Date.now() - timestamp;
+        time = Math.floor(time / 1000);
+        const seconds = `${time % 60}`;
+        const minutes = Math.floor(seconds / 60);
+        return `Call ${minutes.length > 1 ? minutes:`0${minutes}`}:${seconds.length > 1 ? seconds:`0${seconds}`}`;
+    }
+
+    React.useEffect(() => {
+        props.data.socket.loadData({ type: 'chats' });
+        props.data.socket.loadData({ type: 'rooms' });
+        data.user.contacts.forEach(v => props.data.socket.loadData({ type: 'profile', id: v }));
+    }, []);
+
+    if (props.menu.get.type === 'contacts' && sidebar.type !== 'contacts') setSidebar({ type: 'contacts', id: ''});
+    else if (props.menu.get.type === 'rooms' && sidebar.type !== 'rooms') setSidebar({ type: 'rooms', id: ''});
+
+    const loadChats = (chats, setMenu) => {
+        if (!chats || !chats.filter(v => v).length) return [];
+        chats = chats.filter(v => v);
+
+        return chats.sort((a, b) => {
+            a = a.history && a.history.length ? a.history[a.history.length-1].timestamp : 0;
+            b = b.history && b.history.length ? b.history[b.history.length-1].timestamp : 0;
+            return b - a;
+        }).map((v, i) => {
+            const lastMessage = v.history && v.history[0] ? v.history[v.history.length-1] : '';
+
+            if (props.data.socket.callData.current === v.id && props.data.socket.callData.state === 2 && !callTimeInt) { 
+                setCallTimeInt(setInterval(() => {
+                    if (callTimeRef.current) callTimeRef.current.innerHTML = callTimeCount(props.data.socket.callData.timestamp);
+                }, 1000));        
+            }
+
+            if (props.data.socket.callData.state !== 2 && callTimeInt) {
+                clearInterval(callTimeInt);
+                setCallTimeInt(0);
+            }
+
+            const descr = (lastMessage && sidebar.type === 'rooms' ? `${lastMessage.sender === data.user.id ? 'You':data.profiles[lastMessage.sender].name}: `:'') + (
+            (props.data.socket.callData.current === v.id && props.data.socket.callData.state === 1 ? 'Outgoing Call':'')
+            || (props.data.socket.callData.current === v.id ? `Call 00:00`:'')
+            || (props.data.socket.callData.incomes.has(v.id) ? 'Incoming Call':'')
+            || (lastMessage.text && lastMessage.text.indexOf('<room-inv/') !== -1 ? 'Invite':'')
+            || lastMessage.text 
+            || (lastMessage && lastMessage.files[0] ? (lastMessage.files[0][1].startsWith('image') ? 'Image':'File'):'')
+            || (lastMessage && lastMessage.audio.uri ? 'Audio Message':'')
+            || (lastMessage && lastMessage.geo.lat ? 'Geolocation':''));
+
+            return (
+                <div key={i} className='sidebar-chat' onClick={() => setMenu(v.id)} style={{ backgroundColor: ['contacts', 'rooms'].includes(props.menu.get.type) && v.id === props.menu.get.id ? 'var(--blue-mid)':'inherit' }}>
+                    <Avatar className='sidebar-chat-logo' room={v.id[0] === 'r' ? v.name:''} url={v.avatar_url || ''} />
+                    {v.online ? <div id='sidebar-chat-online' />:''}
+                    {v.unread && v.unread.count ? (v.unread.id !== data.user.id ? <div className='sidebar-unread1' />:<div className='sidebar-unread2'>{v.unread.count <= 1000 ? v.unread.count:'999+'}</div>):''}
+                    <p className='sidebar-chat-name'>{v.name || ''}{data.user.muted.includes(v.id) ? <NotifIcon2 className='sidebar-chat-muted' />:''}</p>
+                    <p className='sidebar-chat-descr' ref={props.data.socket.callData.current === v.id && props.data.socket.callData.state === 2 ? callTimeRef : null} style={descr ? {}:{opacity: '0.7'}}>{descr || 'No messages yet'}</p>
+                </div>
+            );
+        });
+    }
+
+    const searchReq = {
+        setSearch: (data) => {
+            if (searchTimeout) clearTimeout(searchTimeout);
+            setSearchTimeout(setTimeout(() => {
+                props.data.socket.request('search', data)
+            }, 2000));
+        },
+
+        clearSearch: () => {
+            if (searchTimeout) clearTimeout(searchTimeout);
+        }
+    }
+
+    const afterSearch = (text, chats) => {
+        const splitText = text.split(' ');
+
+        const searchFunc = (compare, v) => {
+            let found = false;
+            splitText.forEach(t => {
+                if (compare && compare.indexOf(t) !== -1) found = true;
+            });
+
+            if (found) return v;
+        }
+
+        const userProfiles = [], userContacts = [];
+        for (let x in data.profiles) {
+            const body = {id: x, ...data.profiles[x]}
+            userProfiles.push(body);
+            if (data.user.contacts.includes(x.id)) userContacts.push(body);
+        }
+
+        const userRooms = [];
+        for (let x in data.rooms) {
+            const body = {id: x, ...data.rooms[x]}
+            userRooms.push(body);
+        }
+
+        // searching 
+        chats = chats.concat(userContacts.filter((v) => searchFunc(v.name, v)));
+        chats = chats.concat(userProfiles.filter((v) => searchFunc('#' + v.profile_id, v)));
+        chats = chats.concat(userRooms.filter((v) => searchFunc(v.name, v)));
+        chats = chats.concat(userRooms.filter((v) => searchFunc(v.room_id, v)));
+
+        return chats;
+    }
+
+    const search = (text) => {
+        let chats = []; 
+
+        if (!text) return [];
+
+        // profile search
+        if (text.indexOf('#') !== -1) {
+            let id = text.slice(text.indexOf('#')+1);
+            id = id.slice(0, id.indexOf(' ') === -1 ? id.length:id.indexOf(' '));
+
+            const profile = data.profiles[id];
+
+            if (!profile && id) searchReq.setSearch({ type: 'user', id });
+        }
+
+        // room search
+        if (text.indexOf('@') !== -1) {
+            let id = text.slice(text.indexOf('@')+1);
+            id = id.slice(0, id.indexOf(' ') === -1 ? id.length:id.indexOf(' '));
+
+            if (id) searchReq.setSearch('search', { type: 'room', id });
+        }
+
+        if (text.indexOf('#') + text.indexOf('@') < -1) searchReq.clearSearch();
+
+        afterSearch(text, chats);
+    }
+
+    const inputChange = (event) => {
+        const text = event.target.value;
+        setSearchInput(text);
+        search(text);
+    }
+
+    let chats
+    , chatMenuSet = (id) => props.menu.set({ type: data.user.contacts.includes(id) || data.chats[id] ? 'contacts':'profile', id })
+    , roomMenuSet = (id) => props.menu.set({ type: 'room', id });
+    if (searchInput) chats = loadChats(afterSearch(searchInput, []), chatMenuSet);
+    else if (sidebar.type === 'rooms') chats = loadChats(Object.values(data.rooms), (id) => props.menu.set({ type: 'rooms', id }), roomMenuSet);
+    else chats = (() => {
+        Object.values(data.chats).filter(v => !data.user.contacts.includes(v.id) && !data.profiles[v.id]).forEach(v => props.data.socket.loadData({ type: 'profile', id: v.id }));
+
+        return loadChats([
+            ...data.user.contacts.map(v => {
+                const chat = data.chats[v];
+                if (data.profiles[v]) return {...chat, ...data.profiles[v]};
+            }),
+            ...Object.values(data.chats).map(v => {
+                const profile = data.profiles[v.id];
+                if (profile && !data.user.contacts.includes(profile.id) && v.history.length) return {...v, ...profile};
+            }),
+            ...Array.from(props.data.socket.callData.incomes).map(v => {
+                const profile = data.profiles[v];
+                if (profile && !data.user.contacts.includes(v) && !data.chats[v] && props.data.socket.callData.current === v.id) return { ...profile, history: [] };
+            })], chatMenuSet);
+    })();
+
+    return <div id='sidebar'>
+            <div id='sidebar-search'>
+                <SearchIcon id='sidebar-search-icon' />
+                <input id='sidebar-search-input' autoComplete='off' placeholder='Search...' maxLength='20' onChange={inputChange} style={searchInput.indexOf('#') + searchInput.indexOf('@') >= -1 ? {fontFamily: `'DM Mono', monospace`, fontWeight: 400}:{}} />
+            </div>
+            {chats.length ? <div id='sidebar-chats'>{chats}</div>:<p id='sidebar-text'>{searchInput ? 'SEARCHING':(sidebar.type === 'rooms' ? 'NO ROOMS':'NO CONTACTS')}</p>}
+            {sidebar.type === 'rooms' ? <AddIcon id='sidebar-newroom' onClick={() => props.data.socket.request('room', { type: 'new' })} />:''}
+        </div>;
+}
+
+module.exports = SideBar;
