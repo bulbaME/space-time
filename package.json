@@ -39,7 +39,7 @@
   "scripts": {
     "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "watchify src/app/index.jsx -o src/public/ugly.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] ] -g [ envify --NODE_ENV production ] -g uglifyify | terser --compress --mangle",
+    "prod": "browserify src/app/index.jsx -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] ] -g [ envify --NODE_ENV production ] -g uglifyify | terser --mangle --compress > src/public/ugly.js",
     "debug-watch": "watchify src/app/index.jsx -o src/public/bundle.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] ]"
   },
   "repository": {

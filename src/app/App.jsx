@@ -5,7 +5,7 @@ const Content = require('./Content.jsx');
 const SideBar = require('./SideBar.jsx');
 const {Alert, Popup} = require('./Popup.jsx');
 const Socket = require('./Socket.js');
-
+ 
 let socketConnected = false;
 
 function App (props) {

@@ -15,7 +15,6 @@ const userAuthInit = (App, db) => {
             if (data) {
                 res.setHeader('Access-Control-Allow-Origin', 'http://localhost:2007');
                 res.status(202).json({ 'authorized': true });
-                console.log(`[AUTH] client authorized (${req.ip})`);
             }
             else {
                 res.status(400).cookie('auth-key', '').json({ 'authorized': false });  // reset wrong cookie
