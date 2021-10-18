@@ -14,7 +14,7 @@ const MAX_FILE_SIZE = 2_500_000; // == 5 000 000 bytes (a character is 16 bit)
 const FILE_URI_LIFETIME = 86_400_000; // == 24 hours 
 
 class DB {
-	async init(REDIS_PORT) {
+	async init() {
 		const db_access = JSON.parse(fs.readFileSync('db-secret.json'));
 
 		// firestore
@@ -65,7 +65,7 @@ class DB {
 		this.getFiles = firestore.getAll;
 
 		// redis
-		const redisClient = redis.createClient(REDIS_PORT);
+		const redisClient = redis.createClient(process.env.REDIS_PORT);
 		const redisGet = promisify(redisClient.get).bind(redisClient);
 		const redisCheck = promisify(redisClient.exists).bind(redisClient);
 		const redisRange = promisify(redisClient.lrange).bind(redisClient);

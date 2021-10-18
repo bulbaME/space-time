@@ -1,4 +1,4 @@
-const post = async (path, data) => fetch('http://localhost:2007' + path, {
+const post = async (path, data) => fetch(path, {
     method: 'POST',
     body: JSON.stringify(data),
     headers: {

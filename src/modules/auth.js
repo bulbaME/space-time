@@ -1,6 +1,5 @@
 'use strict';
 
-
 const fs = require('fs');
 const passport = require('passport');
 const oauth_strategy = require('passport-google-oauth20').Strategy;
@@ -13,7 +12,7 @@ const userAuthInit = (App, db) => {
     App.post('/login', (req, res) => {
         db.user.processAuthKey(req.body.key).then((data) => {
             if (data) {
-                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:2007');
+                res.setHeader('Access-Control-Allow-Origin', process.env.URL);
                 res.status(202).json({ 'authorized': true });
             }
             else {
@@ -43,7 +42,7 @@ const userAuthInit = (App, db) => {
     passport.use(new oauth_strategy({
         clientID: oauth_secret.client_id,
         clientSecret: oauth_secret.client_secret,
-        callbackURL: 'http://localhost:2007/auth/done'
+        callbackURL: '/auth/done'
     }, (tokenAccess, tokenRefresh, profile, done) => done(null, profile)));
     passport.serializeUser((user, done) => done(null, user));
 }

@@ -6,7 +6,9 @@ const cookie = new Cookies;
 
 const { getAuthKey } = require('./Auth.js');
 const Call = require('./Call.js');
-const Rec = require('./Voice.js')
+const Rec = require('./Voice.js');
+
+const DATA_UPDATE_RATE = 10000;
 
 class Socket {
     constructor(hooks) {
@@ -35,6 +37,13 @@ class Socket {
             sockets: {}
         }
 
+        // update profiles data 
+        setInterval(() => {
+            this.loadData({ type: 'user-posts' });
+            for (let p of Object.keys(hooks.data.get.profiles)) 
+                this.loadData({ type: 'profile', id: p });
+        }, DATA_UPDATE_RATE);
+
         this.socket.on('auth-error', () => this.destroy());
         this.socket.on('disconnect', () => this.destroy());
         this.socket.on('connect_error', () => this.destroy());
@@ -53,6 +62,10 @@ class Socket {
             switch(body.type) {
                 case 'post':
                     newData.user.posts.push(body.data);
+                    break;
+
+                case 'user-posts':
+                    newData.user.posts = body.data;
                     break;
                 case 'user':
                     newData.user = data;

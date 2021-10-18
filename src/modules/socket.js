@@ -39,6 +39,10 @@ const init = (io, db) => {
                             temp = await db.user.get(userId);
                             resData = temp;
                             break;
+                        case 'user-posts':
+                            temp = await db.user.get(userId);
+                            resData = temp.posts;
+                            break;
                         case 'profile':
                             if (!reqData.id) return;
                             temp = await db.user.get(reqData.id);

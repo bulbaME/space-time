@@ -1,4 +1,6 @@
 const React = require('react');
+require('dotenv').config();
+
 
 const MenuButtons = require('./MenuButtons.jsx');
 const Content = require('./Content.jsx');

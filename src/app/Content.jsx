@@ -56,8 +56,9 @@ const formatTimeMessage = (time) => {
     const dateArr = date.toString().split(' ');
     const t = dateArr[4].split(':').slice(0, 2).join(':');
 
-    if (diff / 60 < 1440) return t;
-    else return diff < 31_563_000 ? `${dateArr[1]} ${dateArr[2]}`: `${dateArr[2]}/${dateArr[1]}/${dateArr[3]}`;
+    // if (diff / 60 < 1440) return t;
+    // else return diff < 31_563_000 ? `${dateArr[1]} ${dateArr[2]}`: `${dateArr[2]}/${dateArr[1]}/${dateArr[3]}`;
+    return [t, `${dateArr[2]}/${dateArr[1]}/${dateArr[3]}`];
 }
 
 function Content (props) {
@@ -79,12 +80,6 @@ function Content (props) {
             showMenu = <AuthFrame setAuth={props.setAuth} placeholder='Type here...' />;
     }
 
-
-    if (props.data.socket){
-        React.useEffect(() => {
-            setInterval(() => props.data.socket.updateOnline(), 10000);
-        }, []);
-    }
     return (<>
         {cookie.get('notifications') === 'on' && 
         props.data.socket && 
@@ -383,12 +378,16 @@ function ContactsFrame (props) {
 
     const loadMessages = (history) => {
         return history.map((v, i) => {
+            let [time, date] = formatTimeMessage(v.timestamp);
             return (<div key={i} className={`contacts-message-${v.sender === data.user.id ? 'r':'l'}`}>
                 <div className='text'>{parseInvites(v.text)}</div>
                 {v.audio.uri ? <AudioMessage data={v.audio} />:''}
                 <div className='files'>{loadFiles(v.files, props.popup, false, 2)}</div>
                 {v.geo && v.geo.lat ? <iframe className='map' src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4000!2d${v.geo.lon}!3d${v.geo.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2s!4v1628611962984!5m2!1sru!2s`} loading='lazy' />:''}
-                <div className='time'>{formatTimeMessage(v.timestamp)}</div>
+                <div className='time'>{v.sender === data.user.id ? 
+                <><div className='time-hover'>{date}</div>{time}</>:
+                <>{time}<div className='time-hover'>{date}</div></>
+                }</div>
                 {history.length - i <= data.chats[profile.id].unread.count ? <div className='unread' />:''}
             </div>);
         });
@@ -590,6 +589,7 @@ function RoomsFrame(props) {
 
     const loadMessages = (history) => {
         return history.map((v, i) => {
+            let [time, date] = formatTimeMessage(v.timestamp);
             return (<div key={i} className={`rooms-message-${v.sender === data.user.id ? 'r':'l'}`}>
                 <Avatar url={v.sender === data.user.id ? data.user.avatar_url:data.profiles[v.sender].avatar_url} className='avatar' />
                 <p className='name'>{v.sender === data.user.id ? 'You':data.profiles[v.sender].name}</p>
@@ -597,7 +597,10 @@ function RoomsFrame(props) {
                 {v.audio.uri ? <AudioMessage data={v.audio} />:''}
                 <div className='files'>{loadFiles(v.files, props.popup, false, 2)}</div>
                 {v.geo && v.geo.lat ? <iframe className='map' src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4000!2d${v.geo.lon}!3d${v.geo.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2s!4v1628611962984!5m2!1sru!2s`} loading='lazy' />:''}
-                <div className='time'>{formatTimeMessage(v.timestamp)}</div>
+                <div className='time'>{v.sender === data.user.id ? 
+                <><div className='time-hover'>{date}</div>{time}</>:
+                <>{time}<div className='time-hover'>{date}</div></>
+                }</div>
             </div>);
         });
     }

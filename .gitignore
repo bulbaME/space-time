@@ -7,6 +7,5 @@ node_modules
 # vs code data
 .vscode
 
-/heroku_deploy
 ugly.js
 bundle.js

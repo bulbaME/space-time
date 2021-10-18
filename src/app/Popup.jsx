@@ -6,6 +6,8 @@ const Avatar = require('./Avatar.jsx');
 // icons
 import DropdownDots from './graphics/dropdown-dots.jsx';
 import EditIcon from './graphics/icon-edit.jsx';
+import DisableIcon from './graphics/icon-disable.jsx';
+import EnableIcon from './graphics/icon-enable.jsx';
 import DeleteIcon from './graphics/icon-delete.jsx';
 import BlockIcon from './graphics/icon-block.jsx';
 import UnblockIcon from './graphics/icon-unblock.jsx';
@@ -268,8 +270,8 @@ function ProfileDropDown (props) {
                 <NotifIcon className='profile-dropdown-item profile-dropdown-notify' onClick={() => { props.data.socket.request('user', { type: 'mute', id: profileId }); data.user.muted.push(profileId); props.data.socket.setData(data) }} />
             :   <NotifIcon2 className='profile-dropdown-item profile-dropdown-notify2' onClick={() => { props.data.socket.request('user', { type: 'unmute', id: profileId }); data.user.muted = data.user.muted.filter(v => v !== profileId); props.data.socket.setData(data) }} />}
             {data.user.contacts.includes(profileId) ? 
-                <DeleteIcon className='profile-dropdown-item profile-dropdown-delete' onClick={() => { props.data.socket.request('user', { type: 'remove', id: profileId }); data.user.contacts = data.user.contacts.filter(v => v !== profileId); props.data.socket.setData(data) }} />
-            :   <AddIcon className='profile-dropdown-item profile-dropdown-add' onClick={() => { props.data.socket.request('user', { type: 'add', id: profileId }); data.user.contacts.push(profileId); props.data.socket.setData(data) }} />}
+                <DisableIcon className='profile-dropdown-item profile-dropdown-delete' onClick={() => { props.data.socket.request('user', { type: 'remove', id: profileId }); data.user.contacts = data.user.contacts.filter(v => v !== profileId); props.data.socket.setData(data) }} />
+            :   <EnableIcon className='profile-dropdown-item profile-dropdown-add' onClick={() => { props.data.socket.request('user', { type: 'add', id: profileId }); data.user.contacts.push(profileId); props.data.socket.setData(data) }} />}
             {data.user.blocked.includes(profileId) ? 
                 <UnblockIcon className='profile-dropdown-item profile-dropdown-unblock' onClick={() => { props.data.socket.request('user', { type: 'unblock', id: profileId }); data.user.blocked = data.user.blocked.filter(v => v !== profileId); props.data.socket.setData(data) }} />
             :   <BlockIcon className='profile-dropdown-item profile-dropdown-block' onClick={() => { props.data.socket.request('user', { type: 'block', id: profileId }); data.user.blocked.push(profileId); props.data.socket.setData(data) }} />}

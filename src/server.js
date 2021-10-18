@@ -4,6 +4,10 @@ const socket = require('socket.io');
 const express = require('express');
 const { google } = require('googleapis');
 
+
+require('dotenv').config();
+process.env.REDIS_PORT = process.env.REDIS_URL || 6379; 
+
 const Auth = require('./modules/auth.js');
 const DB = require('./modules/db.js');
 const Socket = require('./modules/socket.js')
@@ -14,14 +18,13 @@ App.use(express.urlencoded({ extended: true }));  // for parsing application/x-w
 App.use(express.static(__dirname + '/public'));  // send page
 
 const PORT = process.env.PORT || 2007;
-const REDIS_PORT = process.env.REDIS_URL || 6379; 
 
 const server = App.listen(PORT, () => console.log('[SERVER] started'));
 const io = socket(server);
 
 (async () => {
     // initialize database
-    const db = await new DB(REDIS_PORT).init();
+    const db = await new DB().init();
 
     // initialize authentication
     Auth.userAuthInit(App, db);
