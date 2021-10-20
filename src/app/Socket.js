@@ -49,7 +49,6 @@ class Socket {
         this.socket.on('connect_error', () => this.destroy());
 
         this.socket.on('auth-succeed', () => {
-            console.log('connected', this.socket.id);
             this.hooks.socket.set(this);
         });
 

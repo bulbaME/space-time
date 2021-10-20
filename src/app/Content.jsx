@@ -55,10 +55,13 @@ const formatTimeMessage = (time) => {
     const date = new Date(time);
     const dateArr = date.toString().split(' ');
     const t = dateArr[4].split(':').slice(0, 2).join(':');
+    const d = diff / 60 > 10800 ? `${dateArr[2]}/${dateArr[1]}/${dateArr[3]}` : 
+    diff / 60 > 2880 ? `${Math.floor(diff / 60 / 1440)} days ago` : 
+    diff / 60 > 1440 ? 'yesterday' : 'today';
 
     // if (diff / 60 < 1440) return t;
     // else return diff < 31_563_000 ? `${dateArr[1]} ${dateArr[2]}`: `${dateArr[2]}/${dateArr[1]}/${dateArr[3]}`;
-    return [t, `${dateArr[2]}/${dateArr[1]}/${dateArr[3]}`];
+    return [t, d];
 }
 
 function Content (props) {
@@ -258,6 +261,13 @@ function SettingsFrame (props) {
     const [inputId, setInputId] = React.useState('');
     const [inputStatus, setInputStatus] = React.useState('');
     const [inputName, setInputName] = React.useState('');
+
+    const randomEmoji = () => {
+        const emojis = '😀😃😄😁😆😅😂🤣😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾';
+        const index = Math.floor(emojis.length / 2 * Math.random()) * 2;
+        return emojis.slice(index, index+2);
+    }
+
     const changeId = (newId) => {
         if (newId === props.data.get.user.profile_id) props.alert({show: true, text: 'Your new ID must be NEW'});
         else if (!/^[a-z0-9]{1,}$/.test(newId)) props.alert({show: true, text: 'ID must consist of lowercase letters or numbers'});
@@ -269,12 +279,6 @@ function SettingsFrame (props) {
             props.data.set(data);
             props.alert({show: true, text: 'Nice profile ID!', type: 'success'});
         }
-    }
-
-    const randomEmoji = () => {
-        const emojis = '😀😃😄😁😆😅😂🤣😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾';
-        const index = Math.floor(emojis.length / 2 * Math.random()) * 2;
-        return emojis.slice(index, index+2);
     }
 
     const changeStatus = (newStatus) => {
