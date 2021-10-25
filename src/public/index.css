@@ -9,7 +9,8 @@
     --blue-mid-light: #5B76A9;
     --blue-light: #384E77;
     --light-gray: #CBD0E2;
-    --red: #D72424;
+    --alert-red: #D72424;
+    --red: #d63939;
     --yellow: #e9c306;
     --green: #20BA2F;
     --settings-button-off: #E2842D;
@@ -111,9 +112,9 @@ body, #root {
 }
 
 .eq-bar {
-    width: 0.5vh;
-    height: 1vh;
-    border-radius: 1vh;
+    width: 0.8vh;
+    height: 0.8vh;
+    border-radius: 0.6vh;
     background-color: var(--light-gray);
     transition: 50ms;
 }
@@ -152,7 +153,7 @@ body, #root {
 }
 
 .alert-t-error {
-    background-color: var(--red);
+    background-color: var(--alert-red);
     color: #fff;
     transition: 0;
 }
