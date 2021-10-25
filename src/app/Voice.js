@@ -14,7 +14,7 @@ class Voice {
     }
 
     #init(eventHandler) {
-        const eqWidth = 36;
+        const eqWidth = 28;
 
         for (let e = 0; e < eqWidth; e++) {
             const elem = document.createElement('div');
@@ -39,7 +39,7 @@ class Voice {
 
                 for(let i = 0; i < eqWidth; i++) {
                     let height = (Math.abs(dataArray[skip * i] - 128) / 128);
-                    height = 12 * height;
+                    height = 10 * height;
                     bars[i].style.height = `${height < 1 ? 1:height > 4.5 ? 4.5:height}vh`;
                 }
             };
