@@ -13,6 +13,7 @@ function SideBar (props) {
     const [searchTimeout, setSearchTimeout] = React.useState(0);
     const [callTimeInt, setCallTimeInt] = React.useState(0);
     const callTimeRef = React.useRef();
+    const searchRef = React.useRef();
 
     const callTimeCount = (timestamp) => {
         let time = Date.now() - timestamp;
@@ -66,7 +67,7 @@ function SideBar (props) {
             || (searchInput ? ' ':'');
 
             return (
-                <div key={i} className='sidebar-chat' onClick={() => setMenu(v.id)} style={{ backgroundColor: ['contacts', 'rooms'].includes(props.menu.get.type) && v.id === props.menu.get.id ? 'var(--blue-mid)':'inherit' }}>
+                <div key={i} className='sidebar-chat' onClick={() => { searchRef.current.value = ''; setSearchInput(''); setMenu(v.id) }} style={{ backgroundColor: ['contacts', 'rooms'].includes(props.menu.get.type) && v.id === props.menu.get.id ? 'var(--blue-mid)':'inherit' }}>
                     <Avatar className='sidebar-chat-logo' room={v.id[0] === 'r' ? v.name:''} url={v.avatar_url || ''} />
                     {v.online ? <div id='sidebar-chat-online' />:''}
                     {v.unread && v.unread.count ? (v.unread.id !== data.user.id ? <div className='sidebar-unread1' />:<div className='sidebar-unread2'>{v.unread.count <= 1000 ? v.unread.count:'999+'}</div>):''}
@@ -184,7 +185,7 @@ function SideBar (props) {
     return <div id='sidebar'>
             <div id='sidebar-search'>
                 <SearchIcon id='sidebar-search-icon' />
-                <input id='sidebar-search-input' autoComplete='off' placeholder='Search...' maxLength='20' onChange={inputChange} style={searchInput.indexOf('#') + searchInput.indexOf('@') >= -1 ? {fontFamily: `'DM Mono', monospace`, fontWeight: 400}:{}} />
+                <input id='sidebar-search-input' ref={searchRef} autoComplete='off' placeholder='Search...' maxLength='20' onChange={inputChange} style={searchInput.indexOf('#') + searchInput.indexOf('@') >= -1 ? {fontFamily: `'DM Mono', monospace`, fontWeight: 400}:{}} />
             </div>
             {chats.length ? <div id='sidebar-chats'>{chats}</div>:<p id='sidebar-text'>{searchInput ? 'SEARCHING':(sidebar.type === 'rooms' ? 'NO ROOMS':'NO CONTACTS')}</p>}
             {sidebar.type === 'rooms' ? <AddIcon id='sidebar-newroom' onClick={() => props.data.socket.request('room', { type: 'new' })} />:''}

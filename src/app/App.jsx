@@ -1,6 +1,6 @@
 const React = require('react');
 require('dotenv').config();
-
+const {isMobile} = require('react-device-detect');
 
 const MenuButtons = require('./MenuButtons.jsx');
 const Content = require('./Content.jsx');
@@ -45,7 +45,7 @@ function App (props) {
     return (
         <div id='main'>
             {menu.type === 'auth' ? '' : <SideBar menu={{get: menu, set: setMenu}} data={data} alert={setAlert} incomes={{ get: incomeCalls, set: setIncomeCalls }} /> }
-            <Content menu={{get: menu, set: setMenu}} alert={setAlert} setAuth={setAuthorized} data={data} popup={{get: popup, set: setPopup}} />
+            <Content isMobile={isMobile} menu={{get: menu, set: setMenu}} alert={setAlert} setAuth={setAuthorized} data={data} popup={{get: popup, set: setPopup}} />
             {menu.type === 'auth' ? '' : <MenuButtons data={data} menu={{get: menu, set: setMenu}} />}
             <Popup popup={{get: popup, set: setPopup}} alert={{get: alert, set: setAlert}} menu={{ get: menu, set: setMainData }} incomes={{ get: incomeCalls, set: setIncomeCalls }} data={data} />
             <Alert alert={{get: alert, set: setAlert}} />

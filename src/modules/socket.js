@@ -356,7 +356,7 @@ const init = (io, db) => {
                                         for (let s of userSockets) if (sockets[s]) sockets[s].emit('call', { type: 'end-request', id: userId, socketId: clientId });
                                         if (dec) clientSocket.emit('call', { type: 'declined', id });
                                     }
-                                    currentCall.reqTimeout = setTimeout(() => currentCall.unreqFunc(true), CALL_TIMEOUT);
+                                    currentCall.reqTimeout = setTimeout(() => currentCall.unreqFunc ? currentCall.unreqFunc(true):0, CALL_TIMEOUT);
                                 }
                             }
                             break;
@@ -402,16 +402,13 @@ const init = (io, db) => {
 
                             break;
                         case 'decline':
-                            if (currentCall.type === 2 || !currentCall.type) return;
-                            else {
-                                if (await db.call.verify(socketId, userId) && !await db.call.verify(clientId, id))
-                                    sockets[socketId].emit('call', { type: 'declined', id });
-                                else if (currentCall.state === 1) {
-                                    currentCall.unreqFunc();
-                                    clearTimeout(currentCall.reqTimeout);
-                                } else if (currentCall.state === 2) {
-                                    if (sockets[socketId]) sockets[socketId].emit('call', { type: 'end', id });
-                                }
+                            if (await db.call.verify(socketId, userId) && !await db.call.verify(clientId, id))
+                                sockets[socketId].emit('call', { type: 'declined', id });
+                            else if (currentCall.state === 1) {
+                                currentCall.unreqFunc();
+                                clearTimeout(currentCall.reqTimeout);
+                            } else if (currentCall.state === 2) {
+                                if (sockets[socketId]) sockets[socketId].emit('call', { type: 'end', id });
                             }
                     }
                 });
@@ -439,7 +436,7 @@ const init = (io, db) => {
                     }
                 });
 
-            // if key is invalid disconnect socket
+            // if auth key is invalid disconnect socket
             } else {
                 clientSocket.emit('auth-error', {});
                 clientSocket.disconnect(true);

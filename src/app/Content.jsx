@@ -262,6 +262,10 @@ function SettingsFrame (props) {
     const [inputStatus, setInputStatus] = React.useState('');
     const [inputName, setInputName] = React.useState('');
 
+    const inputRef = React.useRef();
+    const statusRef = React.useRef();
+    const nameRef = React.useRef();
+
     const randomEmoji = () => {
         const emojis = '😀😃😄😁😆😅😂🤣😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾';
         const index = Math.floor(emojis.length / 2 * Math.random()) * 2;
@@ -278,6 +282,7 @@ function SettingsFrame (props) {
             data.user.profile_id = newId;
             props.data.set(data);
             props.alert({show: true, text: 'Nice profile ID!', type: 'success'});
+            inputRef.current.value = '';
         }
     }
 
@@ -290,6 +295,7 @@ function SettingsFrame (props) {
 
         props.data.socket.request('change', { type: 'status', data: newStatus });
         props.alert({show: true, text: 'Status updated', type: 'success'});
+        statusRef.current.value = '';
     }
 
     const changeName = (newName) => {
@@ -300,6 +306,7 @@ function SettingsFrame (props) {
 
         props.data.socket.request('change', { type: 'name', data: newName });
         props.alert({show: true, text: 'Name updated', type: 'success'});
+        nameRef.current.value = '';
     }
 
     const user = props.data.get.user;
@@ -347,15 +354,15 @@ function SettingsFrame (props) {
             </div>
             <div id='settings-change-id' className='settings-change'>
                 <p className='settings-change-id-symb'>#</p>
-                <input id='settings-change-input-id' className='settings-change-input' maxLength='16' placeholder={user.profile_id} onChange={(event) => setInputId(event.target.value)} />
+                <input id='settings-change-input-id' className='settings-change-input' maxLength='16' ref={inputRef} placeholder={user.profile_id} onChange={(event) => setInputId(event.target.value)} />
                 <div className='settings-change-submit' onClick={() => changeId(inputId)}><p>OK</p></div>
             </div>
             <div id='settings-change-status' className='settings-change'>
-                <input className='settings-change-input' maxLength='16' placeholder={user.status} onChange={(event) => setInputStatus(event.target.value)} />
+                <input className='settings-change-input' maxLength='16' ref={statusRef} placeholder={user.status} onChange={(event) => setInputStatus(event.target.value)} />
                 <div className='settings-change-submit' onClick={() => changeStatus(inputStatus)}><p>OK</p></div>
             </div>
             <div id='settings-change-name' className='settings-change' style={{ fontWeight: 500 }}>
-                <input className='settings-change-input' maxLength='10' placeholder={user.name} onChange={(event) => setInputName(event.target.value)} />
+                <input className='settings-change-input' maxLength='10' ref={nameRef} placeholder={user.name} onChange={(event) => setInputName(event.target.value)} />
                 <div className='settings-change-submit' onClick={() => changeName(inputName)}><p>OK</p></div>
             </div>
             <div id='settings-notify' onClick={notifToggle}><div id='settings-notify-button' className={cookie.get('notifications') === 'on' ? 'on':'off'} />Recieve notifications</div>

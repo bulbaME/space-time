@@ -7,11 +7,23 @@ const cookie = new Cookies;
 const { getAuthKey } = require('./Auth.js');
 const Call = require('./Call.js');
 const Rec = require('./Voice.js');
+const e = require('cors');
 
 const DATA_UPDATE_RATE = 10000;
+const MAX_REQ_SEC = 10;
 
 class Socket {
     constructor(hooks) {
+        // requests made by client in last second
+        this.reqLastSec = 0;
+        this.blockReq = false;
+        this.recentReq = [];
+        setInterval(() => this.reqLastSec = 0, 1000);
+
+        // recent requests
+        setInterval(() => this.recentReq = [], 100);
+
+        
         this.socket = IO({ auth: { token: getAuthKey() }});
         this.hooks = hooks;
 
@@ -152,6 +164,7 @@ class Socket {
         });
 
         this.socket.on('call', (data) => {
+            console.log(data);
             switch(data.type) {
                 case 'request':
                     this.callData.incomes.add(data.id);
@@ -186,12 +199,16 @@ class Socket {
         });
     }
 
+    // deconstructor
     destroy() {
         if (this.socket.connected) this.socket.disconnect();
         this.hooks.auth.set(false);
         this.hooks.socket.set(null);
         this.socket = null;
     }
+
+
+    // CALL
 
     call(type, id = 0) {
         const endCall = () => {
@@ -223,6 +240,8 @@ class Socket {
             this.hooks.call.set(this.callData.current);
 
         } else if (type === 'end') {
+            console.log(this.callData.incomes, id);
+
             if (this.callData.incomes.has(id)) {
                 this.socket.emit('call', { type: 'decline', id, socketId: this.callData.sockets[id] });
                 this.hooks.incomes.set(this.hooks.incomes.get.filter(v => v !== id));
@@ -239,12 +258,37 @@ class Socket {
         this.setData(this.hooks.data.get);
     }
 
+
+    // DATA
+
     loadData(params) {
-        this.socket.emit('main-data', params);
+        this.request('main-data', params);
     }
 
     request(event, data) {
-        this.socket.emit(event, data);
+        // check if same request was already made 
+        let found = false;
+        for (let r of this.recentReq) {
+            let same = true;
+            
+            for (let k of Object.keys(data)) 
+                if (r[1][k] !== data[k]) same = false;
+            if (same && event === r[0]) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found) return;
+        this.recentReq.push([event, data]);
+
+        if (this.reqLastSec > MAX_REQ_SEC) {
+            if (!this.hooks.alert.get.show)
+                this.hooks.alert.set({show: true, text: 'Calm down!', type: 'error'});
+        } else {
+            this.reqLastSec++;
+            this.socket.emit(event, data);
+        }
     }
 
     setData(data) {
@@ -277,19 +321,28 @@ class Socket {
         profiles.forEach(id => this.socket.emit('online', id));
     }
 
+
+    // NOTIFICATIONS
+
     createNotification (params) {
         const n = new Notification(params.title, { ...params, silent: true });
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'visible') n.close();
         });
-      }
+    }
 
+    
+    // GTTS
+    
     gtts(text) {
         const gtts = new Gtts(text, 'en');
         let res;
         gtts.stream().pipe(res);
         console.log(res)
     }
+
+
+    // VOICE MESSAGES
 
     async startRec(eq) {
         if (!(await window.navigator.mediaDevices.getUserMedia({audio: true}).catch(this.hooks.popup.set({ show: true, type: 'error', text: 'Unable to get microphone output' })))) return;
