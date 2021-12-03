@@ -602,7 +602,7 @@ function RoomsFrame(props) {
         return history.map((v, i) => {
             let [time, date] = formatTimeMessage(v.timestamp);
             return (<div key={i} className={`rooms-message-${v.sender === data.user.id ? 'r':'l'}`}>
-                <Avatar url={v.sender === data.user.id ? data.user.avatar_url:data.profiles[v.sender].avatar_url} className='avatar' />
+                <Avatar url={v.sender === data.user.id ? data.user.avatar_url:data.profiles[v.sender].avatar_url} className='avatar' onClick={() => props.menu.set({ type: 'profile', id: v.sender })} />
                 <p className='name'>{v.sender === data.user.id ? 'You':data.profiles[v.sender].name}</p>
                 <div className='text'>{parseInvites(v.text)}</div>
                 {v.audio.uri ? <AudioMessage data={v.audio} />:''}

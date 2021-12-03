@@ -30,6 +30,9 @@ const init = (io, db) => {
                 sockets[clientId] = clientSocket;
                 db.user.connect(userId, clientId);
 
+                clientSocket.on('listen-id', async (reqData) => {
+                });
+
                 // on data request
                 clientSocket.on('main-data', async (reqData) => {
                     let temp, resData;

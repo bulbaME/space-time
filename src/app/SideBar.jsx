@@ -66,8 +66,14 @@ function SideBar (props) {
             || (lastMessage && lastMessage.geo.lat ? 'Geolocation':''))
             || (searchInput ? ' ':'');
 
+            const chatClick = () => {
+                searchRef.current.value = ''; 
+                setSearchInput('');
+                setMenu(v.id);
+            }
+
             return (
-                <div key={i} className='sidebar-chat' onClick={() => { searchRef.current.value = ''; setSearchInput(''); setMenu(v.id) }} style={{ backgroundColor: ['contacts', 'rooms'].includes(props.menu.get.type) && v.id === props.menu.get.id ? 'var(--blue-mid)':'inherit' }}>
+                <div key={i} className='sidebar-chat' onClick={chatClick} style={{ backgroundColor: ['contacts', 'rooms'].includes(props.menu.get.type) && v.id === props.menu.get.id ? 'var(--blue-mid)':'inherit' }}>
                     <Avatar className='sidebar-chat-logo' room={v.id[0] === 'r' ? v.name:''} url={v.avatar_url || ''} />
                     {v.online ? <div id='sidebar-chat-online' />:''}
                     {v.unread && v.unread.count ? (v.unread.id !== data.user.id ? <div className='sidebar-unread1' />:<div className='sidebar-unread2'>{v.unread.count <= 1000 ? v.unread.count:'999+'}</div>):''}
@@ -134,6 +140,8 @@ function SideBar (props) {
         if (text.indexOf('#') !== -1) {
             let id = text.slice(text.indexOf('#')+1);
             id = id.slice(0, id.indexOf(' ') === -1 ? id.length:id.indexOf(' '));
+            // do not allow searching for self id
+            if (id == data.profile.id) return [];
 
             const profile = data.profiles[id];
 
@@ -162,8 +170,11 @@ function SideBar (props) {
     let chats
     , chatMenuSet = (id) => props.menu.set({ type: data.user.contacts.includes(id) || data.chats[id] ? 'contacts':'profile', id })
     , roomMenuSet = (id) => props.menu.set({ type: 'room', id });
-    if (searchInput) chats = loadChats(afterSearch(searchInput, []), chatMenuSet);
-    else if (sidebar.type === 'rooms') chats = loadChats(Object.values(data.rooms), (id) => props.menu.set({ type: 'rooms', id }), roomMenuSet);
+    if (searchInput) { 
+        if (sidebar.type === 'chats') chats = loadChats(afterSearch(searchInput, []), chatMenuSet);
+        if (sidebar.type === 'rooms') chats = loadChats(afterSearch(searchInput, []), roomMenuSet);
+    }
+    else if (sidebar.type === 'rooms') chats = loadChats(Object.values(data.rooms), roomMenuSet);
     else chats = (() => {
         Object.values(data.chats).filter(v => !data.user.contacts.includes(v.id) && !data.profiles[v.id]).forEach(v => props.data.socket.loadData({ type: 'profile', id: v.id }));
 

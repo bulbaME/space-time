@@ -19,7 +19,7 @@ App.use(express.static(__dirname + '/public'));  // send page
 
 const PORT = process.env.PORT || 2007;
 
-const server = App.listen(PORT, () => console.log('[SERVER] started'));
+const server = App.listen(PORT, () => console.log(`[SERVER] started on port ${PORT}`));
 const io = socket(server);
 
 (async () => {

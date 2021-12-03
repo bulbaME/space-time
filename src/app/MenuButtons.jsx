@@ -9,12 +9,23 @@ import LogoSettings from './graphics/logo-settings.jsx';
 
 function MenuButtons (props) {
     const [selected, setSelected] = React.useState(props.selected);
+    const [lastChatSelected, setLastChatSelected] = React.useState({ rooms: '', chats: '' });
     if (selected !== `menu-button-${props.menu.get.type}`) setSelected(`menu-button-${props.menu.get.type}`);
 
     // parse button id and set current menu
     const changeFunc = (id) => {
         const type = id.slice(id.lastIndexOf('-') + 1);
         setSelected(id);
+
+        if (props.menu.get.type == 'contacts') {
+            lastChatSelected.chats = props.menu.get.id;
+            setLastChatSelected(lastChatSelected);
+        }
+
+        if (props.menu.get.type == 'rooms') {
+            lastChatSelected.rooms = props.menu.get.id;
+            setLastChatSelected(lastChatSelected);
+        }
 
         let last;
         switch(type) {        
@@ -23,6 +34,7 @@ function MenuButtons (props) {
                     if (!last || last < v.history[0]) last = v.id;
                 });
     
+                if (lastChatSelected.chats) last = lastChatSelected.chats;
                 if (!last) last = props.data.get.user.contacts[0];
                 
                 props.menu.set({ type: 'contacts', id: last || '' });
@@ -32,6 +44,7 @@ function MenuButtons (props) {
                     if (!last || last < v.history[0]) last = v.id;
                 });
     
+                if (lastChatSelected.rooms) last = lastChatSelected.rooms;
                 if (!last) last = Object.values(props.data.get.rooms).length ? Object.values(props.data.get.rooms)[0].id:'';
                 
                 props.menu.set({ type: 'rooms', id: last || '' });

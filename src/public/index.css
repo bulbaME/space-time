@@ -961,6 +961,7 @@ textarea::-moz-scrollbar-thumb:hover {
     border-radius: 2vh;
     cursor: pointer;
     margin-bottom: 2vh;
+    transition: 200ms;
 }
 
 .sidebar-chat-selected {
