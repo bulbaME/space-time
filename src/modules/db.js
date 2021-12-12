@@ -330,6 +330,14 @@ class DB {
 				chats_.chats.updateOne({ ids: { $all: [userId1, userId2]}}, { $set: { history: [], unread: { id: '', count: 0 }}});
 			},
 
+			async remove(userId1, userId2, msgid) {
+				const chat = await chats_.chats.findOne({ ids: { $all: [userId1, userId2]}});
+
+				for (let m of chat.history) firestore.deleteAll(m.id);
+
+				chats_.chats.updateOne({ ids: { $all: [userId1, userId2]}}, { $set: { history: [], unread: { id: '', count: 0 }}});
+			},
+
 			async read(userId1, userId2) {
 				return await chats_.chats.updateOne({ ids: { $all: [userId1, userId2] }, 'unread.id': userId1 }, { $set: { unread: { id: '', count: 0 }}});
 			},
@@ -384,8 +392,9 @@ class DB {
 					return {...message, files: urls, audio: {time: message.audio.time, uri: audioUrl}};
 				},
 
-				delete(userId1, userId2, id) {
-					chats_.chats.updateOne({ ids: { $all: [userId1, userId2] }}, { $pull: { history: { id }}});
+				async delete(userId1, userId2, id) {
+					const data = await chats_.chats.updateOne({ ids: { $all: [userId1, userId2] } }, { $pull: { history: { id, sender: userId1 }}});
+					return !!data.modifiedCount;
 				},
 
 				read(userId1, userId2, timestamp) {
@@ -497,8 +506,8 @@ class DB {
 					return {...message, files: urls, audio: {time: message.audio.time, uri: audioUrl}};
 				},
 
-				delete(roomId, id) {
-					rooms_.rooms.updateOne({ id: roomId }, { $pull: { history: { id }}});
+				delete(userId, roomId, id) {
+					rooms_.rooms.updateOne({ id: roomId }, { $pull: { history: { id, sender: userId }}});
 				}
 			},
 

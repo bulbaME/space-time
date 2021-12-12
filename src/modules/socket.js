@@ -66,6 +66,7 @@ const init = (io, db) => {
                                 online: temp.online,
                                 in_contacts: temp.contacts.includes(userId)
                             };
+                            
                             break;
                         case 'chats':
                             if (reqData.id) resData = await db.chats.get(userId, reqData.id);
@@ -110,7 +111,7 @@ const init = (io, db) => {
                 });
 
                 clientSocket.on('room', async (reqData) => {
-                    let temp, updated;
+                    let temp, updated, data, room;
 
                     switch(reqData.type) {
                         case 'join':
@@ -167,13 +168,23 @@ const init = (io, db) => {
                                     for (let s of await db.user.getSockets(u))
                                         if (sockets[s] && s !== clientId) sockets[s].emit('main-data', { type: 'rooms', data: { ...updated }});
                             }
-                            break
+                            break;
+                        case 'delete':
+                            room = await db.rooms.check(userId, reqData.roomId);
+                            if (room) {
+                                db.rooms.message.delete(userId, reqData.roomId, reqData.id);
+
+                                for (let u of room.ids)
+                                    for (let s of await db.user.getSockets(u))
+                                        if (sockets[s]) sockets[s].emit('message', { type: 'delete', data: { id: reqData.roomId, msg: reqData.id }});
+                            }
+                            break;
                         case 'message':
-                            const room = await db.rooms.check(userId, reqData.id);
+                            room = await db.rooms.check(userId, reqData.id);
                             if (room) {
                                 temp = reqData.data;
                                 const message = await db.rooms.message.new(userId, reqData.id, { text: temp.text.trim(), files: temp.files, audio: temp.audio, geo: temp.geo });
-                                const data = { ...message };
+                                data = { ...message };
                                 
                                 for (let u of room.ids)
                                     for (let s of await db.user.getSockets(u))
@@ -233,7 +244,7 @@ const init = (io, db) => {
                 // on message request
                 clientSocket.on('message', async (reqData) => {
                     if (!reqData.id) return;
-                    let data;
+                    let data, profile;
                     
                     switch(reqData.type) {
                         case 'new':
@@ -241,7 +252,7 @@ const init = (io, db) => {
                             const userProfile = await db.user.get(userId);
                             if (!userProfile.contacts.includes(reqData.id)) return;
 
-                            const profile = await db.user.get(reqData.id);
+                            profile = await db.user.get(reqData.id);
                             if (profile && !profile.blocked.includes(userId)) {
                                 if (profile.privacy.write === 'all' || profile.contacts.includes(userId)) {
                                     const message = await db.chats.message.new(userId, profile.id, { text: reqData.text.trim(), files: reqData.files, audio: reqData.audio, geo: reqData.geo });
@@ -258,10 +269,18 @@ const init = (io, db) => {
                             db.chats.clear(userId, reqData.id);
                             data = {};
                             break;
+                        case 'delete':
+                            profile = await db.user.get(reqData.id);
+                            if (profile.privacy.write === 'all' || profile.contacts.includes(userId)) {
+                                if (!db.chats.message.delete(userId, reqData.id, reqData.msg)) return;
+                                data = { msg: reqData.msg };
+                            }
+                            
                         default:
                             return;
                     }
 
+                    // update data for clients
                     for (let s of await db.user.getSockets(userId))
                         if (sockets[s]) sockets[s].emit('message', { type: reqData.type, data: { ...data, id: reqData.id }});
 

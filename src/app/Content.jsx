@@ -141,7 +141,18 @@ function UserFrame (props) {
     const input = React.useRef();
 
     const postDeleteButton = (id) => {
-        props.data.socket.setData(deletePost(id));
+        const confirm = props.popup.get;
+        confirm.func = {
+            yes: () => props.data.socket.setData(deletePost(id)),
+            no: () => 0
+        }
+        
+        confirm.show = true;
+        confirm.type = 'confirm';
+
+        props.popup.set(confirm);
+        props.data.socket.setData(props.data.get);
+
         // const pressEvent = (event) => {
         //     if (event.key !== 'Enter') return;
         //     props.alert({ show: false });
@@ -172,7 +183,7 @@ function UserFrame (props) {
 
     const postUnlike = (id) => {
         props.data.socket.request('post', { type: 'unlike', id });
-        data.user.liked_posts = data.user.liked_posts.filter(v => v && v !== id).map(v => v.id);
+        data.user.liked_posts = data.user.liked_posts.filter(v => v && v !== id);
         profile.posts = profile.posts.map(v => {
             if (v.id === id) v.likes--;
             return v;
@@ -194,7 +205,7 @@ function UserFrame (props) {
                         {data.user.liked_posts.find(v_ => v_ === v.id) ? 
                             <LikeActiveIcon className='profile-post-liked' onClick={() => props.data.socket.setData(postUnlike(v.id))} /> 
                             : <LikeUnactiveIcon className='profile-post-unliked' onClick={() => props.data.socket.setData(postLike(v.id))} />}
-                        <ShareIcon className='profile-post-share' />
+                        {/* <ShareIcon className='profile-post-share' /> */}
                         {v.likes ? <div className='profile-post-likes'>{v.likes}</div>:''}
                     </div>
                 </div>);
@@ -390,18 +401,29 @@ function ContactsFrame (props) {
     const loadMessages = (history) => {
         return history.map((v, i) => {
             let [time, date] = formatTimeMessage(v.timestamp);
-            return (<div key={i} className={`contacts-message-${v.sender === data.user.id ? 'r':'l'}`}>
-                <div className='text'>{parseInvites(v.text)}</div>
-                {v.audio.uri ? <AudioMessage data={v.audio} />:''}
-                <div className='files'>{loadFiles(v.files, props.popup, false, 2)}</div>
-                {v.geo && v.geo.lat ? <iframe className='map' src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4000!2d${v.geo.lon}!3d${v.geo.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2s!4v1628611962984!5m2!1sru!2s`} loading='lazy' />:''}
-                <div className='time'>{v.sender === data.user.id ? 
-                <><div className='time-hover'>{date}</div>{time}</>:
-                <>{time}<div className='time-hover'>{date}</div></>
-                }</div>
-                {history.length - i <= data.chats[profile.id].unread.count ? <div className='unread' />:''}
-            </div>);
+            return (
+                <div key={i} className='contacts-message-boundary'>
+                {v.sender === data.user.id ? <p className='contacts-date'>
+                <DeleteIcon className='contacts-message-delete' onClick={() => deleteMessage(v)}/>{date}</p>:
+                <p className='contacts-date' style={{right: '3.5vh'}}>{date}</p>}
+                <div key={i} className={`contacts-message-${v.sender === data.user.id ? 'r':'l'}`}>
+                    {v.text ? <div className='text'>{parseInvites(v.text)}</div>:''}
+                    {v.audio.uri ? <AudioMessage data={v.audio} />:''}
+                    <div className='files'>{loadFiles(v.files, props.popup, false, 2)}</div>
+                    {v.geo && v.geo.lat ? <iframe className='map' src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4000!2d${v.geo.lon}!3d${v.geo.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2s!4v1628611962984!5m2!1sru!2s`} loading='lazy' />:''}
+                    <div className='time'>{time}</div>
+                    {history.length - i <= data.chats[profile.id].unread.count ? <div className='unread' />:''}
+                </div>
+                </div>
+                );
         });
+    }
+
+    const deleteMessage = (msg) => {
+        let chat = data.chats[profile.id];
+        props.data.socket.request('message', { type: 'delete', msg: msg.id , id: chat.ids.filter(i => i !== msg.sender)[0] });
+        chat.history = chat.history.filter(v => msg.id !== v.id);
+        props.data.socket.setData(data);
     }
 
     const sendMessage = async (content) => {
@@ -420,6 +442,7 @@ function ContactsFrame (props) {
 
         if (!text && !files.length && !rec && !content.geo.lat) return;
         const files_ = await Attachs.toString(files);
+        content.meta = {type: 'message'}
         content.files = files_;
         content.type = 'new';
         content.text = text;
@@ -559,7 +582,7 @@ function ContactsFrame (props) {
     return (<>
         <div id='contacts-history'>{loadMessages(data.chats[profile.id] ? data.chats[profile.id].history:[])}</div>
         <div id='contacts-top'>
-            <ContactsDropDown menu={props.menu} data={props.data} />
+            <ContactsDropDown menu={props.menu} data={props.data} popup={props.popup} />
             {props.data.socket.callData.state === 2 ? (props.data.socket.callData.muted ? <MicOffIcon id='contacts-mute' onClick={() => props.data.socket.callMuteToggle()} />:<MicIcon id='contacts-mute' onClick={() => props.data.socket.callMuteToggle()} />):''}
             {
                 //                                                                                                                                                                                                                                                                                                                                                                                                            too long? 😯
@@ -587,7 +610,7 @@ function RoomsFrame(props) {
     
     // get most recent chat
     if (!room) return (<div id='contacts-select'>SELECT ROOM</div>);
-    
+
     const [files, setFiles] = React.useState([]);
     const [rec, setRec] = React.useState(0);
     const [recTime, setRecTime] = React.useState(0);
@@ -601,19 +624,29 @@ function RoomsFrame(props) {
     const loadMessages = (history) => {
         return history.map((v, i) => {
             let [time, date] = formatTimeMessage(v.timestamp);
-            return (<div key={i} className={`rooms-message-${v.sender === data.user.id ? 'r':'l'}`}>
+            return (
+            <div key={i} className='rooms-message-boundary'>
+            {v.sender === data.user.id ? <p className='rooms-date'>
+                <DeleteIcon className='rooms-message-delete' onClick={() => deleteMessage(v.id)}/>{date}</p>:
+            <p className='rooms-date' style={{right: '3.5vh'}}>{date}</p>}
+            <div key={i} className={`rooms-message-${v.sender === data.user.id ? 'r':'l'}`}>
                 <Avatar url={v.sender === data.user.id ? data.user.avatar_url:data.profiles[v.sender].avatar_url} className='avatar' onClick={() => props.menu.set({ type: 'profile', id: v.sender })} />
                 <p className='name'>{v.sender === data.user.id ? 'You':data.profiles[v.sender].name}</p>
-                <div className='text'>{parseInvites(v.text)}</div>
+                {v.text ? <div className='text'>{parseInvites(v.text)}</div>:''}
                 {v.audio.uri ? <AudioMessage data={v.audio} />:''}
                 <div className='files'>{loadFiles(v.files, props.popup, false, 2)}</div>
                 {v.geo && v.geo.lat ? <iframe className='map' src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4000!2d${v.geo.lon}!3d${v.geo.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2s!4v1628611962984!5m2!1sru!2s`} loading='lazy' />:''}
-                <div className='time'>{v.sender === data.user.id ? 
-                <><div className='time-hover'>{date}</div>{time}</>:
-                <>{time}<div className='time-hover'>{date}</div></>
-                }</div>
-            </div>);
+                <div className='time'>{time}</div>
+            </div>
+            </div>
+            );
         });
+    }
+
+    const deleteMessage = (id) => {
+        props.data.socket.request('room', { type: 'delete', roomId: room.id, id: id })
+        room.history = room.history.filter(v => v.id !== id);
+        props.data.socket.setData(props.data.get);
     }
 
     const sendMessage = async (content) => {
@@ -784,12 +817,16 @@ function RoomsFrame(props) {
 function loadFiles(files, popup, data=false, f = 4) {
     if (!files.length) return '';
     const fCounter = Math.ceil(files.length / f);
-    const view = (file) => {
+    const view = (file, i) => {
         if (data) data.socket.setData(data.get);
-        popup.set({ type: 'file', uri: file[0], fType: file[1], show: true });
+        let popupData = { type: 'file', uri: file[0], fType: file[1], show: true, next: 0, prev: 0 };
+        if (i > 0) popupData.prev = () => view(files[i-1], i-1);
+        if (i < files.length-1) popupData.next = () => view(files[i+1], i+1);
+
+        popup.set(popupData);
     }
 
-    const fileLoad = (file, i) => file[1].startsWith('image') ? <img src={file[0]} onClick={() => view(file)} alt={file[1]} key={i} />:<FileIcon className='images-file' alt='text file' key={i} onClick={() => view(file)} />;
+    const fileLoad = (file, i) => file[1].startsWith('image') ? <img src={file[0]} onClick={() => view(file, i)} alt={file[1]} key={i} />:<FileIcon className='images-file' alt='text file' key={i} onClick={() => view(file, i)} />;
 
     return (<div className='images-frame'>
         <div className='images-main'>{files.slice(0, fCounter).map(fileLoad)}</div>

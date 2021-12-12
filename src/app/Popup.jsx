@@ -21,6 +21,7 @@ import ExitIcon from './graphics/icon-exit.jsx';
 import LikeActiveIcon from './graphics/icon-star-active.jsx';
 import LikeUnactiveIcon from './graphics/icon-star-unactive.jsx';
 import CloseIcon from './graphics/icon-close.jsx';
+import ArrowIcon from './graphics/icon-arrow.jsx'
 
 const vhToPx = (vh) => {
 	return vh * (document.documentElement.clientHeight / 100);
@@ -80,15 +81,22 @@ function Popup (props) {
 
     incomes = incomes.map(id => {
         const data_ = id[0] === 'r' ? props.data.get.rooms[id]:props.data.get.profiles[id];
+        const close = (id) => {
+            let incomes = props.incomes.get.filter(v => v !== id);
+            data.show = false; 
+            props.incomes.set(incomes);
+            props.data.socket.setData(props.data.get);
+        }
 
         if (!data_) props.data.socket.loadData({ type: 'profile', id });
         else {
             return (
-            <div draggable key={id} className='popup-income'>
+            <div key={id} className='popup-income'>
                 <p className='popup-income-name'>{data_.name}</p>
                 <Avatar className='popup-income-avatar' url={data_.avatar_url} />
                 <CallIcon className='popup-income-accept' onClick={() => props.data.socket.call('start', id)} />
                 <CallIcon className='popup-income-decline' onClick={() => props.data.socket.call('end', id)} />
+                <CloseIcon className='popup-income-close' onClick={() => close(id)} />
             </div>
             );
         }
@@ -117,16 +125,16 @@ function Popup (props) {
             if (event.key === 'Escape') props.popup.set({ show: false });
         }, false);
 
-        document.addEventListener('dragover', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
+        // document.addEventListener('dragover', (event) => {
+        //     event.stopPropagation();
+        //     event.preventDefault();
 
-            event.path.forEach((elem) => {
-                if (elem.className !== 'popup-income') return;
-                elem.style.top = `${event.y - vhToPx(10)}px`;
-                elem.style.left = `${event.x - vhToPx(10)}px`;
-            });
-        });
+        //     event.path.forEach((elem) => {
+        //         if (elem.className !== 'popup-income') return;
+        //         elem.style.top = `${event.y - vhToPx(10)}px`;
+        //         elem.style.left = `${event.x - vhToPx(10)}px`;
+        //     });
+        // });
     }, []);
 
     const close = () => props.popup.set({ show: false });
@@ -135,8 +143,8 @@ function Popup (props) {
     return (<>
         {incomes}
         { data.show && Element ? <>
-        <div id='popup-body' onClick={close} onKeyPress={(event) => {console.log(event)}} style={{ backgroundColor: bodyColor }} />
-        <Element data={props.data} popup={props.popup} alert={props.alert} /> 
+        <div id='popup-body' onClick={close} style={{ backgroundColor: bodyColor }} />
+        <Element data={props.data} close={close} popup={props.popup} alert={props.alert} /> 
         </> : ''}
         </>);
 }
@@ -144,20 +152,24 @@ function Popup (props) {
 function FilePop (props) {
     const data = props.popup.get;
 
-    return (<>{data.fType.startsWith('image') ? 
-        <img id='popup-file-image' src={data.uri} />
+    return (<>
+        { data.next ? <ArrowIcon id='popup-file-next' onClick={data.next} />:'' }
+        { data.prev ? <ArrowIcon id='popup-file-prev' onClick={data.prev} />:'' }
+        { data.fType.startsWith('image') ? 
+        <div id='popup-file-image-frame' onClick={props.close}>
+        <img id='popup-file-image' src={data.uri} /></div>
         : <iframe id='popup-file-txt' src={data.uri} />
     }</>);
 }
 
 function Confirm (props) {
-    const popup = props.popup.get;
+    const f = props.popup.get.func;
 
     return (
         <div id='popup-confirm-body'>
-            <p>Are you sure you want to do this?</p>
-            <div id='popup-confirm-no' onClick={() => { popup.func.no(); props.popup.close(); }}>NO</div>
-            <div id='popup-confirm-yes' onClick={() => { popup.func.yes(); props.popup.close(); }}>YES</div>
+            <p>Are you sure?</p>
+            <div id='popup-confirm-no' onClick={() => { f.no(); props.popup.close(); }}>NO</div>
+            <div id='popup-confirm-yes' onClick={() => { f.yes(); props.popup.close(); }}>YES</div>
         </div>
     );
 }
@@ -227,7 +239,6 @@ function NewPost (props) {
 
     const post = async () => {
         const files_  = await Attachs.toString(files);
-        console.log(files_)
         if (input.title.length > 30 || input.text.length > 1500 || !(input.title || input.text || files_.length)) return; 
         const postBody = {
             title: input.title,
@@ -288,6 +299,19 @@ function ContactsDropDown (props) {
     const [dropped, setDropped] = React.useState(false);
     const profileId = props.menu.get.id;
     const data = props.data.get;
+    const deleteH = () => {
+        const confirm = props.popup.get;
+
+        confirm.func = {
+            yes: () => props.data.socket.request('message', { type: 'clear', id: profileId }),
+            no: () => 0 
+        }
+        confirm.type = 'confirm'
+        confirm.show = true
+
+        props.popup.set(confirm);
+        props.data.socket.setData(props.data.get);
+    }
 
     const Menu = () => {
         return dropped ? (<div className='contacts-dropdown-menu' onClick={() => setDropped(false)}>
@@ -295,7 +319,7 @@ function ContactsDropDown (props) {
             {!data.user.muted.includes(profileId) ? 
                 <NotifIcon className='contacts-dropdown-item contacts-dropdown-notify' onClick={() => { props.data.socket.request('user', { type: 'mute', id: profileId }); data.user.muted.push(profileId); props.data.socket.setData(data) }} />
             :   <NotifIcon2 className='contacts-dropdown-item contacts-dropdown-notify2' onClick={() => { props.data.socket.request('user', { type: 'unmute', id: profileId }); data.user.muted = data.user.muted.filter(v => v !== profileId); props.data.socket.setData(data) }} />}
-            <DeleteIcon className='contacts-dropdown-item contacts-dropdown-delete' onClick={() => props.data.socket.request('message', { type: 'clear', id: profileId })} />
+            <DeleteIcon className='contacts-dropdown-item contacts-dropdown-delete' onClick={deleteH} />
             {data.user.blocked.includes(profileId) ?  
                 <UnblockIcon className='contacts-dropdown-item contacts-dropdown-unblock' onClick={() => { props.data.socket.request('user', { type: 'unblock', id: profileId }); data.user.blocked = data.user.blocked.filter(v => v !== profileId); props.data.socket.setData(data) }} />
             :   <BlockIcon className='contacts-dropdown-item contacts-dropdown-block' onClick={() => { props.data.socket.request('user', { type: 'block', id: profileId }); data.user.blocked.push(profileId); props.data.socket.setData(data) }} />}
@@ -412,7 +436,7 @@ function RoomsDropDown (props) {
                     {loadMembers()}
                 </div>
                 <span id='rooms-dropdown-bar' />
-                <Avatar className='rooms-dropdown-avatar' url={data.rooms[roomId].avatar_url} room={data.rooms[roomId].name} onClick={data.rooms[roomId].admins.includes(data.user.id) ? (() => input.current.click()):() => console.log(3)} />
+                <Avatar className='rooms-dropdown-avatar' url={data.rooms[roomId].avatar_url} room={data.rooms[roomId].name} onClick={data.rooms[roomId].admins.includes(data.user.id) ? (() => input.current.click()):() => 0} />
                 {!data.user.muted.includes(roomId) ? 
                     <NotifIcon className='rooms-dropdown-notify' onClick={() => { props.data.socket.request('user', { type: 'mute', id: roomId }); data.user.muted.push(roomId); props.data.socket.setData(data) }} />
                 :   <NotifIcon2 className='rooms-dropdown-notify' style={{ paddingLeft: '0.1vh' }} onClick={() => { props.data.socket.request('user', { type: 'unmute', id: roomId }); data.user.muted = data.user.muted.filter(v => v !== roomId); props.data.socket.setData(data) }} />}
@@ -430,4 +454,4 @@ function RoomsDropDown (props) {
     </>);
 }
 
-module.exports = {Alert, Popup, ProfileDropDown, ContactsDropDown, RoomsDropDown};
+module.exports = {Alert, Popup, ProfileDropDown, ContactsDropDown, RoomsDropDown, Confirm};

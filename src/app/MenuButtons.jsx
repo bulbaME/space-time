@@ -24,28 +24,32 @@ function MenuButtons (props) {
 
         if (props.menu.get.type == 'rooms') {
             lastChatSelected.rooms = props.menu.get.id;
-            setLastChatSelected(lastChatSelected);
+            setLastChatSelected(lastChatSelected); 
         }
 
         let last;
         switch(type) {        
             case 'contacts':
-                Object.values(props.data.get.chats).forEach(v => {
-                    if (!last || last < v.history[0]) last = v.id;
-                });
-    
                 if (lastChatSelected.chats) last = lastChatSelected.chats;
-                if (!last) last = props.data.get.user.contacts[0];
+                if (!last && Object.values(props.data.get.chats).length) last = Object.values(props.data.get.chats).sort((a, b) => {
+                    if (!a.history.length) return 1;
+                    if (!b.history.length) return -1;
+
+                    let t1 = a.history[a.history.length-1].timestamp, t2 = b.history[b.history.length-1].timestamp;
+                    return t1 > t2 ? -1 : 1;
+                }, )[0].ids.filter(v => v !== props.data.get.user.id)[0];
                 
                 props.menu.set({ type: 'contacts', id: last || '' });
             break;
             case 'rooms':
-                Object.values(props.data.get.rooms).forEach(v => {
-                    if (!last || last < v.history[0]) last = v.id;
-                });
-    
                 if (lastChatSelected.rooms) last = lastChatSelected.rooms;
-                if (!last) last = Object.values(props.data.get.rooms).length ? Object.values(props.data.get.rooms)[0].id:'';
+                if (!last && Object.values(props.data.get.rooms).length) last = Object.values(props.data.get.rooms).sort((a, b) => {
+                    if (!a.history.length) return 1;
+                    if (!b.history.length) return -1;
+
+                    let t1 = a.history[a.history.length-1].timestamp, t2 = b.history[b.history.length-1].timestamp;
+                    return t1 > t2 ? -1 : 1;
+                }, )[0].id;
                 
                 props.menu.set({ type: 'rooms', id: last || '' });
             break;

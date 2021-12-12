@@ -50,11 +50,11 @@ class Socket {
         }
 
         // update profiles data 
-        setInterval(() => {
-            this.loadData({ type: 'user-posts' });
-            for (let p of Object.keys(hooks.data.get.profiles)) 
-                this.loadData({ type: 'profile', id: p });
-        }, DATA_UPDATE_RATE);
+        // setInterval(() => {
+        //     this.loadData({ type: 'user-posts' });
+        //     for (let p of Object.keys(hooks.data.get.profiles)) 
+        //         this.loadData({ type: 'profile', id: p });
+        // }, DATA_UPDATE_RATE);
 
         this.socket.on('auth-error', () => this.destroy());
         this.socket.on('disconnect', () => this.destroy());
@@ -154,6 +154,10 @@ class Socket {
                 case 'clear':
                     if (data.id[0] === 'r') newData.rooms[data.id] = { id: data.id, history: [] };
                     else newData.chats[data.id] = { id: data.id, history: [], unread: { id: '', count: 0 } };
+                    break;
+                case 'delete':
+                    if (data.id[0] === 'r') newData.rooms[data.id].history = newData.rooms[data.id].history.filter(v => v.id !== data.msg);
+                    else newData.chats[data.id].history = newData.chats[data.id].history.filter(v => v.id !== data.msg);
             }
 
             this.setData(newData);
@@ -164,7 +168,6 @@ class Socket {
         });
 
         this.socket.on('call', (data) => {
-            console.log(data);
             switch(data.type) {
                 case 'request':
                     this.callData.incomes.add(data.id);
@@ -240,8 +243,6 @@ class Socket {
             this.hooks.call.set(this.callData.current);
 
         } else if (type === 'end') {
-            console.log(this.callData.incomes, id);
-
             if (this.callData.incomes.has(id)) {
                 this.socket.emit('call', { type: 'decline', id, socketId: this.callData.sockets[id] });
                 this.hooks.incomes.set(this.hooks.incomes.get.filter(v => v !== id));
@@ -283,8 +284,8 @@ class Socket {
         this.recentReq.push([event, data]);
 
         if (this.reqLastSec > MAX_REQ_SEC) {
-            if (!this.hooks.alert.get.show)
-                this.hooks.alert.set({show: true, text: 'Calm down!', type: 'error'});
+            // if (!this.hooks.alert.get.show)
+            //     this.hooks.alert.set({show: true, text: 'Calm down!', type: 'error'});
         } else {
             this.reqLastSec++;
             this.socket.emit(event, data);
@@ -292,7 +293,7 @@ class Socket {
     }
 
     setData(data) {
-        // save scroll parameter to set after re-render 
+        // save profile scroll parameter to set after re-render 
         if (data.user && document.getElementById('profile-posts')) data.scroll = document.getElementById('profile-posts').scrollTop;
         
         this.hooks.alert.set({ show: false });
@@ -303,10 +304,11 @@ class Socket {
          * compared to data hook,
          * which doesn't update anything below parent element
          * 
-         * why am I using Socket class for updating data?
+         * why am I using Socket class for updating global data object?
          * because it fucking doesn't work otherwise
          *  
          * I hate react
+         * (15/08/21)
         */
 
         this.hooks.data.set(data);
@@ -335,6 +337,7 @@ class Socket {
     // GTTS
     
     gtts(text) {
+        // TODO 
         const gtts = new Gtts(text, 'en');
         let res;
         gtts.stream().pipe(res);

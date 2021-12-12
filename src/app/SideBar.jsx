@@ -32,7 +32,7 @@ function SideBar (props) {
     if (props.menu.get.type === 'contacts' && sidebar.type !== 'contacts') setSidebar({ type: 'contacts', id: ''});
     else if (props.menu.get.type === 'rooms' && sidebar.type !== 'rooms') setSidebar({ type: 'rooms', id: ''});
 
-    const loadChats = (chats, setMenu) => {
+    const loadChats = (chats, setMenu, isRoom=false) => {
         if (!chats || !chats.filter(v => v).length) return [];
         chats = chats.filter(v => v);
 
@@ -55,7 +55,7 @@ function SideBar (props) {
                 setCallTimeInt(0);
             }
 
-            const descr = (lastMessage && sidebar.type === 'rooms' ? `${lastMessage.sender === data.user.id ? 'You':data.profiles[lastMessage.sender].name}: `:'') + (
+            const descr = (lastMessage && sidebar.type === 'rooms' && !props.data.socket.callData.call ? `${lastMessage.sender === data.user.id ? 'You':data.profiles[lastMessage.sender].name}: `:'') + (
             (props.data.socket.callData.current === v.id && props.data.socket.callData.state === 1 ? 'Outgoing Call':'')
             || (props.data.socket.callData.current === v.id ? `Call 00:00`:'')
             || (props.data.socket.callData.incomes.has(v.id) ? 'Incoming Call':'')
@@ -76,7 +76,7 @@ function SideBar (props) {
                 <div key={i} className='sidebar-chat' onClick={chatClick} style={{ backgroundColor: ['contacts', 'rooms'].includes(props.menu.get.type) && v.id === props.menu.get.id ? 'var(--blue-mid)':'inherit' }}>
                     <Avatar className='sidebar-chat-logo' room={v.id[0] === 'r' ? v.name:''} url={v.avatar_url || ''} />
                     {v.online ? <div id='sidebar-chat-online' />:''}
-                    {v.unread && v.unread.count ? (v.unread.id !== data.user.id ? <div className='sidebar-unread1' />:<div className='sidebar-unread2'>{v.unread.count <= 1000 ? v.unread.count:'999+'}</div>):''}
+                    {v.unread && v.history.length && v.unread.count ? (v.unread.id !== data.user.id ? <div className='sidebar-unread1' />:<div className='sidebar-unread2'>{v.unread.count <= 1000 ? v.unread.count:'999+'}</div>):''}
                     <p className='sidebar-chat-name'>{v.name || ''}{data.user.muted.includes(v.id) ? <NotifIcon2 className='sidebar-chat-muted' />:''}</p>
                     <p className='sidebar-chat-descr' ref={props.data.socket.callData.current === v.id && props.data.socket.callData.state === 2 ? callTimeRef : null} style={descr ? {}:{opacity: '0.7'}}>{descr || 'No messages yet'}</p>
                 </div>
@@ -141,7 +141,7 @@ function SideBar (props) {
             let id = text.slice(text.indexOf('#')+1);
             id = id.slice(0, id.indexOf(' ') === -1 ? id.length:id.indexOf(' '));
             // do not allow searching for self id
-            if (id == data.profile.id) return [];
+            if (id == data.user.id) return [];
 
             const profile = data.profiles[id];
 
@@ -167,16 +167,25 @@ function SideBar (props) {
         search(text);
     }
 
+    const getIdFromChat = (ch) => ch.ids.filter(v => v !== data.user.id)[0];
+    const canShowChat = (id) => data.user.contacts.includes(id) || data.user.privacy.write === 'all';
+    const canShowCallChat = (id) => data.user.contacts.includes(id) || data.user.privacy.call === 'all';
+
     let chats
-    , chatMenuSet = (id) => props.menu.set({ type: data.user.contacts.includes(id) || data.chats[id] ? 'contacts':'profile', id })
-    , roomMenuSet = (id) => props.menu.set({ type: 'room', id });
+    , chatMenuSet = (id) => props.menu.set({ type: canShowChat(id) || data.chats[id] ? 'contacts':'profile', id })
+    , roomMenuSet = (id) => props.menu.set({ type: 'rooms', id });
+    // search 
     if (searchInput) { 
-        if (sidebar.type === 'chats') chats = loadChats(afterSearch(searchInput, []), chatMenuSet);
+        if (sidebar.type === 'contacts') chats = loadChats(afterSearch(searchInput, []), chatMenuSet);
         if (sidebar.type === 'rooms') chats = loadChats(afterSearch(searchInput, []), roomMenuSet);
     }
+    // load rooms
     else if (sidebar.type === 'rooms') chats = loadChats(Object.values(data.rooms), roomMenuSet);
+    // load chats
     else chats = (() => {
-        Object.values(data.chats).filter(v => !data.user.contacts.includes(v.id) && !data.profiles[v.id]).forEach(v => props.data.socket.loadData({ type: 'profile', id: v.id }));
+        Object.values(data.chats).map(v => v.ids ? getIdFromChat(v) : '' )
+        .filter(v => (canShowCallChat(v) || canShowChat(v)) && !data.profiles[v]).forEach(v => 
+            { if (v) props.data.socket.loadData({ type: 'profile', id: v }); });
 
         return loadChats([
             ...data.user.contacts.map(v => {
@@ -184,12 +193,13 @@ function SideBar (props) {
                 if (data.profiles[v]) return {...chat, ...data.profiles[v]};
             }),
             ...Object.values(data.chats).map(v => {
-                const profile = data.profiles[v.id];
-                if (profile && !data.user.contacts.includes(profile.id) && v.history.length) return {...v, ...profile};
+                if (!v.ids) return;
+                const profile = data.profiles[getIdFromChat(v)];
+                if (profile && canShowChat(profile.id) && v.history.length && !data.user.contacts.includes(profile.id)) return {...v, ...profile};
             }),
             ...Array.from(props.data.socket.callData.incomes).map(v => {
                 const profile = data.profiles[v];
-                if (profile && !data.user.contacts.includes(v) && !data.chats[v] && props.data.socket.callData.current === v.id) return { ...profile, history: [] };
+                if (profile && canShowCallChat(v) && !data.chats[v]) return { ...profile, history: [] };
             })], chatMenuSet);
     })();
 
