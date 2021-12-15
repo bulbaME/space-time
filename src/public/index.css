@@ -2257,8 +2257,9 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .audio {
     width: 43vh;
-    height: 5vh;
+    height: 6vh;
     border-radius: 2vh;
+    margin-left: -.5vh;
 }
 
 .audio-button {
@@ -2281,11 +2282,11 @@ textarea::-moz-scrollbar-thumb:hover {
 .audio-time {
     position: absolute;
     width: fit-content;
-    margin-left: 37vh;
-    margin-top: 1.1vh;
+    margin-left: 25vh;
+    margin-top: 1.5vh;
     text-align: right;
-    font-size: 2.3vh;
-    font-family: 'Rubik', sans-serif;
+    font-size: 2vh;
+    font-family: 'Rubik';
     font-weight: 400;
     color: var(--light-gray)
 }
@@ -2295,11 +2296,11 @@ textarea::-moz-scrollbar-thumb:hover {
     --bar-width: 0%;
     -webkit-appearance: none;
     position: absolute;
-    width: 26vh;
+    width: 16vh;
     height: 0.5vh;
     border-radius: 0.5vh;
-    margin-left: 8vh;
-    margin-top: 2.25vh;
+    margin-left: 7vh;
+    margin-top: 2.5vh;
     cursor: pointer;
 }
 

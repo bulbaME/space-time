@@ -34,7 +34,12 @@ class Call {
 
     init() {
         // create audio stream from microphone
-        window.navigator.mediaDevices.getUserMedia({ audio: true })
+        if (!window.navigator.mediaDevices) {
+            this.eventHandler.emit('stop', 'mic-denied');
+            return;
+        }
+        
+            window.navigator.mediaDevices.getUserMedia({ audio: true })
         .then(async (audioMediaStream) => {
             const audioContext = this.audioContext;
 
