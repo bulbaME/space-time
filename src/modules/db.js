@@ -171,28 +171,28 @@ class DB {
 				async add (userId1, userId2) {
 					user_.users.updateOne({ id: userId1 }, { $addToSet: { contacts: userId2 }});
 					// if needed create chat with another user
-					if (!(await chats_.get(userId1, userId2))) chats_.new(userId1, userId2);
+					if (!(await chats_.get(userId1, userId2))) return chats_.new(userId1, userId2);
 				},
 
 				// remove user from contacts
 				remove (userId1, userId2) {
-					user_.users.updateOne({ id: userId1 }, { $pull: { contacts: userId2 }});
+					return user_.users.updateOne({ id: userId1 }, { $pull: { contacts: userId2 }});
 				},
 
 				block (userId1, userId2) {
-					user_.users.updateOne({ id: userId1 }, { $addToSet: { blocked: userId2 }});
+					return user_.users.updateOne({ id: userId1 }, { $addToSet: { blocked: userId2 }});
 				},
 
 				unblock (userId1, userId2) {
-					user_.users.updateOne({ id: userId1 }, { $pull: { blocked: userId2 }});
+					return user_.users.updateOne({ id: userId1 }, { $pull: { blocked: userId2 }});
 				},
 
 				mute (userId1, userId2) {
-					user_.users.updateOne({ id: userId1 }, { $addToSet: { muted: userId2 }});
+					return user_.users.updateOne({ id: userId1 }, { $addToSet: { muted: userId2 }});
 				},
 
 				unmute (userId1, userId2) {
-					user_.users.updateOne({ id: userId1 }, { $pull: { muted: userId2 }});
+					return user_.users.updateOne({ id: userId1 }, { $pull: { muted: userId2 }});
 				}
 			},
 
@@ -202,7 +202,7 @@ class DB {
 					if (!(await user_.users.findOne({ id: userId, liked_posts: postId }))) {
 						const authorId = postId.slice(0, postId.indexOf('-'));
 						user_.users.updateOne({ id: userId }, { $addToSet: { liked_posts: postId } });
-						user_.users.updateOne({ id: authorId, 'posts.id': postId }, { $inc: { 'posts.$.likes': 1 }});
+						return user_.users.updateOne({ id: authorId, 'posts.id': postId }, { $inc: { 'posts.$.likes': 1 }});
 					}
 				},
 
@@ -211,7 +211,7 @@ class DB {
 					if (await user_.users.findOne({ id: userId, liked_posts: postId })) {
 						const authorId = postId.slice(0, postId.indexOf('-'));
 						user_.users.updateOne({ id: userId }, { $pull: { liked_posts: postId } });
-						user_.users.updateOne({ id: authorId, 'posts.id': postId }, { $inc: { 'posts.$.likes': -1 }});
+						return user_.users.updateOne({ id: authorId, 'posts.id': postId }, { $inc: { 'posts.$.likes': -1 }});
 					}
 				},
 
@@ -247,9 +247,9 @@ class DB {
 				}, 
 
 				// delete a post
-				delete(userId, postId) {
-					user_.users.updateOne({ id: userId }, { $pull: { posts: { id: postId }}});
+				async delete(userId, postId) {
 					firestore.deleteAll(`${userId}/posts/${postId}`);
+					return user_.users.updateOne({ id: userId }, { $pull: { posts: { id: postId }}});
 				}
 			},
 
@@ -265,7 +265,7 @@ class DB {
 
 				// change user name
 				name(userId, name) {
-					user_.users.updateOne({ id: userId }, { $set: { name: name }});
+					return user_.users.updateOne({ id: userId }, { $set: { name: name }});
 				},
 
 				// change user avatar
@@ -274,26 +274,26 @@ class DB {
 
 					const imgType = data.type.slice(6);
 					const path = `avatars/${userId}.${imgType}`;
-					firestore.save(path, data.data);
 					user_.users.updateOne({ id: userId }, { $set: { avatar_url: path }});
+					return firestore.save(path, data.data);
 				},
 
 				// change user status
 				status(userId, status){
-					user_.users.updateOne({ id: userId }, { $set: { status: status }});
+					return user_.users.updateOne({ id: userId }, { $set: { status: status }});
 				},
 
 				// change user privacy settings
 				privacy(userId, type, state) {
 					switch(type) {
 						case 'call':
-							user_.users.updateOne({ id: userId }, { $set: { 'privacy.call': state }});
+							return user_.users.updateOne({ id: userId }, { $set: { 'privacy.call': state }});
 							break;
 						case 'write':
-							user_.users.updateOne({ id: userId }, { $set: { 'privacy.write': state }});
+							return user_.users.updateOne({ id: userId }, { $set: { 'privacy.write': state }});
 							break;
 						case 'see':
-							user_.users.updateOne({ id: userId }, { $set: { 'privacy.see': state }});
+							return user_.users.updateOne({ id: userId }, { $set: { 'privacy.see': state }});
 					}
 				}
 			},
