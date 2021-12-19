@@ -1,10 +1,14 @@
 'use strict';
 
 
+const { updateListeners, updateListener, listenTo, deleteListener } = require('./listeners.js');
+
 const sockets = {};
 const rooms = {};
+const listeners = {};
 
 const CALL_TIMEOUT = 30_000; // 30 seconds
+
 
 const init = (io, db) => {
     io.sockets.on('connection' , async (clientSocket) => {
@@ -30,7 +34,14 @@ const init = (io, db) => {
                 sockets[clientId] = clientSocket;
                 db.user.connect(userId, clientId);
 
-                clientSocket.on('listen-id', async (reqData) => {
+                // listens to
+                const listens = [];
+                updateListeners(userId, db, sockets);
+
+                clientSocket.on('listen-id', (reqData) => {
+                    listenTo(userId, reqData.state, reqData.id);
+                    if (reqData.state) listens.push(reqData.id);
+                    else listens.pop(listens.find(reqData.id));
                 });
 
                 // on data request
@@ -85,29 +96,32 @@ const init = (io, db) => {
 
                 // on change data request
                 clientSocket.on('change', async (reqData) => {
+                    let promise_;
                     switch(reqData.type) {
                         case 'id':
                             const newProfileId = reqData.id;
-                            if (/^[a-z0-9]{5,16}$/.test(newProfileId)) db.user.update.profileId(userId, newProfileId);
+                            if (/^[a-z0-9]{5,16}$/.test(newProfileId)) promise_ = db.user.update.profileId(userId, newProfileId);
                             break;
                         case 'name':
                             const newUsername = reqData.data;
-                            if(newUsername.length <= 10) db.user.update.name(userId, newUsername);
+                            if(newUsername.length <= 10) promise_ = db.user.update.name(userId, newUsername);
                             break;
                         case 'status':
                             const newStatus = reqData.data;
-                            if(newStatus.length <= 16) db.user.update.status(userId, newStatus);
+                            if(newStatus.length <= 16) promise_ = db.user.update.status(userId, newStatus);
                             break;
                         case 'privacy':
                             const newState = reqData.data;
                             if ((newState.state === 'all' || newState.state === 'contacts') && 
                                 (newState.type === 'call' || newState.type === 'write' || newState.type === 'see')) 
-                                    db.user.update.privacy(userId, newState.type, newState.state);
+                                promise_ = db.user.update.privacy(userId, newState.type, newState.state);
                             break;
                         case 'avatar':
-                            db.user.update.avatar(userId, reqData.data);
+                            promise_ = db.user.update.avatar(userId, reqData.data);
                             break;
                     }
+
+                    if (promise_) promise_.then(() => updateListeners(userId, db, sockets));
                 });
 
                 clientSocket.on('room', async (reqData) => {
@@ -199,16 +213,20 @@ const init = (io, db) => {
 
                     switch(reqData.type) {
                         case 'add':
-                            db.user.user.add(userId, reqData.id);
+                            db.user.user.add(userId, reqData.id)
+                            .then(() => updateListener(reqData.id, userId, db, sockets));
                             break;
                         case 'remove':
-                            db.user.user.remove(userId, reqData.id);
+                            db.user.user.remove(userId, reqData.id)
+                            .then(() => updateListener(reqData.id, userId, db, sockets));
                             break;
                         case 'block':
-                            db.user.user.block(userId, reqData.id);
+                            db.user.user.block(userId, reqData.id)
+                            .then(() => updateListener(reqData.id, userId, db, sockets));
                             break;
                         case 'unblock':
-                            db.user.user.unblock(userId, reqData.id);
+                            db.user.user.unblock(userId, reqData.id)
+                            .then(() => updateListener(reqData.id, userId, db, sockets));
                             break;
                         case 'mute':
                             db.user.user.mute(userId, reqData.id);
@@ -228,16 +246,20 @@ const init = (io, db) => {
                             postBody.files = postBody.files ? postBody.files : [];
 
                             if (postBody.title.length <= 30 && postBody.text.length <= 1500 && (postBody.title || postBody.text || postBody.files.length))
-                                clientSocket.emit('main-data', { type: 'post', data: await db.user.post.new(userId, postBody)});
+                                if (clientSocket.emit('main-data', { type: 'post', data: await db.user.post.new(userId, postBody)}))
+                                    updateListeners(userId, db, sockets);
                             break;
                         case 'delete':
-                            db.user.post.delete(userId, reqData.id);
+                            db.user.post.delete(userId, reqData.id)
+                            .then(updateListeners(userId, db, sockets));
                             break;
                         case 'like':
-                            db.user.post.like(userId, reqData.id);
+                            db.user.post.like(userId, reqData.id)
+                            .then(updateListeners(reqData.id.split('-')[0], db, sockets));
                             break;
                         case 'unlike':
-                            db.user.post.unLike(userId, reqData.id);
+                            db.user.post.unLike(userId, reqData.id)
+                            .then(updateListeners(reqData.id.split('-')[0], db, sockets));
                     }
                 });
 
@@ -443,8 +465,10 @@ const init = (io, db) => {
 
                 // on socket disconnect
                 clientSocket.on('disconnect', () => {
+                    deleteListener(userId, listens);
                     delete sockets[clientId];
                     db.user.disconnect(userId, clientId);
+                    updateListeners(userId, db, sockets);
 
                     if (currentCall.state) {
                         if (currentCall.to) {
