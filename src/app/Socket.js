@@ -23,8 +23,11 @@ class Socket {
         // recent requests
         setInterval(() => this.recentReq = [], 100);
 
-        
-        this.socket = IO({ auth: { token: getAuthKey() }});
+        this.socket = IO({ 
+            auth: { token: getAuthKey() },
+            transports: ["websocket", "polling"]
+        });
+
         this.hooks = hooks;
 
         this.audioContext = null;
@@ -57,11 +60,15 @@ class Socket {
         // }, DATA_UPDATE_RATE);
 
         this.socket.on('auth-error', () => this.destroy());
-        this.socket.on('disconnect', () => this.destroy());
-        this.socket.on('connect_error', () => this.destroy());
+        this.socket.on('disconnect', (err) => console.log(`disconnected: ${err}`));
+        this.socket.on('connect_error', (err) => console.log(`connection error: ${err}`));
 
         this.socket.on('auth-succeed', () => {
             this.hooks.socket.set(this);
+        });
+
+        this.socket.on('listener', (id) => {
+            setTimeout(() => this.request('main-data', { type: 'profile', id }), 50);
         });
 
         this.socket.on('main-data', (body) => {
@@ -86,8 +93,9 @@ class Socket {
 
                     break;
                 case 'profile':
-                    newData.profiles[data.id] = data;
+                    newData.profiles[data.id] = { ...(newData.profiles[data.id] || {}), ...data };
                     if (!newData.chats[data.id]) newData.chats[data.id] = { id: data.id, history: [], unread: { id: '', count: 0 } };
+                    this.socket.emit('listen-id', { id: data.id, state: true });
                     break;
                 case 'rooms':
                     temp = newData.rooms;

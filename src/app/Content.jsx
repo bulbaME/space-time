@@ -211,7 +211,7 @@ function UserFrame (props) {
                 </div>);
         });
 
-        return (<div id='profile-posts'>{posts.length ? <><span id='profile-posts-bar' />{posts}</>:<p id='profile-noposts'>{!profile.in_contacts && profile.privacy.see === 'contacts' ? 'CLOSED PROFILE' : 'NO POSTS'}</p>}</div>);
+        return (<div id='profile-posts'>{posts.length ? <><span id='profile-posts-bar' />{posts}</>:<p id='profile-noposts'>{!profile.in_contacts && profile.privacy.see === 'contacts' && id ? 'CLOSED PROFILE' : 'NO POSTS'}</p>}</div>);
     }
 
     const users = {
@@ -268,10 +268,12 @@ function UserFrame (props) {
 }
 
 function SettingsFrame (props) {
+    const user = props.data.get.user;
+
     const [logoutClicked, setLogoutClicked] = React.useState(false);
-    const [inputId, setInputId] = React.useState('');
-    const [inputStatus, setInputStatus] = React.useState('');
-    const [inputName, setInputName] = React.useState('');
+    const [inputId, setInputId] = React.useState(user.profile_id);
+    const [inputStatus, setInputStatus] = React.useState(user.status);
+    const [inputName, setInputName] = React.useState(user.name);
 
     const inputRef = React.useRef();
     const statusRef = React.useRef();
@@ -320,8 +322,6 @@ function SettingsFrame (props) {
         nameRef.current.value = '';
     }
 
-    const user = props.data.get.user;
-
     // modify privacy settings
     const swp_ = (type, state) => {
         props.data.socket.request('change', { type: 'privacy', data: { type, state }});
@@ -365,15 +365,15 @@ function SettingsFrame (props) {
             </div>
             <div id='settings-change-id' className='settings-change'>
                 <p className='settings-change-id-symb'>#</p>
-                <input id='settings-change-input-id' className='settings-change-input' maxLength='16' ref={inputRef} placeholder={user.profile_id} onChange={(event) => setInputId(event.target.value)} />
+                <input id='settings-change-input-id' className='settings-change-input' maxLength='16' ref={inputRef} placeholder={user.profile_id} value={inputId} onChange={(event) => setInputId(event.target.value)} />
                 <div className='settings-change-submit' onClick={() => changeId(inputId)}><p>OK</p></div>
             </div>
             <div id='settings-change-status' className='settings-change'>
-                <input className='settings-change-input' maxLength='16' ref={statusRef} placeholder={user.status} onChange={(event) => setInputStatus(event.target.value)} />
+                <input className='settings-change-input' maxLength='16' ref={statusRef} placeholder={user.status} value={inputStatus} onChange={(event) => setInputStatus(event.target.value)} />
                 <div className='settings-change-submit' onClick={() => changeStatus(inputStatus)}><p>OK</p></div>
             </div>
             <div id='settings-change-name' className='settings-change' style={{ fontWeight: 500 }}>
-                <input className='settings-change-input' maxLength='10' ref={nameRef} placeholder={user.name} onChange={(event) => setInputName(event.target.value)} />
+                <input className='settings-change-input' maxLength='10' ref={nameRef} placeholder={user.name} value={inputName} onChange={(event) => setInputName(event.target.value)} />
                 <div className='settings-change-submit' onClick={() => changeName(inputName)}><p>OK</p></div>
             </div>
             <div id='settings-notify' onClick={notifToggle}><div id='settings-notify-button' className={cookie.get('notifications') === 'on' ? 'on':'off'} />Recieve notifications</div>
@@ -507,7 +507,7 @@ function ContactsFrame (props) {
             const id = temp.slice(0, temp.indexOf('|'));
             const name = temp.slice(temp.indexOf('|')+1, temp.indexOf('/>'));
 
-            return (<span key={i}>{text2}<span className='invite' onClick={() => props.data.socket.request('room', { type: 'join', id })}>Invite to {name}</span>{text3}</span>);
+            return (<span key={i}>{text2}<span className='invite' onClick={() => roomInviteAccept(props, id)}>Invite to {name}</span>{text3}</span>);
         });
 
         return parsed.length ? parsed:text;
@@ -729,7 +729,7 @@ function RoomsFrame(props) {
             const id = temp.slice(0, temp.indexOf('|'));
             const name = temp.slice(temp.indexOf('|')+1, temp.indexOf('/>'));
 
-            return (<span key={i}>{text2}<span className='invite' onClick={() => props.data.socket.request('room', { type: 'join', id })}>Invite to {name}</span>{text3}</span>);
+            return (<span key={i}>{text2}<span className='invite' onClick={() => roomInviteAccept(props, id)}>Invite to {name}</span>{text3}</span>);
         });
 
         return parsed.length ? parsed:text;
@@ -868,6 +868,11 @@ function AudioMessage(props) {
         <div className='audio-time'>{parseTime(progress)}</div>
     </div>);
 }
+
+const roomInviteAccept = (props, id) => {
+    if (props.data.get.rooms[id]) props.menu.set({ type: 'rooms', id });
+    else props.data.socket.request('room', { type: 'join', id });
+};
 
 module.exports = Content;
  

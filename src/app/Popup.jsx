@@ -155,11 +155,13 @@ function FilePop (props) {
     return (<>
         { data.next ? <ArrowIcon id='popup-file-next' onClick={data.next} />:'' }
         { data.prev ? <ArrowIcon id='popup-file-prev' onClick={data.prev} />:'' }
-        { data.fType.startsWith('image') ? 
         <div id='popup-file-image-frame' onClick={props.close}>
-        <img id='popup-file-image' src={data.uri} /></div>
-        : <iframe id='popup-file-txt' src={data.uri} />
-    }</>);
+        <CloseIcon id='popup-file-close' />
+        { data.fType.startsWith('image') ? 
+        <img id='popup-file-image' src={data.uri} />
+        : <iframe id='popup-file-txt' src={data.uri} /> }
+        </div>
+    </>);
 }
 
 function Confirm (props) {
@@ -236,6 +238,12 @@ function NewPost (props) {
             else props.alert.set({ show: true, type: 'error', text: 'One of your files is bigger than 5MB' });
         }
     }
+ 
+    React.useEffect(() => {
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && event.shiftKey) post();
+        }, false);
+    }, []);
 
     const post = async () => {
         const files_  = await Attachs.toString(files);
@@ -244,9 +252,9 @@ function NewPost (props) {
             title: input.title,
             text: input.text,
             files: files_
-        }
+        };
 
-        props.popup.close()
+        props.popup.close();
         props.data.socket.request('post', { type: 'new', data: postBody });
     }
 
@@ -276,7 +284,6 @@ function ProfileDropDown (props) {
     const Menu = () => {
         return (<div className='profile-dropdown-menu' onClick={() => setDropped(false)}>
             <span id='profile-dropdown-bar' />
-            <EditIcon className='profile-dropdown-item profile-dropdown-edit' onClick={() => props.data.socket.request('user', { type: 'remove', id: profileId })} />
             {!data.user.muted.includes(profileId) ? 
                 <NotifIcon className='profile-dropdown-item profile-dropdown-notify' onClick={() => { props.data.socket.request('user', { type: 'mute', id: profileId }); data.user.muted.push(profileId); props.data.socket.setData(data) }} />
             :   <NotifIcon2 className='profile-dropdown-item profile-dropdown-notify2' onClick={() => { props.data.socket.request('user', { type: 'unmute', id: profileId }); data.user.muted = data.user.muted.filter(v => v !== profileId); props.data.socket.setData(data) }} />}
