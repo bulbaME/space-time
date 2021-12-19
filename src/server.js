@@ -20,7 +20,11 @@ App.use(express.static(__dirname + '/public'));  // send page
 const PORT = process.env.PORT || 2007;
 
 const server = App.listen(PORT, () => console.log(`[SERVER] started on port ${PORT}`));
-const io = socket(server);
+const io = socket(server, {
+    pingTimeout: 180_000,
+    pingInterval: 30_000,
+    maxHttpBufferSize: 1e8  // max message size 100 mb
+});
 
 (async () => {
     // initialize database
