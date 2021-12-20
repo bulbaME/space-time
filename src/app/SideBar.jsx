@@ -193,9 +193,10 @@ function SideBar (props) {
                 if (data.profiles[v]) return {...chat, ...data.profiles[v]};
             }),
             ...Object.values(data.chats).map(v => {
-                if (!v.ids) return;
+                if (!v.ids) v.ids = [v.id, data.user.id];
                 const profile = data.profiles[getIdFromChat(v)];
-                if (profile && canShowChat(profile.id) && v.history.length && !data.user.contacts.includes(profile.id)) return {...v, ...profile};
+                if (profile && canShowChat(profile.id) && v.history.length && !data.user.contacts.includes(profile.id))
+                    return {...v, ...profile};
             }),
             ...Array.from(props.data.socket.callData.incomes).map(v => {
                 const profile = data.profiles[v];

@@ -4,9 +4,6 @@
 const { updateListeners, updateListener, listenTo, deleteListener } = require('./listeners.js');
 
 const sockets = {};
-const rooms = {};
-const listeners = {};
-
 const CALL_TIMEOUT = 30_000; // 30 seconds
 
 
@@ -202,7 +199,7 @@ const init = (io, db) => {
                                 
                                 for (let u of room.ids)
                                     for (let s of await db.user.getSockets(u))
-                                        if (sockets[s]) sockets[s].emit('message', { type: 'new', data: { ...data, id: temp.id }});
+                                        if (sockets[s]) sockets[s].emit('message', { type: 'new', data: { msg: data, id: temp.id }});
                             }
                     }
                 });
@@ -278,7 +275,7 @@ const init = (io, db) => {
                             if (profile && !profile.blocked.includes(userId)) {
                                 if (profile.privacy.write === 'all' || profile.contacts.includes(userId)) {
                                     const message = await db.chats.message.new(userId, profile.id, { text: reqData.text.trim(), files: reqData.files, audio: reqData.audio, geo: reqData.geo });
-                                    data = { ...message };
+                                    data = { msg: message };
                                 }
                             }
 
@@ -294,10 +291,10 @@ const init = (io, db) => {
                         case 'delete':
                             profile = await db.user.get(reqData.id);
                             if (profile.privacy.write === 'all' || profile.contacts.includes(userId)) {
-                                if (!db.chats.message.delete(userId, reqData.id, reqData.msg)) return;
+                                if (!(await db.chats.message.delete(userId, reqData.id, reqData.msg))) return;
                                 data = { msg: reqData.msg };
                             }
-                            
+                            break;
                         default:
                             return;
                     }
@@ -374,10 +371,16 @@ const init = (io, db) => {
                     const socketId = reqData.socketId;
 
                     switch(reqData.type) {
+                        // case 'room-count':
+                        //     clientSocket.emit('call-room-count', { id, count: roomCallMembers[id] || 0 });
+                        //     break;
                         case 'start':
                             if (id[0] === 'r') {
                                 const room = await db.rooms.check(userId, id);
                                 if (!room) return;
+
+                                // if (roomCallMembers[id]) roomCallMembers[id] = 0;
+                                // roomCallMembers[id]++;
 
                                 currentCall.state = 2;
                                 currentCall.type = 2;
@@ -407,6 +410,9 @@ const init = (io, db) => {
                         case 'end':
                             if (!currentCall.state) return;
                             if (currentCall.type === 2) {
+                                // roomCallMembers[id]--;
+                                // if (!roomCallMembers[id]) delete roomCallMembers[id];
+
                                 clientSocket.leave(currentCall.to);
                                 clientSocket.emit('call', { type: 'end', id, socketId: id });
                                 db.rooms.call.end(id);

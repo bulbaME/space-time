@@ -797,6 +797,7 @@ function RoomsFrame(props) {
         <div id='contacts-top'>
             <RoomsDropDown menu={props.menu} data={props.data} alert={props.alert} />
             {props.data.socket.callData.state === 2 ? (props.data.socket.callData.muted ? <MicIcon id='contacts-mute' onClick={() => props.data.socket.callMuteToggle()} />:<MicOffIcon id='contacts-mute' onClick={() => props.data.socket.callMuteToggle()} />):''}
+            <div id='room-call-count'></div>
             <CallIcon id='contacts-call' className={props.data.socket.callData.current === room.id && props.data.socket.callData.state ? 'contacts-call-active':'contacts-call-unactive'} onClick={() => props.data.socket.call(!props.data.socket.callData.state ? 'start':'end', room.id)} />
             <div id='contacts-top-profile'><Avatar className='contacts-top-avatar' room={room.name} url={room.avatar_url} /><p>{room.name}</p></div></div>
         <div id='contacts-bottom'>

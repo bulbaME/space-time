@@ -52,6 +52,13 @@ class Socket {
             sockets: {}
         }
 
+        setInterval(() => {
+            for (let rk in this.hooks.data.get.rooms) {
+                const r = this.hooks.data.get.rooms[rk];
+                this.request('call', { type: 'room-count', id: r.id });
+            }
+        }, 1000);
+
         // update profiles data 
         // setInterval(() => {
         //     this.loadData({ type: 'user-posts' });
@@ -70,6 +77,12 @@ class Socket {
         this.socket.on('listener', (id) => {
             setTimeout(() => this.request('main-data', { type: 'profile', id }), 50);
         });
+
+        // update room call member count
+        // this.socket.on('call-room-count', (d) => {
+        //     const data = this.hooks.data.get;
+        //     data.rooms[d.id].callMembers = d.count;
+        // });
 
         this.socket.on('main-data', (body) => {
             const dataHook = this.hooks.data;
@@ -105,7 +118,8 @@ class Socket {
                 case 'chats':
                     if (!temp) temp = newData.chats;
 
-                    if (data.id) {
+                    if (data.ids) {
+                        data.id = data.ids.filter(v => v != newData.user.id)[0];
                         temp[data.id] = data;
                         if (temp.ids) temp.ids.forEach(loadProfiles);
                     }
@@ -137,16 +151,20 @@ class Socket {
                 case 'new':
                     if (data.id[0] === 'r') {
                         temp = newData.rooms[data.id].history;
-                        temp.push(data);
+                        temp.push(data.msg);
                         newData.rooms[data.id].history = temp;
                         const room = newData.rooms[data.id];
                         if (cookie.get('notifications') === 'on' && data.sender !== newData.user.id &&  !newData.user.muted.includes(room.id)) this.createNotification({ title: room.name, icon: room.avatar_url, body: data.text, renotify: true, tag: 1 });
                     } else {
+                        if (!newData.chats[data.id]) {
+                            this.loadData({ type: 'chats', id: data.id });
+                            return;
+                        }
                         temp = newData.chats[data.id].history;
-                        temp.push(data);
+                        temp.push(data.msg);
                         newData.chats[data.id].history = temp;
 
-                        if (data.sender === newData.user.id) newData.chats[data.id].unread.id = data.id;
+                        if (data.msg.sender === newData.user.id) newData.chats[data.id].unread.id = data.id;
                         else {
                             newData.chats[data.id].unread.id = newData.user.id;
                             const profile = newData.profiles[data.id];
