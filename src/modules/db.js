@@ -202,7 +202,7 @@ class DB {
 					if (!(await user_.users.findOne({ id: userId, liked_posts: postId }))) {
 						const authorId = postId.slice(0, postId.indexOf('-'));
 						user_.users.updateOne({ id: userId }, { $addToSet: { liked_posts: postId } });
-						return user_.users.updateOne({ id: authorId, 'posts.id': postId }, { $inc: { 'posts.$.likes': 1 }});
+						return await user_.users.updateOne({ id: authorId, 'posts.id': postId }, { $inc: { 'posts.$.likes': 1 }});
 					}
 				},
 
@@ -211,7 +211,7 @@ class DB {
 					if (await user_.users.findOne({ id: userId, liked_posts: postId })) {
 						const authorId = postId.slice(0, postId.indexOf('-'));
 						user_.users.updateOne({ id: userId }, { $pull: { liked_posts: postId } });
-						return user_.users.updateOne({ id: authorId, 'posts.id': postId }, { $inc: { 'posts.$.likes': -1 }});
+						return await user_.users.updateOne({ id: authorId, 'posts.id': postId }, { $inc: { 'posts.$.likes': -1 }});
 					}
 				},
 
@@ -249,7 +249,7 @@ class DB {
 				// delete a post
 				async delete(userId, postId) {
 					firestore.deleteAll(`${userId}/posts/${postId}`);
-					return user_.users.updateOne({ id: userId }, { $pull: { posts: { id: postId }}});
+					return await user_.users.updateOne({ id: userId }, { $pull: { posts: { id: postId }}});
 				}
 			},
 
@@ -394,6 +394,7 @@ class DB {
 
 				async delete(userId1, userId2, id) {
 					const data = await chats_.chats.updateOne({ ids: { $all: [userId1, userId2] } }, { $pull: { history: { id, sender: userId1 }}});
+					
 					return !!data.modifiedCount;
 				},
 

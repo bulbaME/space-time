@@ -248,15 +248,15 @@ const init = (io, db) => {
                             break;
                         case 'delete':
                             db.user.post.delete(userId, reqData.id)
-                            .then(updateListeners(userId, db, sockets));
+                            .then(() => updateListeners(userId, db, sockets));
                             break;
                         case 'like':
                             db.user.post.like(userId, reqData.id)
-                            .then(updateListeners(reqData.id.split('-')[0], db, sockets));
+                            .then(() => updateListeners(reqData.id.split('-')[0], db, sockets));
                             break;
                         case 'unlike':
                             db.user.post.unLike(userId, reqData.id)
-                            .then(updateListeners(reqData.id.split('-')[0], db, sockets));
+                            .then(() => updateListeners(reqData.id.split('-')[0], db, sockets));
                     }
                 });
 

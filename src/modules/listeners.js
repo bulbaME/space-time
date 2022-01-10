@@ -6,6 +6,8 @@ const listeners = {};
 const updateListeners = (uid, db, sockets) => {
     if (listeners[uid]) for (let id of listeners[uid]) 
         updateListener(id, uid, db, sockets);
+    updateListener(uid, uid, db, sockets);
+    console.log(listeners);
 };
 
 const updateListener = async (uid, id, db, sockets) => {
@@ -14,15 +16,19 @@ const updateListener = async (uid, id, db, sockets) => {
 };
 
 const listenTo = (uid, state, id) => {
-    try {
-        if (state) {
-            if (!listeners[id]) listeners[id] = [];
+    if (uid === id) return;
+    if (state) {
+        if (!listeners[id]) listeners[id] = [];
+        if (!listeners[id].includes(uid))
             listeners[id].push(uid);
-        } else {
-            listeners[id].pop(listeners[id].find(uid));
-            if (!listeners[id].length) delete listeners[id];
-        }
-    } catch (e) { };
+    } else {
+        if (!listeners[id]) return;
+        let index = listeners[id].indexOf(uid);
+        if (index !== -1) {
+            listeners[id].pop(index);
+            if (!listeners[id].length) delete listeners[id];    
+        } 
+    }
 };
 
 const deleteListener = (uid, ids) => {
