@@ -286,18 +286,16 @@ function SettingsFrame (props) {
     }
 
     const changeId = (newId) => {
-        if (newId === props.data.get.user.profile_id) props.alert({show: true, text: 'Your new ID must be NEW'});
+        if (newId === props.data.get.user.profile_id) props.alert({show: true, text: 'This ID is already set'});
         else if (!/^[a-z0-9]{1,}$/.test(newId)) props.alert({show: true, text: 'ID must consist of lowercase letters or numbers'});
         else if (!/^[a-z0-9]{5,16}$/.test(newId)) props.alert({show: true, text: 'Length of an ID must be between 5 and 15 characters'});
         else {
             props.data.socket.request('change', { type: 'id', id: newId });
-            const data = props.data.get;
-            data.user.profile_id = newId;
-            props.data.set(data);
-            props.alert({show: true, text: 'Nice profile ID!', type: 'success'});
-            inputRef.current.value = '';
+            setInputId('');
         }
     }
+
+    console.log(user);
 
     const changeStatus = (newStatus) => {
         if (newStatus === props.data.get.user.status) return;

@@ -7,7 +7,6 @@ const updateListeners = (uid, db, sockets) => {
     if (listeners[uid]) for (let id of listeners[uid]) 
         updateListener(id, uid, db, sockets);
     updateListener(uid, uid, db, sockets);
-    console.log(listeners);
 };
 
 const updateListener = async (uid, id, db, sockets) => {

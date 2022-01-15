@@ -98,6 +98,7 @@ const init = (io, db) => {
                         case 'id':
                             const newProfileId = reqData.id;
                             if (/^[a-z0-9]{5,16}$/.test(newProfileId)) promise_ = db.user.update.profileId(userId, newProfileId);
+                            if (promise_) promise_.then((r) => clientSocket.emit('change-profile-id-status', r));
                             break;
                         case 'name':
                             const newUsername = reqData.data;

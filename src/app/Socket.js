@@ -70,6 +70,14 @@ class Socket {
         this.socket.on('disconnect', (err) => console.log(`disconnected: ${err}`));
         this.socket.on('connect_error', (err) => console.log(`connection error: ${err}`));
 
+        // handles user updated id response
+        this.socket.on('change-profile-id-status', (data) => {
+            if (data) this.hooks.alert.set({show: true, text: 'ID changed', type: 'success'});
+            else {
+                this.hooks.alert.set({show: true, text: 'ID is already taken', type: 'error'});
+            }
+        });
+
         this.socket.on('auth-succeed', () => {
             this.hooks.socket.set(this);
         });
@@ -103,9 +111,9 @@ class Socket {
                     break;
                 case 'user':
                     newData.user = data;
-                    newData.profiles = {};
-                    newData.rooms = {};
-                    newData.chats = {};
+                    if (!newData.profiles) newData.profiles = {};
+                    if (!newData.rooms) newData.rooms = {};
+                    if (!newData.chats) newData.chats = {};
 
                     break;
                 case 'profile':

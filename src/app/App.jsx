@@ -49,7 +49,6 @@ function App (props) {
             {menu.type === 'auth' ? '' : <MenuButtons data={data} menu={{get: menu, set: setMenu}} />}
             <Popup popup={{get: popup, set: setPopup}} confirm={{}} alert={{get: alert, set: setAlert}} menu={{ get: menu, set: setMainData }} incomes={{ get: incomeCalls, set: setIncomeCalls }} data={data} />
             <Alert alert={{get: alert, set: setAlert}} />
-            <p id='version'>beta v0.1.0</p>
         </div>
     );
 }
