@@ -291,11 +291,18 @@ function SettingsFrame (props) {
         else if (!/^[a-z0-9]{5,16}$/.test(newId)) props.alert({show: true, text: 'Length of an ID must be between 5 and 15 characters'});
         else {
             props.data.socket.request('change', { type: 'id', id: newId });
-            setInputId('');
         }
     }
 
-    console.log(user);
+    // handles user updated id response
+    React.useEffect(() => props.data.socket.socket.on('change-profile-id-status', (ok) => {
+        if (ok) {
+            props.alert({show: true, text: 'ID changed', type: 'success'});
+        } else {
+            props.alert({show: true, text: 'ID is already taken', type: 'error'});
+            setInputId(user.profile_id);
+        }
+    }), []);
 
     const changeStatus = (newStatus) => {
         if (newStatus === props.data.get.user.status) return;
@@ -589,13 +596,14 @@ function ContactsFrame (props) {
             <div id='contacts-top-profile' onClick={() => props.menu.set({ type: 'profile', id: profile.id })}><Avatar className={'contacts-top-avatar' + (profile.online ? ' contacts-top-avatar-online':'')} url={profile.avatar_url} /><p>{profile.name}</p></div></div>
         <div id='contacts-bottom'>
             <DynamicTextarea ref={inputRef} id='contacts-bottom-textarea' disabled={!data.user.contacts.includes(profile.id) || profile.blocked || rec || (!profile.in_contacts && profile.privacy.write === 'contacts')} onKeyUp={onKeyPress} maxLength='500' placeholder={!profile.in_contacts && profile.privacy.write === 'contacts' ? `${profile.name} is unreachable`:(data.user.contacts.includes(profile.id) && !profile.blocked ? 'Type here...':(profile.blocked ? `${profile.name} blocked you`:`Add ${profile.name} to write him`))} maxRows='7' onChange={inputOnChange} onHeightChange={onHeightChange} />
-            <div id='contacts-eq' ref={eqElem} style={{display: rec ? 'flex':'none'}} />
+            { !data.user.contacts.includes(profile.id) || profile.blocked || (!profile.in_contacts && profile.privacy.write === 'contacts') ? '':
+            <> <div id='contacts-eq' ref={eqElem} style={{display: rec ? 'flex':'none'}} />
             { rec === 0 ?
                 <AttachmentsButton id='contacts-attach' files={{get: files, set: setFiles}} alert={{set: props.alert}} />
             : rec === 1 ?
                 <SoundStopIcon id='contacts-attach' onClick={() => props.data.socket.stopRec()} style={{ marginTop: '0.7vh', right: '5.5vh' }} />
             :   <DeleteIcon id='contacts-attach' onClick={() => setRec(0)} style={{ top: '1.5vh', width: '3vh', height: '3vh' }} />
-            }
+            } </> }
             {input || files.length || typeof rec === 'object' ? <SendIcon id='contacts-bottom-2' onClick={() => sendMessage({ text: input, id: profile.id, audio: rec })} />:<MicIcon id='contacts-bottom-2' onClick={rec ? () => 0:startRec} className={rec === 1 ? 'contacts-rec':''} />}
             <span id='contacts-bottom-bar' />
         </div>
