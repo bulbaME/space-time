@@ -22,6 +22,7 @@ import LikeActiveIcon from './graphics/icon-star-active.jsx';
 import LikeUnactiveIcon from './graphics/icon-star-unactive.jsx';
 import CloseIcon from './graphics/icon-close.jsx';
 import ArrowIcon from './graphics/icon-arrow.jsx'
+import ArrowIconL from './graphics/icon-arrow-left.jsx'
 
 const vhToPx = (vh) => {
 	return vh * (document.documentElement.clientHeight / 100);
@@ -154,7 +155,7 @@ function FilePop (props) {
 
     return (<>
         { data.next ? <ArrowIcon id='popup-file-next' onClick={data.next} />:'' }
-        { data.prev ? <ArrowIcon id='popup-file-prev' onClick={data.prev} />:'' }
+        { data.prev ? <ArrowIconL id='popup-file-prev' onClick={data.prev} />:'' }
         <div id='popup-file-image-frame' onClick={props.close}>
         <CloseIcon id='popup-file-close' />
         { data.fType.startsWith('image') ? 
