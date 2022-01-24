@@ -36,7 +36,7 @@ const userAuthInit = (App, db) => {
             lang: user.locale
         });
 
-        res.cookie('auth-key', authKey, { expires: cookieLifetime }).redirect('/');
+        res.cookie('auth-key', authKey, { expires: cookieLifetime }).redirect('/redirect');
     });
 
     passport.use(new oauth_strategy({
