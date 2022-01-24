@@ -45,6 +45,7 @@ class Socket {
         this.callData = {
             current: 0,
             call: null,
+            callObj: null,
             muted: false,
             timestamp: 0,
             state: 0,
@@ -52,12 +53,12 @@ class Socket {
             sockets: {}
         }
 
-        setInterval(() => {
-            for (let rk in this.hooks.data.get.rooms) {
-                const r = this.hooks.data.get.rooms[rk];
-                this.request('call', { type: 'room-count', id: r.id });
-            }
-        }, 1000);
+        // setInterval(() => {
+        //     for (let rk in this.hooks.data.get.rooms) {
+        //         const r = this.hooks.data.get.rooms[rk];
+        //         this.request('call', { type: 'room-count', id: r.id });
+        //     }
+        // }, 1000);
 
         // update profiles data 
         // setInterval(() => {
@@ -74,10 +75,30 @@ class Socket {
             this.hooks.socket.set(this);
         });
 
+        // update call data volume
+        this.socket.on('call-data', ({ buffer, sample, sampleRate }) => {
+            const step = sampleRate / 10;
+            
+            for (let c = 0; c * step < sample; c++) {
+                setTimeout(() => {
+                    const vol = this.callData.callObj.volumeFromBuffer(buffer.slice(c * step * 2, (c + 1) * step * 2));
+                    const elements = document.getElementsByClassName('contacts-top-avatar-call');
+                    if (!elements.length) return;
+                    const element = elements[0];
+                    element.style.borderColor = `rgba(159, 43, 237, ${vol * 2})`;
+                }, c * 100);
+            }
+        });
+
         this.socket.on('listener', (id) => {
             const user = this.hooks.data.get.user;
+            console.log(id, user);
             if (!user) return;
-            setTimeout(() => this.request('main-data', id !== user.id ? { type: 'profile', id } : { type: 'user' } ), 50);
+            if (id === user.id) this.request('main-data', { type: 'user' });
+            else {
+                this.request('main-data', { type: 'profile', id });
+                this.request('main-data', { type: 'online', id });
+            }
         });
 
         // update room call member count
@@ -121,7 +142,7 @@ class Socket {
                     if (!temp) temp = newData.chats;
 
                     if (data.ids) {
-                        data.id = data.ids.filter(v => v != newData.user.id)[0];
+                        if (body.type === 'chats') data.id = data.ids.filter(v => v != newData.user.id)[0];
                         temp[data.id] = data;
                         if (temp.ids) temp.ids.forEach(loadProfiles);
                     }
@@ -202,7 +223,7 @@ class Socket {
                     this.callData.sockets[data.id] = data.socketId;
                     this.hooks.incomes.set(this.hooks.incomes.get.concat([data.id]));
                     const data_ = this.hooks.data.get[data.id[0] === 'r' ? 'rooms':'profiles'][data.id];
-                    if (data_) this.createNotification({ title: `${data_.name}`, icon: data_.avatar_url, body: 'Incoming Call', requireInteraction: true, tag: 2});
+                    if (data_ && cookie.get('notifications') === 'on' && !newData.user.muted.includes(data_.id)) this.createNotification({ title: `${data_.name}`, icon: data_.avatar_url, body: 'Incoming Call', requireInteraction: true, tag: 2});
                     
                     break;
                 case 'end-request':
@@ -217,7 +238,9 @@ class Socket {
                     call.init();
                     this.callData.timestamp = Date.now();
                     this.callData.call = call.eventHandler;
+                    this.callData.callObj = call;
                     this.callData.state = 2;
+                    this.callData.call.emit('mute', this.callData.muted);
 
                     break;
                 case 'declined':
@@ -252,6 +275,11 @@ class Socket {
             this.callData.call = null;
             delete this.callData.sockets[this.callData.current];
             this.hooks.call.set(0);
+
+            const elements = document.getElementsByClassName('contacts-top-avatar-call');
+            if (!elements.length) return;
+            const element = elements[0];
+            element.style.borderColor = 'var(--green)';
         }
 
         if (type === 'start') {
@@ -376,7 +404,15 @@ class Socket {
     // VOICE MESSAGES
 
     async startRec(eq) {
-        if (!(await window.navigator.mediaDevices.getUserMedia({audio: true}).catch(this.hooks.popup.set({ show: true, type: 'error', text: 'Unable to get microphone output' })))) return;
+        if (!(await 
+            window.navigator.mediaDevices.getUserMedia({audio: true})
+            .catch((e) => console.log('Mic error:', e))
+        )) {
+            this.hooks.alert.set({ show: true, type: 'error', text: 'Unable to get microphone output' });
+            this.stopRec();
+            return;
+        }
+
         if (!this.audioContext) this.audioContext = new AudioContext();
 
         this.rec = {
@@ -388,7 +424,7 @@ class Socket {
         this.rec.current.emit('start');
 
         this.rec.current.on('stop', (data) => {
-            if (data === 'mic-denied') this.hooks.popup.set({ show: true, type: 'error', text: 'Unable to get microphone output' });
+            if (data === 'mic-denied') this.hooks.alert.set({ show: true, type: 'error', text: 'Unable to get microphone output' });
         });
 
         return this.rec.current;

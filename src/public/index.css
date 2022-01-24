@@ -118,7 +118,7 @@ body, #root {
     height: 0.8vh;
     border-radius: 0.6vh;
     background-color: var(--light-gray);
-    transition: 50ms;
+    transition: 100ms;
 }
 
 .invite {
@@ -1584,6 +1584,13 @@ textarea::-moz-scrollbar-thumb:hover {
     border-radius: 50%;
 }
 
+.contacts-top-avatar-call {
+    border: 0.4vh solid transparent;
+    box-sizing: border-box;
+    border-radius: 50%;
+    transition: 100ms;
+}
+
 #contacts-bottom {
     position: absolute;
     width: 64vh;
@@ -2719,7 +2726,7 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     display: inline-block;
     margin-left: 5vh;
-    margin-top: -3.5vh;
+    margin-top: -4vh;
     margin-bottom: 0.5vh;
     font-family: 'DM Mono', monospace;
     font-weight: 300;

@@ -35,7 +35,7 @@ function App (props) {
             popup: { get: popup, set: setPopup },
             alert: { get: alert, set: setAlert },
             call: { get: call, set: setCall },
-            incomes: { get: incomeCalls, set: setIncomeCalls }
+            incomes: { get: incomeCalls, set: setIncomeCalls },
         });
     } else if (!authorized) socketConnected = false;
 

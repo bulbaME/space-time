@@ -32,6 +32,17 @@ class Call {
         audioSource.start(0);
     }
 
+    volumeFromBuffer(buffer) {
+        const uint8buffer = new Uint8Array(buffer);
+        let vol = Math.abs((uint8buffer.reduce((a, b) => a + b) / uint8buffer.length) - 128); 
+        vol = Math.sqrt(vol / 128);
+        vol -= .15;
+        if (vol < 0) vol = .15;
+        vol *= 5;
+        if (vol > 1) vol = 1;
+        return vol;
+    }
+
     init() {
         // create audio stream from microphone
         if (!window.navigator.mediaDevices) {

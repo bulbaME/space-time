@@ -472,8 +472,7 @@ const init = (io, db) => {
 
                 // on socket disconnect
                 clientSocket.on('disconnect', () => {
-                    deleteListener(userId, listens);
-                    delete sockets[clientId];
+                    // deleteListener(userId, listens);
                     db.user.disconnect(userId, clientId);
                     updateListeners(userId, db, sockets);
 
@@ -487,6 +486,8 @@ const init = (io, db) => {
                         if (currentCall.unreqFunc) currentCall.unreqFunc();
                         if (currentCall.reqTimeout) clearTimeout(currentCall.reqTimeout);
                     }
+
+                    delete sockets[clientId];
                 });
 
             // if auth key is invalid disconnect socket

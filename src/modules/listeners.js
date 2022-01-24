@@ -24,8 +24,8 @@ const listenTo = (uid, state, id) => {
         if (!listeners[id]) return;
         let index = listeners[id].indexOf(uid);
         if (index !== -1) {
-            listeners[id].pop(index);
-            if (!listeners[id].length) delete listeners[id];    
+            listeners[id].splice(index, 1);
+            if (!listeners[id].length) delete listeners[id];
         } 
     }
 };
