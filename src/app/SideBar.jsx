@@ -12,6 +12,7 @@ function SideBar (props) {
     const [searchInput, setSearchInput] = React.useState('');
     const [searchTimeout, setSearchTimeout] = React.useState(0);
     const [callTimeInt, setCallTimeInt] = React.useState(0);
+    const [collapsed, setCollapsed] = React.useState(true);
     const callTimeRef = React.useRef();
     const searchRef = React.useRef();
 

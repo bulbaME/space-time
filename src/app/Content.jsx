@@ -255,8 +255,7 @@ function UserFrame (props) {
         <>
             <input type='file' accept='image/*' ref={input} style={{ display: 'none', position: 'absolute' }} />
             <div id='profile-bg' />
-            <Avatar url={profile.avatar_url} className='profile-avatar' />
-            {profile.id === data.user.id ? <EditIcon id='profile-avatar-edit' onClick={() => input.current.click()} />:''}
+            <Avatar url={profile.avatar_url} className='profile-avatar' onClick={() => input.current.click()} />
             <div id='profile-status'><p>{profile.status}</p></div>
             <div id='profile-name'>{profile.name}{profile.online ? <div id='profile-online' />:''}</div>
             <InteractElement />

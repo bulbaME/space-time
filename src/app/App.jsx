@@ -42,14 +42,24 @@ function App (props) {
     const data = getSocket ? {get: mainData, socket: getSocket, set: setMainData } : false;
 
     // main frame
-    return (
+    return isMobile ?
+    (
         <div id='main'>
-            {menu.type === 'auth' ? '' : <SideBar menu={{get: menu, set: setMenu}} data={data} alert={setAlert} incomes={{ get: incomeCalls, set: setIncomeCalls }} /> }
-            <Content isMobile={isMobile} menu={{get: menu, set: setMenu}} alert={setAlert} setAuth={setAuthorized} data={data} popup={{get: popup, set: setPopup}} />
+            {/* {menu.type === 'auth' ? '' : <SideBar menu={{get: menu, set: setMenu}} data={data} alert={setAlert} incomes={{ get: incomeCalls, set: setIncomeCalls }} /> } */}
+            <Content menu={{get: menu, set: setMenu}} alert={setAlert} setAuth={setAuthorized} data={data} popup={{get: popup, set: setPopup}} />
             {menu.type === 'auth' ? '' : <MenuButtons data={data} menu={{get: menu, set: setMenu}} />}
             <Popup popup={{get: popup, set: setPopup}} confirm={{}} alert={{get: alert, set: setAlert}} menu={{ get: menu, set: setMainData }} incomes={{ get: incomeCalls, set: setIncomeCalls }} data={data} />
             <Alert alert={{get: alert, set: setAlert}} />
-            <p id='version'>beta v0.1.0</p>
+        </div>
+    )
+    :
+    (
+        <div id='main'>
+            {menu.type === 'auth' ? '' : <SideBar menu={{get: menu, set: setMenu}} data={data} alert={setAlert} incomes={{ get: incomeCalls, set: setIncomeCalls }} /> }
+            <Content menu={{get: menu, set: setMenu}} alert={setAlert} setAuth={setAuthorized} data={data} popup={{get: popup, set: setPopup}} />
+            {menu.type === 'auth' ? '' : <MenuButtons data={data} menu={{get: menu, set: setMenu}} />}
+            <Popup popup={{get: popup, set: setPopup}} confirm={{}} alert={{get: alert, set: setAlert}} menu={{ get: menu, set: setMainData }} incomes={{ get: incomeCalls, set: setIncomeCalls }} data={data} />
+            <Alert alert={{get: alert, set: setAlert}} />
         </div>
     );
 }

@@ -75,7 +75,7 @@ class Socket {
         });
 
         this.socket.on('listener', (id) => {
-            setTimeout(() => this.request('main-data', { type: 'profile', id }), 50);
+            setTimeout(() => this.request('main-data', id !== this.hooks.data.get.user.id ? { type: 'profile', id } : { type: 'user' } ), 50);
         });
 
         // update room call member count
