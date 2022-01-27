@@ -1,27 +1,28 @@
 const React = require('react');
 const { AttachmentsButton } = require('./Buttons.jsx');
-const Attachs = require('./Files.js');
+const Attachs = require('../Files.js');
 const Avatar = require('./Avatar.jsx');
+const { useSwipeable } = require('react-swipeable');
 
 // icons
-import DropdownDots from './graphics/dropdown-dots.jsx';
-import EditIcon from './graphics/icon-edit.jsx';
-import DisableIcon from './graphics/icon-disable.jsx';
-import EnableIcon from './graphics/icon-enable.jsx';
-import DeleteIcon from './graphics/icon-delete.jsx';
-import BlockIcon from './graphics/icon-block.jsx';
-import UnblockIcon from './graphics/icon-unblock.jsx';
-import NotifIcon from './graphics/icon-notification.jsx';
-import NotifIcon2 from './graphics/icon-notification2.jsx';
-import AddIcon from './graphics/icon-add.jsx';
-import UpArrowIcon from './graphics/icon-arrow-up.jsx';
-import DragDrop from './graphics/post-draganddrop.jsx';
-import CallIcon from './graphics/icon-call.jsx';
-import ExitIcon from './graphics/icon-exit.jsx';
-import LikeActiveIcon from './graphics/icon-star-active.jsx';
-import LikeUnactiveIcon from './graphics/icon-star-unactive.jsx';
-import CloseIcon from './graphics/icon-close.jsx';
-import ArrowIcon from './graphics/icon-arrow.jsx'
+import DropdownDots from '../graphics/dropdown-dots.jsx';
+import EditIcon from '../graphics/icon-edit.jsx';
+import DisableIcon from '../graphics/icon-disable.jsx';
+import EnableIcon from '../graphics/icon-enable.jsx';
+import DeleteIcon from '../graphics/icon-delete.jsx';
+import BlockIcon from '../graphics/icon-block.jsx';
+import UnblockIcon from '../graphics/icon-unblock.jsx';
+import NotifIcon from '../graphics/icon-notification.jsx';
+import NotifIcon2 from '../graphics/icon-notification2.jsx';
+import AddIcon from '../graphics/icon-add.jsx';
+import UpArrowIcon from '../graphics/icon-arrow-up.jsx';
+import DragDrop from '../graphics/post-draganddrop.jsx';
+import CallIcon from '../graphics/icon-call.jsx';
+import ExitIcon from '../graphics/icon-exit.jsx';
+import LikeActiveIcon from '../graphics/icon-star-active.jsx';
+import LikeUnactiveIcon from '../graphics/icon-star-unactive.jsx';
+import CloseIcon from '../graphics/icon-close.jsx';
+import ArrowIcon from '../graphics/icon-arrow.jsx'
 
 const vhToPx = (vh) => {
 	return vh * (document.documentElement.clientHeight / 100);
@@ -151,11 +152,18 @@ function Popup (props) {
 
 function FilePop (props) {
     const data = props.popup.get;
+    const swiping = useSwipeable({
+        onSwipedLeft: () => {
+            if (data.next) data.next();
+        },
+
+        onSwipedRight: () => {
+            if (data.prev) data.prev();
+        }
+    });
 
     return (<>
-        { data.next ? <ArrowIcon id='popup-file-next' onClick={data.next} />:'' }
-        { data.prev ? <ArrowIcon id='popup-file-prev' onClick={data.prev} />:'' }
-        <div id='popup-file-image-frame' onClick={props.close}>
+        <div id='popup-file-image-frame' onClick={props.close} {...swiping}>
         <CloseIcon id='popup-file-close' />
         { data.fType.startsWith('image') ? 
         <img id='popup-file-image' src={data.uri} />

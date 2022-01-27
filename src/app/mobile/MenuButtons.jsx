@@ -2,10 +2,10 @@ const React = require('react');
 const { MenuButton } = require('./Buttons.jsx')
 
 // import svg logos
-import LogoProfile from './graphics/logo-profile.jsx';
-import LogoContacts from './graphics/logo-contacts.jsx';
-import LogoRooms from './graphics/logo-rooms.jsx';
-import LogoSettings from './graphics/logo-settings.jsx';
+import LogoProfile from '../graphics/logo-profile.jsx';
+import LogoContacts from '../graphics/logo-contacts.jsx';
+import LogoRooms from '../graphics/logo-rooms.jsx';
+import LogoSettings from '../graphics/logo-settings.jsx';
 
 function MenuButtons (props) {
     const [selected, setSelected] = React.useState(props.selected);

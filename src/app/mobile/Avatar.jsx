@@ -1,6 +1,6 @@
 const React = require('react');
 
-import DefaultAvatar from './graphics/avatar-default.jsx';
+import DefaultAvatar from '../graphics/avatar-default.jsx';
 
 
 function Avatar(props) {

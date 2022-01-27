@@ -32,17 +32,52 @@ body, #root {
 #main {
 }
 
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+#sidebar-frame {
+    height: 100vh;
+    width: 85vw;
+    opacity: .7;
+    right: 0;
+    position: fixed;
+    background-color: black;
+    transition: 300ms;
+}
+
+#sidebar-frame-col {
+    display: none;
+    height: 100vh;
+    width: 85vw;
+    opacity: 0;
+    right: 0;
+    position: fixed;
+    background-color: black;
+    transition: 300ms;
+}
+
 #sidebar {
-    background-color: inherit;
-    width: 10vw;
-    height: 100vw;
+    background-color: var(--blue-dimm);
+    width: 60vw;
+    height: calc(100vh - 16vw);
+    border-right: 1px solid var(--blue-mid);
+    position: fixed;
+}
+
+#sidebar-col {
+    background-color: var(--blue-dimm);
+    width: 15vw;
+    height: calc(100vh - 16vw);
+    position: fixed;
+    border-right: 1px solid var(--blue-mid);   
 }
 
 #content {
     position: fixed;
     background-color: inherit;
-    width: 90vw;
-    height: 100vw;
+    width: 85vw;
+    height: 100vh;
     right: 0;
 }
 
@@ -146,8 +181,7 @@ img {
 .alert {
     position: absolute;
     display: inline-flex;
-    margin: auto;
-    font-size: 3vw;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     padding-top: 0.5vw;
@@ -156,6 +190,8 @@ img {
     padding-right: 2vw;
     border-radius: 4vw;
     cursor: pointer;
+    margin-left: 50vw;
+    transform: translateX(-50%);
     box-shadow: 0.3vw 0.3vw 1vw 0vw rgba(0, 0, 0, 0.342);
 }
 
@@ -278,11 +314,14 @@ img {
 }
 
 #popup-file-image-frame {
-    top: 20vw;
+    top: 40vh;
+    left: 50vw;
     position: absolute;
-    height: 60vw;
-    width: 60vw;
+    height: 40vh;
+    width: 80vw;
+    align-items: center;
     user-select: none;
+    transform: translate(-50%, -50%);
 }
 
 #popup-file-prev {
@@ -327,7 +366,6 @@ img {
     border: 0;
     border-radius: 1.5vw;
     zoom: 1;
-    box-shadow: 0 0 2vw 2vw rgba(0, 0, 0, 0.201);
 }
 
 #popup-file-close {
@@ -353,29 +391,30 @@ img {
     left: 50%;
     width: min-content;
     height: min-content;
-    min-width: 20vw;
-    min-height: 20vw;
+    min-width: 30vw;
+    min-height: 30vw;
     transform: translate(-50%, -50%);
     border: 0;
     border-radius: 3vw;
-    box-shadow: 0 0 2vw 2vw rgba(0, 0, 0, 0.418);
+    background-color: var(--light-gray);
 }
 
 #popup-newpost-body {
     position: absolute;
-    margin: auto;
-    width: 50vw;
-    height: 42.5vw;
-    margin-top: 20vw;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 60vw;
+    margin-top: 40%;
     background-color: var(--blue-dimm);    
-    border-radius: 3vw;
+    border-radius: 5vw;
 }
 
 #popup-newpost-body input {
     display: inline-block;
     background-color: var(--blue-mid);
-    height: 4vw;
-    width: 31.5vw;
+    height: 7vw;
+    width: 52vw;
     border: 0;
     color: var(--light-gray);
     margin-top: 2vw;
@@ -383,7 +422,7 @@ img {
     border-radius: 4vw;
     padding-left: 2vw;
     padding-right: 2vw;
-    font-size: 2vw;
+    font-size: 4vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
 }
@@ -391,7 +430,7 @@ img {
 #popup-newpost-attach {
     display: inline-block;
     position: absolute;
-    margin-left: 0.8vw;
+    margin-left: 1.4vw;
     margin-top: 2vw;
     cursor: pointer;
     width: 3vw;
@@ -401,8 +440,8 @@ img {
 
 #popup-newpost-attach #attach {
     position: absolute;
-    width: 3vw;
-    height: 3vw;
+    width: 7vw;
+    height: 7vw;
     padding: 0.7vw;
     border-radius: 50%;
     background-color: var(--blue-light);
@@ -466,8 +505,8 @@ img {
 
 #popup-newpost-body #submit {
     display: inline-block;
-    width: 3vw;
-    height: 3vw;
+    width: 7vw;
+    height: 7vw;
     margin-top: 2vw;
     position: absolute;
     margin-left: 0.8;
@@ -515,10 +554,10 @@ img {
     background-color: var(--blue-mid);
     color: var(--light-gray);
     border: 0;
-    border-radius: 4vw;
-    height: 31vw;
-    width: 42vw;
-    margin-top: 1.5vw;
+    border-radius: 4vw !important;
+    height: 43.5vw;
+    width: 72vw;
+    margin-top: 3vw;
     margin-left: 2vw;
     border-radius: 2vw;
     padding-left: 2vw;
@@ -526,7 +565,7 @@ img {
     padding-bottom: 0;
     resize: none;
     padding-top: 1.5vw;
-    font-size: 2vw;
+    font-size: 3.5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 500;
 }
@@ -569,41 +608,43 @@ img {
     position: absolute;
     margin: auto;
     width: auto;
-    height: 9vw;
-    margin-top: 35vw;
-    margin-left: 26vw;
+    height: 21vw;
+    margin-top: 40vh;
+    margin-left: 50vw;
+    transform: translateX(-50%);
     background-color: var(--blue-light);
     text-align: center;
     padding: 2vw;
     padding-top: 1vw;
     padding-bottom: 3vw;
-    border-radius: 3vw;
+    border-radius: 5vw;
     user-select: none;
-    box-shadow: 1vw 1vw 2vw rgba(0, 0, 0, 0.342);
+    box-shadow: 0vw 0vw 3vw rgba(0, 0, 0, 0.5);
 }
 
 #popup-confirm-body p {
-    font-size: 3vw;
+    font-size: 6vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    margin: 0;
+    margin: 1vw;
     color: var(--light-gray);
 }
 
 #popup-confirm-no {
     position: absolute;
-    font-size: 3vw;
+    font-size: 6vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    margin-left: 0.5vw;
+    margin-left: 6vw;
     margin-top: 1.2vw;
     cursor: pointer;
     background-color: var();
     padding: 1vw;
     padding-left: 1.5vw;
     padding-right: 1.5vw;
-    border-radius: 1.5vw;
-    color: var(--light-gray);
+    border-radius: 2vw;
+    background-color: var(--red);
+    color: #fff;
     transition: 200ms;
 }
 
@@ -614,14 +655,16 @@ img {
 
 #popup-confirm-yes {
     position: absolute;
-    font-size: 3vw;
+    font-size: 6vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    margin-left: 11vw;
+    margin-left: 21.5vw;
     margin-top: 1.2vw;
+    border-radius: 2vw;
     cursor: pointer;
     padding: 1vw;
-    color: var(--light-gray);
+    background-color: var(--green);
+    color: #fff;
     transition: 200ms;
 }
 
@@ -665,9 +708,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #settings-notify {
     position: absolute;
-    margin-top: 64vw;
+    margin-top: 76vw;
     margin-left: 7vw;
-    font-size: 2.3vw;
+    font-size: 3.5vw;
+    line-height: 5vw;
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     color: var(--light-gray);
@@ -679,34 +723,34 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     margin-left: -4vw;
     margin-top: -0.1vw;
-    width: 2vw;
-    height: 2vw;
-    border-radius: 1vw;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 1.2vw;
 }
 
 #settings-notify .on {
     transition: 200ms;
     background-color: var(--settings-button-on);
-    border: 0.5vw solid var(--settings-button-on);
+    border: .8vw solid var(--settings-button-on);
 }
 
 #settings-notify .off {
     transition: 200ms;
-    border: 0.5vw solid var(--light-gray);
+    border: .8vw solid var(--light-gray);
 }
 
 #settings-notify .off:hover {
     background-color: var(--light-gray);
-    border: 0.5vw solid var(--light-gray);
+    border: .8vw solid var(--light-gray);
 }
 
 .settings-button {
-    width: 6.5vw;
-    height: 3.5vw;
+    width: 8vw;
+    height: 4vw;
     transition: 300ms;
     border-radius: 3.5vw;
     cursor: pointer;
-    margin-bottom: 3vw;
+    margin-bottom: 3.5vw;
 }
 
 .settings-button-on {
@@ -718,20 +762,19 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .settings-button-circle {
-    width: 3.5vw;
-    height: 3.5vw;
+    width: 4vw;
+    height: 4vw;
     fill: var(--light-gray);
     border: 0;
     transition: inherit;
-    margin-top: -0.04vw;
 }
 
 .settings-button-circle-right {
-    margin-left: 3vw;
+    margin-left: 4vw;
 }
 
 .settings-title {
-    font-size: 3vw;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     color: #fff;
@@ -739,7 +782,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .settings-text {
-    font-size: 2.3vw;
+    font-size: 3.5vw;
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     color: var(--light-gray);
@@ -749,23 +792,23 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .settings-text-small {
     position: absolute;
-    font-size: 1.5vw;
+    font-size: 2.5vw;
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
     color: var(--blue-light);
-    margin-top: 0.8vw;
+    margin-top: 0vw;
     user-select: none;
 }
 
 #settings-text-frame {
     margin-left: 3vw;
-    width: 30vw;
+    width: 50vw;
 }
 
 #settings-interact-frame-1 {
-    margin-top: 8vw;
-    margin-left: 17vw;
-    width: 10vw;
+    margin-top: 14vw;
+    margin-left: 15vw;
+    width: 40vw;
 }
 
 #settings-frame {
@@ -777,30 +820,33 @@ textarea::-moz-scrollbar-thumb:hover {
     background-color: none;
     border: 0;
     border-radius: 1vw;
-    margin-left: 41vw;
+    margin-left: 48vw;
     font-family: 'Rubik', sans-serif;
-    font-size: 1.7vw;
+    font-size: 3vw;
     width: 30vw;
     display: flex;
-    height: 3.4vw;
+    height: 4.3vw;
 }
 
 #settings-change-id {
-    margin-top: 41.5vw;
+    margin-top: 46vw;
+    width: 40vw;
 }
 
 #settings-change-input-id {
-    padding-left: 2.1vw;
-    width: 17vw;
+    padding-left: 3vw;
+    width: 22vw;
     font-family: 'DM Mono', monospace;
 }
 
 #settings-change-status {
-    margin-top: 48vw;
+    margin-top: 54vw;
+    width: 40vw;
 }
 
 #settings-change-name {
-    margin-top: 54.5vw;
+    margin-top: 62vw;
+    width: 40vw;
 }
 
 .settings-change-input {
@@ -814,7 +860,7 @@ textarea::-moz-scrollbar-thumb:hover {
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
-    width: 18.1vw;
+    width: 24vw;
 }
 
 .settings-change-input:focus {
@@ -830,16 +876,16 @@ textarea::-moz-scrollbar-thumb:hover {
     font-family: 'DM Mono', monospace;
     font-size: inherit;
     font-weight: inherit;
-    margin-top: 0.6vw;
+    margin-top: 0.3vw;
     margin-left: 1vw;
 }
 
 .settings-change-submit {
-    font-size: 2.2vw;
+    font-size: 3vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     margin-top: 0;
-    width: 5vw;
+    width: 6vw;
     height: inherit;
     background-color: var(--blue-light);
     margin-left: 1.5vw;
@@ -870,16 +916,16 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #settings-logout {
     position: absolute;
-    width: 15vw;
-    height: 6vw;
-    font-size: 2.6vw;
+    width: 20.5vw;
+    height: 7.5vw;
+    font-size: 4vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     color: var(--light-gray);
     background-color: var(--blue-mid);
     border-radius: 6vw;
-    margin-top: 62vw;
-    margin-left: 52vw;
+    margin-top: 74vw;
+    margin-left: 60vw;
     transition: 200ms;
     cursor: pointer;
     user-select: none;
@@ -904,16 +950,16 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .menu-button {
     width: 25vw;
-    height: 10vw;
+    height: 14vw;
     cursor: pointer;
-    padding-bottom: 10px;
     transition: 100ms;
+    padding: 1vw;
 }
 
 #buttons-bar {
     position: fixed;
     bottom: 0;
-    background-color: black;
+    background-color: var(--blue-light);
     display: flex;
     width: 100vw;
     justify-content: space-between;
@@ -941,77 +987,136 @@ textarea::-moz-scrollbar-thumb:hover {
     fill: var(--light-gray);
 }
 
+#menu-button-profile {
+    padding-bottom: 1vw;
+}
+
+
 /* side bar */
 
 #sidebar-text {
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 4vw;
-    width: 30vw;
+    font-size: 7vw;
+    width: 40vw;
     margin: auto;
-    margin-top: 40vw;
+    margin-top: 40vh;
     color: var(--blue-light);
     text-align: center;
     user-select: none;
 }
 
 #sidebar-search {
-    width: 31vw;
-    height: 4vw;
+    width: 58vw;
+    height: 7vw;
     background-color: var(--blue-mid);
-    border-radius: 1.3vw;
+    border-radius: 3vw;
     margin: auto;
-    margin-top: 1.5vw;
+    margin-top: 1vw;
+    margin-left: 1vw;
+    transition: 300ms;
 }
 
 #sidebar-search-icon {
     fill: var(--light-gray);
-    margin-top: 0.5vw;
-    margin-left: 0.7vw;
-    width: 3vw;
-    height: 3vw;
+    margin-top: 1.2vw;
+    margin-left: 1vw;
+    width: 5vw;
+    height: 5vw;
+    transition: 300ms;
+}
+
+#sidebar-search-col {
+    width: 13vw;
+    height: 13vw;
+    background-color: var(--blue-mid);
+    border-radius: 3vw;
+    margin: auto;
+    margin-top: 1vw;   
+    transition: 300ms;
+}
+
+#sidebar-search-icon-col {
+    fill: var(--light-gray);
+    margin: 2vw;
+    width: 9vw;
+    height: 9vw;
+    transition: 300ms;
 }
 
 .sidebar-unread1 {
     position: absolute;
     background-color: var(--light-gray);
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 3vw;
+    height: 3vw;
     border-radius: 50%;
-    margin-left: 28vw;
-    margin-top: 3.3vw;
+    margin-left: 50vw;
+    margin-top: 5vw;
+    transition: 300ms;
 }
 
 .sidebar-unread2 {
     position: absolute;
     background-color: var(--blue-light);
-    min-width: 1.7vw;
+    min-width: 3vw;
     width: fit-content;
-    height: 1.7vw;
-    border-radius: 0.85vw;
-    margin-left: 28vw;
-    margin-top: 3.3vw;
+    height: 3vw;
+    border-radius: 2vw;
+    margin-left: 50vw;
+    margin-top: 5vw;
     font-family: 'Quicksand', sans-serif;
-    font-size: 1.5vw;
+    font-size: 2.5vw;
     font-weight: 600;
     color: var(--light-gray);
     text-align: center;
-    padding-left: 0.5vw;
-    padding-right: 0.5vw;
+    padding-left: .7vw;
+    padding-right: .7vw;
+    transition: 300ms;
+}
+
+.sidebar-unread1-col {
+    position: absolute;
+    background-color: var(--light-gray);
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    margin-left: 8.5vw;
+    margin-top: 8.5vw;
+    transition: 300ms;
+}
+
+.sidebar-unread2-col {
+    position: absolute;
+    background-color: var(--blue-light);
+    min-width: 3vw;
+    width: fit-content;
+    height: 3vw;
+    border-radius: 2vw;
+    margin-left: 8.5vw;
+    margin-top: 8.5vw;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 2.5vw;
+    font-weight: 600;
+    color: var(--light-gray);
+    text-align: center;
+    padding-left: .7vw;
+    padding-right: .7vw;
+    transition: 300ms;
 }
 
 #sidebar-search-input {
     position: absolute;
     background-color: var(--blue-mid);
-    width: 25vw;
-    height: 3vw;
+    width: 45vw;
+    height: 6vw;
     border: 0;
     outline: none;
     padding: 0.5vw;
     font-family: 'Quicksand', sans-serif;
-    font-size: 1.7vw;
+    font-size: 3.2vw;
     font-weight: 600;
     color: var(--light-gray);
+    transition: 300ms;
 }
 
 #sidebar-search-input:focus {
@@ -1032,12 +1137,21 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .sidebar-chat {
-    width: 31vw;
-    height: 8vw;
-    border-radius: 2vw;
+    width: 58vw;
+    height: 13vw;
+    border-radius: 4vw;
     cursor: pointer;
-    margin-bottom: 2vw;
-    transition: 200ms;
+    margin-bottom: 1vw;
+    transition: 300ms;
+}
+
+.sidebar-chat-col {
+    width: 13vw;
+    height: 13vw;
+    border-radius: 4vw;
+    cursor: pointer;
+    margin-bottom: 1vw;
+    transition: 300ms;    
 }
 
 .sidebar-chat-selected {
@@ -1046,18 +1160,19 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .sidebar-chat-logo {
     position: absolute;
-    margin: 1.2vw;
-    height: 5.6vw;
-    width: 5.6vw;
+    margin: 1.5vw;
+    height: 10vw;
+    width: 10vw;
     border-radius: 50%;
-    font-size: 4.3vw;
+    font-size: 7.7vw;
+    transition: 200ms;
 }
 
 .sidebar-chat-muted {
     position: absolute;
     fill: var(--light-gray);
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 3vw;
+    height: 3vw;
     margin-left: 1vw;
     margin-top: 0.5vw;
     opacity: 0.7;
@@ -1065,55 +1180,62 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .sidebar-chat-name {
     position: absolute;
-    font-size: 2vw;
+    font-size: 3.5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 600;
     color: #fff;
-    margin-top: 1.6vw;
-    margin-left: 8vw;
+    margin-top: 2vw;
+    margin-left: 14vw;
+    transition: 300ms;
 }
 
 .sidebar-chat-descr {
     position: absolute;
-    font-size: 1.6vw;
+    font-size: 2.5vw;
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
-    margin-top: 4.5vw;
-    margin-left: 8vw;
+    margin-top: 7.5vw;
+    margin-left: 14vw;
     color: var(--light-gray);
-    width: 18vw;
-    height: 2vw;
+    width: 35vw;
+    height: 4vw;
     overflow-x: hidden;
     word-wrap: break-word;
 }
 
 #sidebar-chats {
-    width: 31vw;
-    margin: auto;
+    width: 36vw;
     margin-top: 2vw;
+    margin-left: 1vw;
+}
+
+#sidebar-chats-col {
+    width: 12vw;
+    margin-top: 2vw;
+    margin-left: 1vw;
 }
 
 #sidebar-chat-online {
     position: absolute;
-    width: 1.7vw;
-    height: 1.7vw;
+    width: 3vw;
+    height: 3vw;
     background-color: var(--green);
     border-radius: 50%;
-    margin-left: 5.3vw;
+    margin-left: 8.5vw;
     margin-top: 1.4vw;
 }
 
 #sidebar-newroom {
     position: absolute;
-    width: 3.5vw;
-    height: 3.5vw;
-    padding: 1.5vw;
+    width: 6vw;
+    height: 6vw;
+    padding: 2vw;
     border-radius: 50%;
     background-color: var(--blue-light);
     fill: var(--light-gray);
-    bottom: 2vw;
-    margin-left: 26vw;
-    transition: 200ms;
+    bottom: 4vw;
+    margin-left: 46vw;
+    transition: 300ms;
     cursor: pointer;
 }
 
@@ -1138,17 +1260,17 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-top {
     position: absolute;
-    width: 70vw;
-    height: 7vw;
+    width: 85vw;
+    height: 11.5vw;
     background-color: var(--blue-mid);
 }
 
 #contacts-dropdown-dots {
     position: absolute;
-    padding-top: 1.5vw;
-    margin-left: 2vw;
+    margin-top: 2.75vw;
+    margin-left: 3vw;
     width: auto;
-    height: 4vw;
+    height: 6vw;
     cursor: pointer;
 }
 
@@ -1168,13 +1290,12 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-dropdown-menu {
     position: absolute;
-    height: 22.3vw;
-    width: 8vw;
+    width: 12vw;
     background-color: var(--light-gray);
-    transition: 200ms;
-    padding-top: 6vw;
-    border-bottom-left-radius: 4vw;
-    border-bottom-right-radius: 4vw;
+    height: 36vw;
+    padding-top: 5vw;
+    border-bottom-left-radius: 6vw;
+    border-bottom-right-radius: 6vw;
 }
 
 .contacts-dropdown-item {
@@ -1182,8 +1303,8 @@ textarea::-moz-scrollbar-thumb:hover {
     margin: auto;
     fill: var(--blue-light);
     stroke: var(--blue-light);
-    width: 4.5vw;
-    height: 4.5vw;
+    width: 7vw;
+    height: 7vw;
     cursor: pointer;
     margin-bottom: 2vw;
     transition: 200ms;
@@ -1209,29 +1330,29 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-dropdown-bar {
     background-color: var(--dropdown-bar);
-    width: 6vw;
+    width: 7vw;
     margin: auto;
     display: block;
     height: 0.2vw;
-    margin-top: 1vw;
-    margin-bottom: 1.5vw;
+    margin-top: 6vw;
+    margin-bottom: 2.5vw;
 }
 
 #contacts-history {
     position: absolute;
     overflow-y: scroll;
-    width: 70vw;
-    height: 80vw;
-    margin-top: 7vw;
+    width: 85vw;
+    height: calc(100vh - 40vw);
+    margin-top: 11.5vw;
     padding-bottom: 7vw;
 }
 
 #contacts-mute {
     position: absolute;
-    margin-left: 59vw;
-    margin-top: 1.65vw;
-    width: 3.8vw;
-    height: 3.8vw;
+    margin-left: 67vw;
+    margin-top: 3vw;
+    width: 6vw;
+    height: 6vw;
     cursor: pointer;
     transition: 200ms;
     fill: var(--light-gray);
@@ -1243,9 +1364,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-call {
     position: absolute;
-    margin-left: 64.5vw;
-    width: 4vw;
-    height: 4vw;
+    margin-left: 76vw;
+    margin-top: 2.5vw;
+    width: 6vw;
+    height: 6vw;
     cursor: pointer;
     transition: 200ms;
 }
@@ -1278,10 +1400,11 @@ textarea::-moz-scrollbar-thumb:hover {
     transition: 200ms;
     background-color: rgba(0, 0, 0, 0);
     padding-bottom: 4.5vw;
-    padding-top: 1.5vw;  
-    margin-left: 3vw;
-    margin-right: 3vw;
-    border-radius: 2vw;
+    padding-top: 1vw;  
+    margin-right: 2.5vw;
+    margin-left: 2.5vw;
+    border-radius: 3vw;
+    width: 80vw;
 }
 
 .contacts-message-boundary:hover {
@@ -1289,13 +1412,13 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .contacts-date {
-    font-size: 2vw;
+    font-size: 3vw;
     width: fit-content;
     position: absolute;
     color: var(--blue-light);
     font-family: 'Rubik';
     margin: 1.5vw;
-    margin-left: 4vw;
+    margin-left: 6vw;
     margin-top: 0vw;
     transition: 200ms;
     opacity: 0;
@@ -1304,12 +1427,12 @@ textarea::-moz-scrollbar-thumb:hover {
 .contacts-message-delete {
     transition: 200ms;
     fill: var(--blue-light);
-    width: 2.5vw;
-    height: 2.5vw;
+    width: 4vw;
+    height: 4vw;
     cursor: pointer;
     position: absolute;
     opacity: 0;
-    margin-left: -3vw;
+    margin-left: -4.5vw;
 }
 
 .contacts-message-delete:hover {
@@ -1335,13 +1458,14 @@ textarea::-moz-scrollbar-thumb:hover {
     width: fit-content;
     margin-left: auto;
     margin-right: 1vw;
-    padding-top: 1.5vw;
+    margin-top: 1vw;
+    min-width: 5vw;
+    max-width: 60vw;
+    padding-top: 2vw;
     padding-bottom: .5vw;
-    padding-left: 1.5vw;
-    padding-right: 1.5vw;
-    border-radius: 3vw;
-    min-width: 3vw;
-    max-width: 30vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 4vw;
 }
 
 .contacts-message-r .say {
@@ -1353,8 +1477,8 @@ textarea::-moz-scrollbar-thumb:hover {
     display: block;
     margin: auto;
     border-radius: 2vw;
-    width: 30vw;
-    height: 30vw;
+    width: 55vw;
+    height: 55vw;
     margin-bottom: 1vw;
 }
 
@@ -1362,16 +1486,16 @@ textarea::-moz-scrollbar-thumb:hover {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 25vw;
+    max-width: 55vw;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
-    font-size: 2.5vw;
+    font-size: 4vw;
     margin-bottom: 1vw;
 }
 
 .contacts-message-r .images-frame {
     display: flex;
-    max-width: 30vw;
+    max-width: 55vw;
     flex-wrap: wrap;
     user-select: none;
     margin-bottom: 1vw;
@@ -1410,8 +1534,8 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-r img {
     vertical-align: middle;
-    border-radius: 1.5vw;
-    margin: 0.5vw;
+    border-radius: 2.5vw;
+    margin: 1vw;
     border: 0;
     width: calc(100% - 2vw);
     transition: 200ms;
@@ -1425,23 +1549,23 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-r .time {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5vw;
+    font-size: 2vw;
     font-weight: 400;
     color: var(--timestamp-message);
     position: absolute;
-    margin-top: 2vw;
+    margin-top: 1vw;
     text-align: right;
     right: 4.5vw;
 }
 
 .contacts-message-r .unread {
     position: absolute;
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 2vw;
+    height: 2vw;
     background-color: var(--light-gray);
     border-radius: 50%;
     margin-left: -2vw;  
-    margin-top: -1vw;
+    margin-top: -1.5vw;
 }
 
 .contacts-message-l {
@@ -1449,21 +1573,22 @@ textarea::-moz-scrollbar-thumb:hover {
     width: -moz-fit-content;
     width: fit-content;
     margin-left: 1vw;
-    min-width: 3vw;
-    max-width: 30vw;
-    padding-top: 1.5vw;
+    margin-top: 1vw;
+    min-width: 5vw;
+    max-width: 60vw;
+    padding-top: 2vw;
     padding-bottom: .5vw;
-    padding-left: 1.5vw;
-    padding-right: 1.5vw;
-    border-radius: 3vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 4vw;
 }
 
 .contacts-message-l .map {
     border: 0;
     border-radius: 2vw;
     margin-bottom: -0.5vw;
-    width: 30vw;
-    height: 30vw;
+    width: 55vw;
+    height: 55vw;
     margin-bottom: 1vw;
 }
 
@@ -1471,16 +1596,16 @@ textarea::-moz-scrollbar-thumb:hover {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 25vw;
+    max-width: 55vw;
     text-align: left;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
-    font-size: 2.5vw;
+    font-size: 4vw;
     margin-bottom: 1vw;
 }
 
 .contacts-message-l .images-frame {
-    max-width: 50vw;
+    max-width: 55vw;
     display: flex;
     flex-wrap: wrap;
     user-select: none;
@@ -1520,8 +1645,8 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-l img {
     vertical-align: middle;
-    border-radius: 1.5vw;
-    margin: 0.5vw;
+    border-radius: 2.5vw;
+    margin: 1vw;
     border: 0;
     width: calc(100% - 2vw);
     transition: 200ms;
@@ -1535,11 +1660,11 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-l .time {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5vw;
+    font-size: 2vw;
     font-weight: 400;
     color: var(--timestamp-message);
     position: absolute;
-    margin-top: 2vw;
+    margin-top: 1vw;
     text-align: right;
     left: 4.5vw;
 }
@@ -1556,38 +1681,38 @@ textarea::-moz-scrollbar-thumb:hover {
     width: fit-content;
     user-select: none;
     cursor: pointer;
+    margin-top: .5vw;
 }
 
 #contacts-top-profile p {
     color: #fff;
-    font-size: 3.5vw;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    margin-top: 1.25vw;
-    margin-left: 0.75vw;
+    margin-top: 2.5vw;
+    margin-left: 1.5vw;
 }
 
 .contacts-top-avatar {
-    width: 4.5vw;
-    height: 4.5vw;
-    margin-top: 1.25vw;
+    width: 8vw;
+    height: 8vw;
+    margin-top: 2vw;
     border-radius: 50%;
-    font-size: 3.5vw;
+    font-size: 6vw;
 }
 
 .contacts-top-avatar-online {
-    border: 0.4vw solid var(--green);
+    border: .6vw solid var(--green);
     box-sizing: border-box;
     border-radius: 50%;
 }
 
 #contacts-bottom {
     position: absolute;
-    width: 64vw;
-    margin-left: 3vw;
-    margin-top: 91.15vw;
+    width: 80vw;
+    margin-left: 2.5vw;
     background-color: var(--blue-mid);
-    border-radius: 3vw;
+    border-radius: 4vw;
     height: fit-content;
 }
 
@@ -1604,16 +1729,16 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-bottom-textarea {
     font-family: 'Quicksand', sans-serif;
-    font-size: 2.5vw;
+    font-size: 4vw;
     font-weight: 500;
-    height: 3.2vw;
+    height: 4vw;
     color: var(--light-gray);
     border: 0;
     background-color: var(--blue-mid);
-    width: 50vw;
+    width: 63vw;
     resize: none;
     padding: 0;
-    margin-top: 1.5vw;
+    margin-top: 1.7vw;
     margin-bottom: 0.9vw;
     margin-left: 2vw;
 }
@@ -1644,25 +1769,21 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-bottom-2 {
     position: absolute;
-    right: 1.5vw;
-    margin-top: 1.3vw;
-    height: 3.5vw;
-    width: 3.5vw;
+    right: 1vw;
+    margin-top: 2vw;
+    height: 5vw;
+    width: 5vw;
     fill: var(--light-gray);
     transition: 200ms;
     cursor: pointer;
 }
 
-#contacts-bottom-2:hover {
-    opacity: 0.7;
-}
-
 #contacts-attach {
     position: absolute;
-    right: 6vw;
-    top: 0.3vw;
-    height: 4vw;
-    width: 4vw;
+    right: 7.5vw;
+    top: 1vw;
+    height: 5vw;
+    width: 5vw;
     fill: var(--light-gray);
     transition: 200ms;
     cursor: pointer;
@@ -1670,8 +1791,8 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-attach #attach {
     position: absolute;
-    width: 4vw;
-    height: 4vw;
+    width: 5.5vw;
+    height: 5.5vw;
     padding: 0.7vw;
     border-radius: 50%;
     fill: var(--light-gray);
@@ -1679,6 +1800,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 #contacts-attach #clear {
+    display: none;
     position: absolute;
     width: 1.5vw;
     height: 1.5vw;
@@ -1692,18 +1814,18 @@ textarea::-moz-scrollbar-thumb:hover {
 #contacts-attach #count {
     text-align: center;
     position: absolute;
-    font-size: 1.2vw;
+    font-size: 2vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 1000;
     width: fit-content;
-    padding-left: 0.3vw;
-    padding-right: 0.3vw;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
     min-width: 0.9vw;
-    height: 1.5vw;
+    height: 3vw;
     border-radius: 1.5vw;
     transition: 200ms;
     margin-top: 0.3vw;
-    margin-left: 2.5vw;
+    margin-left: 3.5vw;
     border: 0.4vw solid var(--blue-mid);
     background-color: var(--blue-light);
     color: var(--light-gray);
@@ -1714,24 +1836,12 @@ textarea::-moz-scrollbar-thumb:hover {
     color: var(--blue-mid);
 }
 
-#contacts-attach #clear:hover {
-    background-color: var(--red);
-    fill: #fff;
-    stroke: #fff;
-    border: 0.4vw solid var(--blue-mid);
-    border-right: 0.5vw solid var(--blue-mid);
-}
-
-#contacts-attach:hover {
-    opacity: 0.7;
-}
-
 #contacts-bottom-bar {
     position: absolute;
     margin-left: 1vw;
-    margin-top: 1.25vw;
-    height: 3.5vw;
-    width: 0.3vw;
+    margin-top: 2vw;
+    height: 5.5vw;
+    width: .5vw;
     border-radius: 5vw;
     background-color: var(--light-gray);
     opacity: 0.2;
@@ -1752,10 +1862,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #rooms-dropdown-dots {
     position: absolute;
-    margin-top: 1.5vw;
-    margin-left: 2vw;
+    margin-top: 2.75vw;
+    margin-left: 3vw;
     width: auto;
-    height: 4vw;
+    height: 6vw;
     cursor: pointer;
 }
 
@@ -1774,19 +1884,16 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-dropdown-menu1 {
     position: absolute;
-    height: 7vw;
-    width: 8vw;
+    height: 11.5vw;
+    width: 12vw;
     background-color: var(--light-gray);
     transition: 200ms;
-    border-top-right-radius: 4vw;
-    border-bottom-right-radius: 4vw;
 }
 
 .rooms-dropdown-menu2 {
     position: absolute;
-    height: 50vw;
-    width: 40vw;
-    left: -40vw;
+    height: 40vh;
+    width: 68vw;
     background-color: var(--light-gray);
     transition: 200ms;
     border-radius: 3vw;
@@ -1795,10 +1902,11 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-dropdown-avatar {
     position: absolute;
-    margin: 1vw;
-    width: 5vw;
-    height: 5vw;
-    font-size: 3.5vw;
+    margin: 1.7vw;
+    margin-left: 13vw;
+    width: 8vw;
+    height: 8vw;
+    font-size: 6vw;
     user-select: none;
     cursor: pointer;
     transition: 200ms;
@@ -1811,15 +1919,15 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #roooms-dropdown-members {
     position: absolute;
-    height: 34.5vw;
-    width: 40vw;
-    margin-top: 7vw;
+    height: calc(40vh - 10vw);
+    width: 85vw;
+    margin-top: 11.5vw;
 }
 
 .rooms-memeber {
-    width: 38vw;
+    width: 66vw;
     margin: 1vw;
-    height: 8vw;
+    height: 12vw;
     transition: 200ms;
     border-radius: 2vw;
 }
@@ -1832,53 +1940,53 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     margin: 1.5vw;
     margin-left: 1vw;
-    height: 5vw;
-    width: 5vw;
+    height: 9vw;
+    width: 9vw;
     border-radius: 50%;
     cursor: pointer;
 }
 
 .rooms-memeber-name {
     position: absolute;
-    margin-left: 8vw;
-    font-size: 3vw;
+    margin-left: 12vw;
+    font-size: 4vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     color: var(--blue-light);
-    margin-top: 2vw;
+    margin-top: 3.5vw;
     width: 21vw;
     overflow: hidden;
 }
 
 .rooms-memeber-avatar-online {
-    border: 0.5vw solid var(--green);
+    border: 1vw solid var(--green);
     box-sizing: border-box;
 }
 
 .rooms-memeber-admin-on {
     fill: var(--yellow);
     position: absolute;
-    width: 4vw;
-    height: 4vw;
-    margin-left: 33vw;
-    margin-top: 2vw; 
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-left: 57vw;
+    margin-top: 2.8vw; 
 }
 
 .rooms-memeber-admin-off {
     fill: var(--blue-light);
     position: absolute;
-    width: 4vw;
-    height: 4vw;
-    margin-left: 33vw;
-    margin-top: 2vw; 
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-left: 57vw;
+    margin-top: 2.8vw; 
 }
 
 .rooms-memeber-kick {
     position: absolute;
-    width: 4vw;
-    height: 4vw;
-    margin-left: 29vw;
-    margin-top: 2vw; 
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-left: 47vw;
+    margin-top: 2.8vw;
     cursor: pointer;
     fill: var(--light-gray);
     transition: 200ms;
@@ -1890,11 +1998,11 @@ textarea::-moz-scrollbar-thumb:hover {
 .rooms-dropdown-name {
     position: absolute;
     height: 4vw;
-    width: 25vw;
-    margin-top: 1.3vw;
-    margin-left: 7vw;
+    width: 35vw;
+    margin-top: 3vw;
+    margin-left: 22vw;
     border: 0;
-    font-size: 3vw;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     color: var(--blue-light);
@@ -1903,10 +2011,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #rooms-dropdown-exit {
     position: absolute;
-    width: 4vw;
-    height: 4vw;
-    margin-top: 44vw;
-    margin-left: 34vw;
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-top: calc(40vh - 9vw);
+    margin-left: 58vw;
     fill: var(--dropdown-bar);
     cursor: pointer;
     transition: 200ms;
@@ -1919,9 +2027,9 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-dropdown-delete {
     position: absolute;
-    width: 5vw;
-    height: 5vw;
-    margin-top: 43vw;
+    width: 7vw;
+    height: 7vw;
+    margin-top: calc(40vh - 9vw);
     margin-left: 2vw;
     fill: var(--dropdown-bar);
     transition: 200ms;
@@ -1929,10 +2037,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #rooms-dropdown-add {
     position: absolute;
-    width: 4vw;
-    height: 4vw;
-    margin-top: 43.5vw;
-    margin-left: 18vw;
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-top: calc(40vh - 9vw);
+    margin-left: 31vw;
     fill: var(--dropdown-bar);
     transition: 200ms;
 }
@@ -1956,10 +2064,10 @@ textarea::-moz-scrollbar-thumb:hover {
     margin: auto;
     fill: var(--blue-light);
     stroke: var(--blue-light);
-    margin-left: 35vw;
-    margin-top: 1.7vw;
-    width: 3.5vw;
-    height: 3.5vw;
+    margin-left: 60vw;
+    margin-top: 3vw;
+    width: 5vw;
+    height: 5vw;
     cursor: pointer;
     margin-bottom: 2vw;
     transition: 200ms;
@@ -1967,21 +2075,21 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #rooms-dropdown-bar {
     position: absolute;
-    margin-top: 7vw;
-    width: 40vw;
+    margin-top: 11.5vw;
+    width: 68vw;
     height: 0.2vw;
     background-color: var(--dropdown-bar);
 }
 
 .rooms-date {
-    font-size: 2vw;
+    font-size: 3vw;
     width: fit-content;
     position: absolute;
     color: var(--blue-light);
     font-family: 'Rubik';
     margin: 2.2vw;
-    margin-left: 4.5vw;
-    margin-top: -2.5vw;
+    margin-left: 6vw;
+    margin-top: -4vw;
     transition: 200ms;
     opacity: 0;
 }
@@ -1989,12 +2097,12 @@ textarea::-moz-scrollbar-thumb:hover {
 .rooms-message-delete {
     transition: 200ms;
     fill: var(--blue-light);
-    width: 2.5vw;
-    height: 2.5vw;
+    width: 4vw;
+    height: 4vw;
     cursor: pointer;
     position: absolute;
     opacity: 0;
-    margin-left: -3vw;
+    margin-left: -4vw;
 }
 
 .rooms-message-boundary:hover .rooms-date {
@@ -2012,12 +2120,13 @@ textarea::-moz-scrollbar-thumb:hover {
 .rooms-message-boundary {
     transition: 200ms;
     background-color: rgba(0, 0, 0, 0);
-    padding-bottom: 4.5vw;
-    padding-top: 3.5vw;  
+    padding-bottom: 5vw;
+    padding-top: 5.5vw;  
     margin-right: 3vw;
     margin-left: 3vw;
     margin-top: 1vw;
-    border-radius: 3vw;
+    margin-bottom: 2vw;
+    border-radius: 4vw;
 }
 
 .rooms-message-boundary:hover {
@@ -2033,34 +2142,34 @@ textarea::-moz-scrollbar-thumb:hover {
     width: -moz-fit-content;
     width: fit-content;
     margin-left: auto;
-    margin-right: 2.5vw;
-    padding-top: 1.5vw;
+    margin-right: 4vw;
+    padding-top: 3vw;
     padding-bottom: .5vw;
     padding-right: 3vw;
-    padding-left: 1.5vw;
-    border-radius: 3vw;
+    padding-left: 2vw;
+    border-radius: 4vw;
     border-top-right-radius: 0;
-    max-width: 35vw;
+    max-width: 60vw;
 }
 
 .rooms-message-r .avatar {
     position: absolute;
-    margin-top: -5vw;
+    margin-top: -8vw;
     right: 2.5vw;
-    height: 6vw;
-    width: 6vw;
+    height: 8vw;
+    width: 8vw;
     border-radius: 50%;
 }
 
 .rooms-message-r .name {
     position: absolute;
     color: var(--light-gray);
-    font-size: 2vw;
+    font-size: 3vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     text-align: right;
-    margin-top: -4.5vw;
-    right: 9.5vw;
+    margin-top: -8vw;
+    right: 12vw;
 }
 
 .rooms-message-r .say {
@@ -2072,8 +2181,8 @@ textarea::-moz-scrollbar-thumb:hover {
     display: block;
     margin: auto;
     border-radius: 2vw;
-    width: 35vw;
-    height: 30vw;
+    width: 55vw;
+    height: 55vw;
     margin-bottom: 1vw;
 }
 
@@ -2081,17 +2190,18 @@ textarea::-moz-scrollbar-thumb:hover {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 30vw;
+    max-width: 55vw;
     text-align: left;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
-    font-size: 2.5vw;
+    font-size: 4vw;
     margin-bottom: 1vw;
+    min-width: 5vw;
 }
 
 .rooms-message-r .images-frame {
     display: flex;
-    max-width: 50vw;
+    max-width: 55vw;
     flex-wrap: wrap;
     user-select: none;
     margin-bottom: 1vw;
@@ -2114,7 +2224,7 @@ textarea::-moz-scrollbar-thumb:hover {
     vertical-align: middle;
     border-radius: 1.5vw;
     margin: 0.5vw;
-    width: 4vw;
+    width: 25vw;
     height: fit-content;
     padding: 0;
     border: 0;
@@ -2130,8 +2240,8 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-message-r img {
     vertical-align: middle;
-    border-radius: 1.5vw;
-    margin: 0.5vw;
+    border-radius: 3vw;
+    margin: 1vw;
     border: 0;
     width: calc(100% - 2vw);
     transition: 200ms;
@@ -2145,13 +2255,13 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-message-r .time {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5vw;
+    font-size: 2vw;
     font-weight: 400;
     color: var(--timestamp-message);
     position: absolute;
-    margin-top: 2vw;
+    margin-top: 1vw;
     text-align: right;
-    right: 7vw;
+    right: 9vw;
 }
 
 .rooms-message-r .unread {
@@ -2167,59 +2277,59 @@ textarea::-moz-scrollbar-thumb:hover {
     background-color: var(--blue-mid);
     width: -moz-fit-content;
     width: fit-content;
-    margin-left: 2.5vw;
-    padding-top: 1.5vw;
+    margin-left: 4vw;
+    padding-top: 3vw;
     padding-bottom: .5vw;
-    padding-right: 1.5vw;
+    padding-right: 2vw;
     padding-left: 3vw;
-    border-radius: 3vw;
+    border-radius: 4vw;
     border-top-left-radius: 0;
-    max-width: 35vw;
+    max-width: 60vw;
 }
 
 .rooms-message-l .map {
     border: 0;
     border-radius: 2vw;
-    margin-bottom: -0.5vw;
-    width: 35vw;
-    height: 30vw;
+    width: 55vw;
+    height: 55vw;
     margin-bottom: 1vw;
 }
 
 .rooms-message-l .avatar {
     position: absolute;
-    margin-top: -5vw;
+    margin-top: -8vw;
     left: 2.5vw;
-    height: 6vw;
-    width: 6vw;
+    height: 8vw;
+    width: 8vw;
     border-radius: 50%;
 }
 
 .rooms-message-l .name {
     position: absolute;
     color: var(--light-gray);
-    font-size: 2vw;
+    font-size: 3vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     text-align: right;
-    margin-top: -4.5vw;
-    left: 9.5vw;
+    margin-top: -8vw;
+    left: 12vw;
 }
 
 .rooms-message-l .text {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 30vw;
+    max-width: 55vw;
     text-align: left;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
-    font-size: 2.5vw;
+    font-size: 4vw;
     margin-bottom: 1vw;
+    min-width: 5vw;
 }
 
 .rooms-message-l .images-frame {
-    max-width: 50vw;
+    max-width: 55vw;
     display: flex;
     flex-wrap: wrap;
     user-select: none;
@@ -2259,8 +2369,8 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-message-l img {
     vertical-align: middle;
-    border-radius: 1.5vw;
-    margin: 0.5vw;
+    border-radius: 3vw;
+    margin: 1vw;
     border: 0;
     width: calc(100% - 2vw);
     transition: 200ms;
@@ -2274,35 +2384,34 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-message-l .time {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5vw;
+    font-size: 2vw;
     font-weight: 400;
     color: var(--timestamp-message);
     position: absolute;
-    margin-top: 2vw;
+    margin-top: 1vw;
     text-align: right;
-    left: 7vw;
+    left: 9vw;
 }
 
 
 /* audio message */ 
 
 .audio {
-    width: 43vw;
-    height: 6vw;
+    width: 58vw;
+    height: 10vw;
     border-radius: 2vw;
     margin-left: -.5vw;
 }
 
 .audio-button {
     position: absolute;
-    margin-top: -0.5vw;
-    width: 5vw;
-    height: 5vw;
-    padding: 0.5vw;
+    width: 8vw;
+    height: 8vw;
     fill: var(--light-gray);
     border-radius: 50%;
     cursor: pointer;
     transition: 200ms;
+    margin-top: .5vw;
 }
 
 .audio-button:hover {
@@ -2313,10 +2422,10 @@ textarea::-moz-scrollbar-thumb:hover {
 .audio-time {
     position: absolute;
     width: fit-content;
-    margin-left: 25vw;
-    margin-top: 1.5vw;
+    margin-left: 48vw;
+    margin-top: 2.3vw;
     text-align: right;
-    font-size: 2vw;
+    font-size: 3.5vw;
     font-family: 'Rubik';
     font-weight: 400;
     color: var(--light-gray)
@@ -2327,11 +2436,11 @@ textarea::-moz-scrollbar-thumb:hover {
     --bar-width: 0%;
     -webkit-appearance: none;
     position: absolute;
-    width: 16vw;
-    height: 0.5vw;
+    width: 35vw;
+    height: 1vw;
     border-radius: 0.5vw;
-    margin-left: 7vw;
-    margin-top: 2.5vw;
+    margin-left: 10vw;
+    margin-top: 4vw;
     cursor: pointer;
 }
 
@@ -2367,7 +2476,7 @@ textarea::-moz-scrollbar-thumb:hover {
 #profile-bg {
     position: absolute;
     width: 100%;
-    height: 20vw;
+    height: 15vw;
     background: linear-gradient(96.27deg, rgba(23, 89, 151, 0.5) 12.87%, rgba(80, 41, 162, 0.5) 66.53%);
 }
 
@@ -2375,9 +2484,9 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     width: 20vw;
     height: 20vw;
-    margin-top: 10vw;
-    margin-left: 10vw;
-    border-radius: 15vw;
+    margin-top: 5vw;
+    margin-left: 5vw;
+    border-radius: 50%;
     user-select: none;
     /* box-shadow: 0.4vw 0.4vw 1vw rgba(0, 0, 0, 0.205); */
 }
@@ -2404,39 +2513,39 @@ textarea::-moz-scrollbar-thumb:hover {
 #profile-name {
     display: flex;
     position: absolute;
-    font-size: 3.5vw;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    margin-top: 7.4vw;
-    margin-left: 22.5vw;
+    margin-top: 8.7vw;
+    margin-left: 27vw;
     color: #fff;
 }
 
 #profile-online {
     background-color: var(--green);
-    width: 1.6vw;
-    height: 1.6vw;
+    width: 2vw;
+    height: 2vw;
     border-radius: 50%;
-    margin-top: 1.5vw;
-    margin-left: 1vw;
+    margin-top: 2.2vw;
+    margin-left: 1.5vw;
 }
 
 #profile-id {
     position: absolute;
     color: var(--blue-mid-light);
     font-family: 'DM Mono', monospace;
-    font-size: 1.7vw;
+    font-size: 2.5vw;
     font-weight: 400;
-    margin-top: 12.7vw;
-    margin-left: 22.5vw;
+    margin-top: 15.5vw;
+    margin-left: 27vw;
 }
 
 #profile-dropdown-dots {
     position: absolute;
-    margin-top: 1vw;
-    margin-left: 64vw;
+    margin-top: 2vw;
+    margin-left: 76vw;
     width: auto;
-    height: 4vw;
+    height: 6vw;
     cursor: pointer;
 }
 
@@ -2455,14 +2564,13 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .profile-dropdown-menu {
     position: absolute;
-    width: 8vw;
+    width: 12vw;
     background-color: var(--light-gray);
-    margin-left: 62vw;
-    transition: 1400ms;
-    height: 22vw;
+    margin-left: 73vw;
+    height: 36vw;
     padding-top: 5vw;
-    border-bottom-left-radius: 4vw;
-    border-bottom-right-radius: 4vw;
+    border-bottom-left-radius: 6vw;
+    border-bottom-right-radius: 6vw;
 }
 
 .profile-dropdown-item {
@@ -2470,10 +2578,10 @@ textarea::-moz-scrollbar-thumb:hover {
     margin: auto;
     fill: var(--blue-light);
     stroke: var(--blue-light);
-    width: 4.5vw;
-    height: 4.5vw;
+    width: 7vw;
+    height: 7vw;
     cursor: pointer;
-    margin-bottom: 2vw;
+    margin-bottom: 2.5vw;
     transition: 200ms;
 
 }
@@ -2498,27 +2606,27 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-dropdown-bar {
     background-color: var(--dropdown-bar);
-    width: 6vw;
+    width: 7vw;
     margin: auto;
     display: block;
     height: 0.2vw;
-    margin-top: 1vw;
-    margin-bottom: 1.5vw;
+    margin-top: 5vw;
+    margin-bottom: 2.5vw;
 }
 
 #profile-newpost {
     position: absolute;
-    height: 5vw;
-    width: 13.5vw;
+    height: 6vw;
+    width: 20vw;
     background-color: var(--blue-light);
     color: var(--light-gray);
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 2vw;
+    font-size: 3.2vw;
     text-align: center;
     border-radius: 2vw;
-    margin-top: 14.5vw;
-    margin-left: 54.3vw;
+    margin-top: 19vw;
+    margin-left: 61vw;
     cursor: pointer;
     transition: 200ms;
     user-select: none;
@@ -2535,18 +2643,18 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-write {
     position: absolute;
-    width: 4.5vw;
-    height: 3.5vw;
-    padding: 0.75vw;
-    padding-top: 0.9vw;
-    padding-bottom: 0.6vw;
-    border-radius: 2vw;
-    margin-top: 14.5vw;
-    margin-left: 54.3vw;
+    height: 5vw;
+    width: 7vw;
     background-color: var(--blue-light);
-    fill: var(--light-gray);
+    text-align: center;
+    border-radius: 2vw;
+    margin-top: 19vw;
+    margin-left: 63vw;
+    padding: .5vw;
     cursor: pointer;
     transition: 200ms;
+    user-select: none;
+    fill: var(--light-gray);
 }
 
 #profile-write:hover {
@@ -2556,16 +2664,18 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-call {
     position: absolute;
-    width: 4.5vw;
-    height: 3.5vw;
-    padding: 0.75vw;
-    border-radius: 2vw;
-    margin-top: 14.5vw;
-    margin-left: 61.8vw;
+    height: 4vw;
+    width: 6vw;
     background-color: var(--blue-light);
-    fill: var(--light-gray);
+    text-align: center;
+    border-radius: 2vw;
+    margin-top: 19vw;
+    margin-left: 73vw;
+    padding: 1vw;
     cursor: pointer;
     transition: 200ms;
+    user-select: none;
+    fill: var(--light-gray);
 }
 
 #profile-call:hover {
@@ -2575,17 +2685,17 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-add {
     position: absolute;
-    height: 5vw;
-    width: 13.5vw;
+    height: 6vw;
+    width: 12vw;
     background-color: var(--blue-light);
     color: var(--light-gray);
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 2.5vw;
+    font-size: 3.2vw;
     text-align: center;
     border-radius: 2vw;
-    margin-top: 14.5vw;
-    margin-left: 54.3vw;
+    margin-top: 19vw;
+    margin-left: 69vw;
     cursor: pointer;
     transition: 200ms;
     user-select: none;
@@ -2603,19 +2713,19 @@ textarea::-moz-scrollbar-thumb:hover {
 #profile-status {
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 2vw;
+    font-size: 3.3vw;
     text-align: left;
     position: absolute;
-    height: 4vw;
+    height: 6vw;
     min-width: 4vw;
-    max-width: 27vw;
+    max-width: 35vw;
     background-color: var(--blue-mid);
     color: #fff;
     border-radius: 4vw;
-    margin-top: 15.5vw;
-    margin-left: 22.5vw;
-    padding-left: 1.5vw;
-    padding-right: 1.5vw;
+    margin-top: 19vw;
+    margin-left: 26vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
 }
 
 #profile-status p {
@@ -2647,6 +2757,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 #profile-posts-bar {
+    display: none;
     position: absolute;
     margin-top: -1.8vw;
     width: 62vw;
@@ -2658,22 +2769,21 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-posts {
     position: absolute;
-    margin-top: 40vw;
-    width: 70vw;
-    height: 76vw;
+    margin-top: 28vw;
+    width: 85vw;
+    height: calc(100vh - 45vw);
     overflow-y: scroll;
     overflow-x: hidden;
     padding-top: 2vw;
-    padding-bottom: 0vw;
 }
 
 .profile-post {
     background-color: var(--blue-mid);
-    width: 60vw;
-    margin-bottom: 8vw;
+    width: 75vw;
+    margin-bottom: 9vw;
     margin-left: 4vw;
     padding: 1vw;
-    border-radius: 2.7vw;
+    border-radius: 4vw;
     transition: 200ms;
 }
 
@@ -2706,28 +2816,28 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .profile-post-avatar {
-    height: 3.5vw;
-    width: 3.5vw;
-    margin: 0.5vw;
+    height: 5vw;
+    width: 5vw;
+    margin: 1vw;
     border-radius: 50%;
 }
 
 .profile-post-time {
     position: absolute;
     display: inline-block;
-    margin-left: 5vw;
-    margin-top: -3.5vw;
+    margin-left: 8vw;
+    margin-top: -6vw;
     margin-bottom: 0.5vw;
     font-family: 'DM Mono', monospace;
     font-weight: 300;
-    font-size: 1.5vw;
+    font-size: 2.5vw;
     color: var(--blue-mid-light);
 }
 
 .profile-post-title {
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    font-size: 2.3vw;
+    font-size: 5vw;
     color: #fff;
     margin: 2.25vw;
     margin-top: 0;
@@ -2738,7 +2848,7 @@ textarea::-moz-scrollbar-thumb:hover {
 .profile-post-text {
     font-family: 'Quicksand', sans-serif;
     font-weight: 500;
-    font-size: 1.5vw;
+    font-size: 4vw;
     color: var(--light-gray);
     margin: 2.25vw;
     margin-top: 0;
@@ -2754,11 +2864,11 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .profile-post-delete {
     position: absolute;
-    margin-left: 56.3vw;
-    margin-top: -4vw;
-    fill: none;
-    width: 2.5vw;
-    height: 2.5vw;
+    margin-left: 69vw;
+    margin-top: -6vw;
+    fill: var(--blue-dimm);
+    width: 4.5vw;
+    height: 4.5vw;
     cursor: pointer;
     opacity: 0.7;
     transition: 200ms;
@@ -2775,10 +2885,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .profile-post-buttons {
     position: absolute;
-    width: 6.2vw;
-    height: 5vw;
+    width: 9vw;
+    height: 7vw;
     margin-top: 1vw;
-    margin-left: 2vw;
+    margin-left: 3vw;
     background-color: var(--blue-light);
     border-bottom-left-radius: 2vw;
     border-bottom-right-radius: 2vw;
@@ -2798,10 +2908,10 @@ textarea::-moz-scrollbar-thumb:hover {
 .profile-post-liked {
     position: absolute;
     fill: var(--yellow);
-    width: 3.8vw;
-    height: 3.8vw;
-    margin-left: 1.2vw;
-    margin-top: 0.3vw;
+    width: 6vw;
+    height: 6vw;
+    margin-left: 1.4vw;
+    margin-top: 0.4vw;
     cursor: pointer;
     transition: 200ms;
 }
@@ -2810,15 +2920,15 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     font-family: 'Quicksand', sans-serif;
     font-weight: 1000;
-    font-size: 1.4vw;
+    font-size: 2.2vw;
     background-color: var(--light-gray);
     color: var(--blue-light);
-    border-radius: 1vw;
-    padding-left: 0.4vw;
-    padding-right: 0.4vw;
+    border-radius: 2vw;
+    padding-left: 0.6vw;
+    padding-right: 0.6vw;
     padding-bottom: 0.1vw;
-    line-height: 1.5vw;
-    margin-left: 3.6vw;
+    line-height: 2.2vw;
+    margin-left: 5vw;
     text-align: left;
     user-select: none;
 }
@@ -2826,10 +2936,10 @@ textarea::-moz-scrollbar-thumb:hover {
 .profile-post-unliked {
     position: absolute;
     fill: var(--light-gray);
-    width: 3.8vw;
-    height: 3.8vw;
-    margin-left: 1.2vw;
-    margin-top: 0.3vw;
+    width: 6vw;
+    height: 6vw;
+    margin-left: 1.4vw;
+    margin-top: 0.4vw;
     cursor: pointer;
     transition: 200ms;
 }
@@ -2854,12 +2964,14 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 6vw;
+    font-size: 8vw;
     color: var(--blue-light);
     user-select: none;
-    margin-top: 20vw;
     width: 69vw;
     text-align: center;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30vh;
 }
 
 /* auth */
@@ -2872,16 +2984,18 @@ a {
 #auth-button {
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    font-size: 2.55vw;
+    font-size: 5vw;
     color: var(--blue-mid-light);
     margin: auto;
     margin-top: 5vw;
-    width: 32vw;
-    height: 5vw;
+    margin-left: 50%;
+    transform: translateX(calc(-50% - 7.5vw));
+    width: 60vw;
+    height: 8vw;
     border-radius: 5vw;
     background-color: var(--blue-mid);
     text-align: center;
-    line-height: 5vw;
+    line-height: 8vw;
     cursor: pointer;
     user-select: none;
     transition: 200ms;
@@ -2917,11 +3031,12 @@ a {
     color: #fff;
     font-family: 'Quicksand', sans-serif;
     font-weight: 1000;
-    font-size: 9vw;
+    font-size: 15vw;
     user-select: none;
-    width: 50vw;
     text-align: center;
     margin-top: 15vw;
+    margin-left: -15vw;
+    width: 100vw;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; 
     -moz-background-clip: text;
