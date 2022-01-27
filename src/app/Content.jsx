@@ -2,30 +2,29 @@ const React = require('react');
 const Cookies = require('universal-cookie');
 const cookie = new Cookies;
 
-const Auth = require('../Auth.js');
-const { logout } = require('../Auth.js');
-const Attachs = require('../Files.js');
+const Auth = require('./Auth.js');
+const { logout } = require('./Auth.js');
+const Attachs = require('./Files.js');
 const { SettingsButton, AttachmentsButton } = require('./Buttons.jsx');
 const Avatar = require('./Avatar.jsx');
 const { ProfileDropDown, ContactsDropDown, RoomsDropDown } = require('./Popup.jsx');
 const DynamicTextarea = require('react-textarea-autosize').default;
-const { swipeable } = require('react-swipeable');
 
-import DeleteIcon from '../graphics/icon-delete.jsx';
-import ShareIcon from '../graphics/icon-share.jsx';
-import LikeActiveIcon from '../graphics/icon-star-active.jsx';
-import LikeUnactiveIcon from '../graphics/icon-star-unactive.jsx';
-import SendIcon from '../graphics/icon-send.jsx';
-import MicIcon from '../graphics/icon-mic.jsx';
-import MicOffIcon from '../graphics/icon-mic-off.jsx';
-import CallIcon from '../graphics/icon-call.jsx';
-import FileIcon from '../graphics/icon-file.jsx';
-import EditIcon from '../graphics/icon-edit.jsx';
-import SoundIcon from '../graphics/icon-sound.jsx';
-import SoundStopIcon from '../graphics/icon-sound-stop.jsx';
-import PlayIcon from '../graphics/icon-play.jsx';
-import PauseIcon from '../graphics/icon-pause.jsx';
-import MessageIcon from '../graphics/icon-message.jsx';
+import DeleteIcon from './graphics/icon-delete.jsx';
+import ShareIcon from './graphics/icon-share.jsx';
+import LikeActiveIcon from './graphics/icon-star-active.jsx';
+import LikeUnactiveIcon from './graphics/icon-star-unactive.jsx';
+import SendIcon from './graphics/icon-send.jsx';
+import MicIcon from './graphics/icon-mic.jsx';
+import MicOffIcon from './graphics/icon-mic-off.jsx';
+import CallIcon from './graphics/icon-call.jsx';
+import FileIcon from './graphics/icon-file.jsx';
+import EditIcon from './graphics/icon-edit.jsx';
+import SoundIcon from './graphics/icon-sound.jsx';
+import SoundStopIcon from './graphics/icon-sound-stop.jsx';
+import PlayIcon from './graphics/icon-play.jsx';
+import PauseIcon from './graphics/icon-pause.jsx';
+import MessageIcon from './graphics/icon-message.jsx';
 
 const getGeo = () => {
     return new Promise((res, rej) => {
@@ -65,7 +64,7 @@ const formatTimeMessage = (time) => {
     return [t, d];
 }
 
-function ContentM (props) {
+function Content (props) {
     let showMenu;
     switch(props.menu.get.type) {
         case 'profile':
@@ -256,7 +255,8 @@ function UserFrame (props) {
         <>
             <input type='file' accept='image/*' ref={input} style={{ display: 'none', position: 'absolute' }} />
             <div id='profile-bg' />
-            <Avatar url={profile.avatar_url} className='profile-avatar' onClick={() => input.current.click()} />
+            <Avatar url={profile.avatar_url} className='profile-avatar' />
+            {profile.id === data.user.id ? <EditIcon id='profile-avatar-edit' onClick={() => input.current.click()} />:''}
             <div id='profile-status'><p>{profile.status}</p></div>
             <div id='profile-name'>{profile.name}{profile.online ? <div id='profile-online' />:''}</div>
             <InteractElement />
@@ -357,7 +357,7 @@ function SettingsFrame (props) {
                 <p className='settings-text'>Who can write me</p>
                 <p className='settings-text'>Who can call me</p>
                 <p className='settings-text'>Who can see my posts</p>
-                <div style={{width: '100%', height: '15wh'}} />
+                <div style={{width: '100%', height: '5vh'}} />
                 <p className='settings-title'>Account</p>
                 <p className='settings-text'>Change my ID</p>
                 <p className='settings-text'>Change status</p>
@@ -381,7 +381,7 @@ function SettingsFrame (props) {
                 <input className='settings-change-input' maxLength='10' ref={nameRef} placeholder={user.name} value={inputName} onChange={(event) => setInputName(event.target.value)} />
                 <div className='settings-change-submit' onClick={() => changeName(inputName)}><p>OK</p></div>
             </div>
-            <div id='settings-notify' onClick={notifToggle}><div id='settings-notify-button' className={cookie.get('notifications') === 'on' ? 'on':'off'} /><span style={{marginLeft: '2vw'}}>Recieve notifications</span></div>
+            <div id='settings-notify' onClick={notifToggle}><div id='settings-notify-button' className={cookie.get('notifications') === 'on' ? 'on':'off'} />Recieve notifications</div>
             <div id='settings-logout' className={logoutClicked ? 'settings-logout-click':''} onClick={() => { logout(props.setAuth); setLogoutClicked(true); }}><p>LOGOUT</p></div>
         </div>
     );
@@ -411,7 +411,7 @@ function ContactsFrame (props) {
                 <div key={i} className='contacts-message-boundary'>
                 {v.sender === data.user.id ? <p className='contacts-date'>
                 <DeleteIcon className='contacts-message-delete' onClick={() => deleteMessage(v)}/>{date}</p>:
-                <p className='contacts-date' style={{right: '3.2vw'}}>{date}</p>}
+                <p className='contacts-date' style={{right: '3.5vh'}}>{date}</p>}
                 <div key={i} className={`contacts-message-${v.sender === data.user.id ? 'r':'l'}`}>
                     {v.text ? <div className='text'>{parseInvites(v.text)}</div>:''}
                     {v.audio.uri ? <AudioMessage data={v.audio} />:''}
@@ -522,7 +522,7 @@ function ContactsFrame (props) {
     React.useEffect(() => {
         if (inputHeight) {
             const elem = document.getElementById('contacts-bottom');
-            elem.style.marginTop = `calc(${inputHeight}vh - 19vw)`;
+            elem.style.marginTop = `${inputHeight}vh`;
         } else onHeightChange();
     }, [inputHeight]);
 
@@ -551,7 +551,7 @@ function ContactsFrame (props) {
     }, [rec]);
 
     const onHeightChange = () => {
-        const IDEAL_H = 100;
+        const IDEAL_H = 97;
         const style = getComputedStyle(document.querySelector('#contacts-bottom'));
         const height = pxToVh(parseInt(style['height']));
         const marginTop = pxToVh(parseInt(style['margin-top']));
@@ -610,8 +610,8 @@ function ContactsFrame (props) {
             { rec === 0 ?
                 <AttachmentsButton id='contacts-attach' files={{get: files, set: setFiles}} alert={{set: props.alert}} />
             : rec === 1 ?
-                <SoundStopIcon id='contacts-attach' onClick={() => props.data.socket.stopRec()} style={{ top: '1.1vw', width: '7vw', height: '7vw', right: '5.5vw' }} />
-            :   <DeleteIcon id='contacts-attach' onClick={() => setRec(0)} style={{ top: '2vw', width: '5vw', height: '5vw', right: '7vw' }} />
+                <SoundStopIcon id='contacts-attach' onClick={() => props.data.socket.stopRec()} style={{ marginTop: '0.7vh', right: '5.5vh' }} />
+            :   <DeleteIcon id='contacts-attach' onClick={() => setRec(0)} style={{ top: '1.5vh', width: '3vh', height: '3vh' }} />
             }
             {input || files.length || typeof rec === 'object' ? <SendIcon id='contacts-bottom-2' onClick={() => sendMessage({ text: input, id: profile.id, audio: rec })} />:<MicIcon id='contacts-bottom-2' onClick={rec ? () => 0:startRec} className={rec === 1 ? 'contacts-rec':''} />}
             <span id='contacts-bottom-bar' />
@@ -644,7 +644,7 @@ function RoomsFrame(props) {
             <div key={i} className='rooms-message-boundary'>
             {v.sender === data.user.id ? <p className='rooms-date'>
                 <DeleteIcon className='rooms-message-delete' onClick={() => deleteMessage(v.id)}/>{date}</p>:
-            <p className='rooms-date' style={{right: '3.2vw'}}>{date}</p>}
+            <p className='rooms-date' style={{right: '3.5vh'}}>{date}</p>}
             <div key={i} className={`rooms-message-${v.sender === data.user.id ? 'r':'l'}`}>
                 <Avatar url={v.sender === data.user.id ? data.user.avatar_url:data.profiles[v.sender].avatar_url} className='avatar' onClick={() => props.menu.set({ type: 'profile', id: v.sender })} />
                 <p className='name'>{v.sender === data.user.id ? 'You':data.profiles[v.sender].name}</p>
@@ -754,7 +754,7 @@ function RoomsFrame(props) {
     React.useEffect(() => {
         if (inputHeight) {
             const elem = document.getElementById('contacts-bottom');
-            elem.style.marginTop = `calc(${inputHeight}vh - 19vw)`;
+            elem.style.marginTop = `${inputHeight}vh`;
         } else onHeightChange();
     }, [inputHeight]);
 
@@ -774,7 +774,7 @@ function RoomsFrame(props) {
     }, [rec])
 
     const onHeightChange = () => {
-        const IDEAL_H = 100;
+        const IDEAL_H = 97;
         const style = getComputedStyle(document.querySelector('#contacts-bottom'));
         const height = pxToVh(parseInt(style['height']));
         const marginTop = pxToVh(parseInt(style['margin-top']));
@@ -902,5 +902,5 @@ const makeProfileCall = (profile, user, socket) => {
     if (accessible) socket.call(socket.callData.current === profile.id && socket.callData.state ? 'end':'start', profile.id);
 };
 
-module.exports = ContentM;
+module.exports = Content;
  
