@@ -143,7 +143,7 @@ body, #root {
     height: 0.8vw;
     border-radius: 0.6vw;
     background-color: var(--light-gray);
-    transition: 50ms;
+    transition: 100ms;
 }
 
 .invite {
@@ -322,19 +322,6 @@ img {
     align-items: center;
     user-select: none;
     transform: translate(-50%, -50%);
-}
-
-#popup-file-prev {
-    position: absolute;
-    fill: var(--light-gray);
-    cursor: pointer;
-    transition: 200ms;
-    width: 10vw;
-    height: 10vw;
-    left: 14vw;
-    top: 45vw;
-    rotate: 180deg;
-    user-select: none;
 }
 
 #popup-file-next {
@@ -1705,6 +1692,13 @@ textarea::-moz-scrollbar-thumb:hover {
     border: .6vw solid var(--green);
     box-sizing: border-box;
     border-radius: 50%;
+}
+
+.contacts-top-avatar-call {
+    border: 0.4vh solid transparent;
+    box-sizing: border-box;
+    border-radius: 50%;
+    transition: 100ms;
 }
 
 #contacts-bottom {

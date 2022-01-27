@@ -28,7 +28,7 @@ function SideBarM (props) {
     React.useEffect(() => {
         props.data.socket.loadData({ type: 'chats' });
         props.data.socket.loadData({ type: 'rooms' });
-        data.user.contacts.forEach(v => props.data.socket.loadData({ type: 'profile', id: v }));
+        // data.user.contacts.forEach(v => props.data.socket.loadData({ type: 'profile', id: v }));
     }, []);
 
     if (props.menu.get.type === 'contacts' && sidebar.type !== 'contacts') setSidebar({ type: 'contacts', id: ''});
@@ -141,35 +141,16 @@ function SideBarM (props) {
     }
 
     const afterSearch = (text, chats) => {
-        const splitText = text.split(' ');
+        text = text.toLowerCase().trim();
 
-        const searchFunc = (compare, v) => {
-            let found = false;
-            splitText.forEach(t => {
-                if (compare && compare.indexOf(t) !== -1) found = true;
-            });
+        if (sidebar.type == 'contacts') Object.values(data.profiles).map((v) => {
+            if (v.name.toLowerCase().indexOf(text) !== -1) chats.push(v); // by name
+            else if (text.indexOf('#') !== -1 && text.length > 1 && v.profile_id.indexOf(text.slice(1)) !== -1) chats.push(v); // by id
+        });
 
-            if (found) return v;
-        }
-
-        const userProfiles = [], userContacts = [];
-        for (let x in data.profiles) {
-            const body = {id: x, ...data.profiles[x]}
-            userProfiles.push(body);
-            if (data.user.contacts.includes(x.id)) userContacts.push(body);
-        }
-
-        const userRooms = [];
-        for (let x in data.rooms) {
-            const body = {id: x, ...data.rooms[x]}
-            userRooms.push(body);
-        }
-
-        // searching 
-        chats = chats.concat(userContacts.filter((v) => searchFunc(v.name, v)));
-        chats = chats.concat(userProfiles.filter((v) => searchFunc('#' + v.profile_id, v)));
-        chats = chats.concat(userRooms.filter((v) => searchFunc(v.name, v)));
-        chats = chats.concat(userRooms.filter((v) => searchFunc(v.room_id, v)));
+        else Object.values(data.rooms).map(v => {
+            if (v.name.toLowerCase().indexOf(text) !== -1) chats.push(v); // by name
+        });
 
         return chats;
     }
@@ -182,6 +163,7 @@ function SideBarM (props) {
         // profile search
         if (text.indexOf('#') !== -1) {
             let id = text.slice(text.indexOf('#')+1);
+
             id = id.slice(0, id.indexOf(' ') === -1 ? id.length:id.indexOf(' '));
             // do not allow searching for self id
             if (id == data.user.id) return [];

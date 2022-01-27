@@ -226,7 +226,7 @@ function UserFrame (props) {
     const InteractElement = () => (id ? (
         ( data.user.contacts.includes(id) ? <>
         <MessageIcon id='profile-write' onClick={() => props.menu.set({ type: 'contacts', id: profile.id })} />
-        <CallIcon id='profile-call' onClick={profile.privacy.call === 'all' || profile.in_contacts ? () => props.data.socket.call('start', profile.id):null} style={profile.privacy.call === 'all' || profile.in_contacts ? {}:{cursor: 'not-allowed'}} />
+        <CallIcon id='profile-call' onClick={() => makeProfileCall(profile, data.user, props.data.socket)} style={profile.privacy.call === 'all' || profile.in_contacts ? {}:{cursor: 'not-allowed'}} />
         </>: (
         <div id='profile-add' onClick={() => users.add(id)}><p>ADD</p></div>) )
         ) : (
@@ -286,18 +286,23 @@ function SettingsFrame (props) {
     }
 
     const changeId = (newId) => {
-        if (newId === props.data.get.user.profile_id) props.alert({show: true, text: 'Your new ID must be NEW'});
+        if (newId === props.data.get.user.profile_id) props.alert({show: true, text: 'This ID is already set'});
         else if (!/^[a-z0-9]{1,}$/.test(newId)) props.alert({show: true, text: 'ID must consist of lowercase letters or numbers'});
         else if (!/^[a-z0-9]{5,16}$/.test(newId)) props.alert({show: true, text: 'Length of an ID must be between 5 and 15 characters'});
         else {
             props.data.socket.request('change', { type: 'id', id: newId });
-            const data = props.data.get;
-            data.user.profile_id = newId;
-            props.data.set(data);
-            props.alert({show: true, text: 'Nice profile ID!', type: 'success'});
-            inputRef.current.value = '';
         }
     }
+
+    // handles user updated id response
+    React.useEffect(() => props.data.socket.socket.on('change-profile-id-status', (ok) => {
+        if (ok) {
+            props.alert({show: true, text: 'ID changed', type: 'success'});
+        } else {
+            props.alert({show: true, text: 'ID is already taken', type: 'error'});
+            setInputId(user.profile_id);
+        }
+    }), []);
 
     const changeStatus = (newStatus) => {
         if (newStatus === props.data.get.user.status) return;
@@ -391,6 +396,7 @@ function ContactsFrame (props) {
     const inputRef = React.useRef();
     const data = props.data.get;
     const profile = data.profiles[props.menu.get.id];
+    const socket = props.data.socket;
 
     // get most recent chat
     if (!profile) return (<div id='contacts-select'>SELECT CHAT</div>);
@@ -538,11 +544,11 @@ function ContactsFrame (props) {
 
     React.useEffect(() => {
         if (rec) return;
-        while (eqElem.current.firstChild)
+        while (eqElem.current && eqElem.current.firstChild)
             eqElem.current.removeChild(eqElem.current.lastChild);
         inputRef.current.value = '';
         
-    }, [rec])
+    }, [rec]);
 
     const onHeightChange = () => {
         const IDEAL_H = 100;
@@ -562,7 +568,6 @@ function ContactsFrame (props) {
     }
 
     const startRec = async () => {
-        inputRef.current.value = '00:00';
         const interval = setInterval(() => {
             if (!props.data.socket.rec.timestamp) return;
             const diff = Date.now() - props.data.socket.rec.timestamp;
@@ -572,26 +577,36 @@ function ContactsFrame (props) {
         }, 100);
 
         const recorder = await props.data.socket.startRec(eqElem);
-        recorder.on('data', (data) => {
-            clearInterval(interval);
-            setRec(data);
-        });
-        setRec(1);
+        if (recorder) {
+            inputRef.current.value = '00:00';
+            recorder.on('data', (data) => {
+                clearInterval(interval);
+                setRec(data);
+            });
+            setRec(1);
+        } else setRec(0);
     }
+
+    let contactState = false;
+    if (! (profile.privacy.call === 'all' || profile.in_contacts)) contactState = `${profile.name} is unreachable`;
+    else if (!data.user.contacts.includes(profile.id)) contactState = `Add ${profile.name} to write him`;
+    else if (data.user.blocked.includes(profile.id)) contactState = `You blocked ${profile.name}`;
+    else if (profile.blocked) contactState = `${profile.name} blocked you`;
 
     return (<>
         <div id='contacts-history'>{loadMessages(data.chats[profile.id] ? data.chats[profile.id].history:[])}</div>
         <div id='contacts-top'>
             <ContactsDropDown menu={props.menu} data={props.data} popup={props.popup} />
-            {props.data.socket.callData.state === 2 ? (props.data.socket.callData.muted ? <MicOffIcon id='contacts-mute' onClick={() => props.data.socket.callMuteToggle()} />:<MicIcon id='contacts-mute' onClick={() => props.data.socket.callMuteToggle()} />):''}
+            {socket.callData.state === 2 ? (socket.callData.muted ? <MicOffIcon id='contacts-mute' onClick={() => socket.callMuteToggle()} />:<MicIcon id='contacts-mute' onClick={() => props.data.socket.callMuteToggle()} />):''}
             {
-                //                                                                                                                                                                                                                                                                                                                                                                                                            too long? 😯
+                //                                                                                                                                                                                                                                                                                                                                                                                          too long? 😯
             }
-            <CallIcon id='contacts-call' className={props.data.socket.callData.current === profile.id && props.data.socket.callData.state ? 'contacts-call-active':'contacts-call-unactive'} onClick={profile.privacy.call === 'all' || profile.in_contacts || props.data.socket.callData.state === 2 ? () => props.data.socket.call(props.data.socket.callData.current === profile.id && props.data.socket.callData.state ? 'end':'start', profile.id):null} />
-            <div id='contacts-top-profile' onClick={() => props.menu.set({ type: 'profile', id: profile.id })}><Avatar className={'contacts-top-avatar' + (profile.online ? ' contacts-top-avatar-online':'')} url={profile.avatar_url} /><p>{profile.name}</p></div></div>
+            <CallIcon id='contacts-call' className={socket.callData.current === profile.id && socket.callData.state ? 'contacts-call-active':'contacts-call-unactive'} onClick={() => makeProfileCall(profile, data.user, socket)} />
+            <div id='contacts-top-profile' onClick={() => props.menu.set({ type: 'profile', id: profile.id })}><Avatar id={'contacts-avatar'} className={'contacts-top-avatar' + (props.data.socket.callData.state === 2 && profile.id === props.data.socket.callData.current ? ' contacts-top-avatar-call' : profile.online ? ' contacts-top-avatar-online':'')} url={profile.avatar_url} /><p>{profile.name}</p></div></div>
         <div id='contacts-bottom'>
-            <DynamicTextarea ref={inputRef} id='contacts-bottom-textarea' disabled={!data.user.contacts.includes(profile.id) || profile.blocked || rec || (!profile.in_contacts && profile.privacy.write === 'contacts')} onKeyUp={onKeyPress} maxLength='500' placeholder={!profile.in_contacts && profile.privacy.write === 'contacts' ? `${profile.name} is unreachable`:(data.user.contacts.includes(profile.id) && !profile.blocked ? 'Type here...':(profile.blocked ? `${profile.name} blocked you`:`Add ${profile.name} to write him`))} maxRows='7' onChange={inputOnChange} onHeightChange={onHeightChange} />
-            <div id='contacts-eq' ref={eqElem} style={{display: rec ? 'flex':'none'}} />
+            <DynamicTextarea ref={inputRef} id='contacts-bottom-textarea' disabled={contactState || rec} onKeyUp={onKeyPress} maxLength='500' placeholder={contactState || 'Type here...'} maxRows='7' onChange={inputOnChange} onHeightChange={onHeightChange} />
+            { contactState ? '':
+            <> <div id='contacts-eq' ref={eqElem} style={{display: rec ? 'flex':'none'}} />
             { rec === 0 ?
                 <AttachmentsButton id='contacts-attach' files={{get: files, set: setFiles}} alert={{set: props.alert}} />
             : rec === 1 ?
@@ -600,6 +615,7 @@ function ContactsFrame (props) {
             }
             {input || files.length || typeof rec === 'object' ? <SendIcon id='contacts-bottom-2' onClick={() => sendMessage({ text: input, id: profile.id, audio: rec })} />:<MicIcon id='contacts-bottom-2' onClick={rec ? () => 0:startRec} className={rec === 1 ? 'contacts-rec':''} />}
             <span id='contacts-bottom-bar' />
+            </> }
         </div>
     </>);
 }
@@ -751,7 +767,7 @@ function RoomsFrame(props) {
     // reset recording
     React.useEffect(() => {
         if (rec) return;
-        while (eqElem.current.firstChild)
+        while (eqElem.current && eqElem.current.firstChild)
             eqElem.current.removeChild(eqElem.current.lastChild);
         inputRef.current.value = '';
         
@@ -775,7 +791,6 @@ function RoomsFrame(props) {
     }
 
     const startRec = async () => {
-        inputRef.current.value = '00:00';
         const interval = setInterval(() => {
             if (!props.data.socket.rec.timestamp) return;
             const diff = Date.now() - props.data.socket.rec.timestamp;
@@ -785,11 +800,14 @@ function RoomsFrame(props) {
         }, 100);
 
         const recorder = await props.data.socket.startRec(eqElem);
-        recorder.on('data', (data) => {
-            clearInterval(interval);
-            setRec(data);
-        });
-        setRec(1);
+        if (recorder) {
+            inputRef.current.value = '00:00';
+            recorder.on('data', (data) => {
+                clearInterval(interval);
+                setRec(data);
+            });
+            setRec(1);
+        } else setRec(0);
     }
 
     return (<>
@@ -873,6 +891,15 @@ function AudioMessage(props) {
 const roomInviteAccept = (props, id) => {
     if (props.data.get.rooms[id]) props.menu.set({ type: 'rooms', id });
     else props.data.socket.request('room', { type: 'join', id });
+};
+
+const makeProfileCall = (profile, user, socket) => {
+    const accessible = 
+        (profile.privacy.call === 'all' || profile.in_contacts) &&  // is reachable
+        !profile.blocked && !user.blocked.includes(profile.id) ||   // is blocked
+        socket.callData.state === 2; // is currently in call
+
+    if (accessible) socket.call(socket.callData.current === profile.id && socket.callData.state ? 'end':'start', profile.id);
 };
 
 module.exports = ContentM;

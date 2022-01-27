@@ -17,6 +17,11 @@ App.use(express.json());  // for parsing application/json
 App.use(express.urlencoded({ extended: true }));  // for parsing application/x-www-form-urlencoded
 App.use(express.static(__dirname + '/public'));  // send page
 
+App.get('/redirect', (req, res) => {
+    if (!req.secure) res.redirect(`https://${req.headers.host}`);
+    res.status(200);
+});
+
 const PORT = process.env.PORT || 2007;
 
 const server = App.listen(PORT, () => console.log(`[SERVER] started on port ${PORT}`));
