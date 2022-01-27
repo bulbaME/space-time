@@ -11,7 +11,6 @@ const MenuButtons = require('./MenuButtons.jsx');
 const Content = require('./Content.jsx');
 const SideBar = require('./SideBar.jsx');
 const {Alert, Popup} = require('./Popup.jsx');
-
 const Socket = require('./Socket.js');
  
 let socketConnected = false;
@@ -48,23 +47,10 @@ function App (props) {
     const data = getSocket ? {get: mainData, socket: getSocket, set: setMainData } : false;
 
     // main frame
-    return isMobile ?
-    (
+    return (
         <div id='main'>
-            <link rel="stylesheet" href="index-mob.css" />
-            <ContentM menu={{get: menu, set: setMenu}} alert={setAlert} setAuth={setAuthorized} data={data} popup={{get: popup, set: setPopup}} />
-            {menu.type === 'auth' ? '' : <SideBarM menu={{get: menu, set: setMenu}} data={data} alert={setAlert} incomes={{ get: incomeCalls, set: setIncomeCalls }} /> }
-            {menu.type === 'auth' ? '' : <MenuButtonsM data={data} menu={{get: menu, set: setMenu}} />}
-            <PopupM popup={{get: popup, set: setPopup}} confirm={{}} alert={{get: alert, set: setAlert}} menu={{ get: menu, set: setMainData }} incomes={{ get: incomeCalls, set: setIncomeCalls }} data={data} />
-            <AlertM alert={{get: alert, set: setAlert}} />
-        </div>
-    )
-    :
-    (
-        <div id='main'>
-            <link rel="stylesheet" href="index.css" />
             {menu.type === 'auth' ? '' : <SideBar menu={{get: menu, set: setMenu}} data={data} alert={setAlert} incomes={{ get: incomeCalls, set: setIncomeCalls }} /> }
-            <Content menu={{get: menu, set: setMenu}} alert={setAlert} setAuth={setAuthorized} data={data} popup={{get: popup, set: setPopup}} />
+            <Content isMobile={isMobile} menu={{get: menu, set: setMenu}} alert={setAlert} setAuth={setAuthorized} data={data} popup={{get: popup, set: setPopup}} />
             {menu.type === 'auth' ? '' : <MenuButtons data={data} menu={{get: menu, set: setMenu}} />}
             <Popup popup={{get: popup, set: setPopup}} confirm={{}} alert={{get: alert, set: setAlert}} menu={{ get: menu, set: setMainData }} incomes={{ get: incomeCalls, set: setIncomeCalls }} data={data} />
             <Alert alert={{get: alert, set: setAlert}} />

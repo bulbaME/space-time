@@ -92,6 +92,7 @@ class Socket {
 
         this.socket.on('listener', (id) => {
             const user = this.hooks.data.get.user;
+            console.log(id, user);
             if (!user) return;
             if (id === user.id) this.request('main-data', { type: 'user' });
             else {
