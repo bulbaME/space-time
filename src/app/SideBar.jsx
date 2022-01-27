@@ -1,19 +1,17 @@
 const React = require('react');
-const { useSwipeable } = require('react-swipeable');
 
-import SearchIcon from '../graphics/icon-search.jsx';
-import NotifIcon2 from '../graphics/icon-notification2.jsx';
-import AddIcon from '../graphics/icon-add.jsx';
+import SearchIcon from './graphics/icon-search.jsx';
+import NotifIcon2 from './graphics/icon-notification2.jsx';
+import AddIcon from './graphics/icon-add.jsx';
 const Avatar = require('./Avatar.jsx');
 
-function SideBarM (props) {
+function SideBar (props) {
     const data = props.data.get;
     if (!data.user) return <></>;
     const [sidebar, setSidebar] = React.useState({ type: 'contacts', id: ''});
     const [searchInput, setSearchInput] = React.useState('');
     const [searchTimeout, setSearchTimeout] = React.useState(0);
     const [callTimeInt, setCallTimeInt] = React.useState(0);
-    const [collapsed, setCollapsed] = React.useState(true);
     const callTimeRef = React.useRef();
     const searchRef = React.useRef();
 
@@ -81,47 +79,6 @@ function SideBarM (props) {
                     {v.unread && v.history.length && v.unread.count ? (v.unread.id !== data.user.id ? <div className='sidebar-unread1' />:<div className='sidebar-unread2'>{v.unread.count <= 1000 ? v.unread.count:'999+'}</div>):''}
                     <p className='sidebar-chat-name'>{v.name || ''}{data.user.muted.includes(v.id) ? <NotifIcon2 className='sidebar-chat-muted' />:''}</p>
                     <p className='sidebar-chat-descr' ref={props.data.socket.callData.current === v.id && props.data.socket.callData.state === 2 ? callTimeRef : null} style={descr ? {}:{opacity: '0.7'}}>{descr || 'No messages yet'}</p>
-                </div>
-            );
-        });
-    }
-
-    const loadCollapsedChats = (chats, setMenu, isRoom=false) => {
-        if (!chats || !chats.filter(v => v).length) return [];
-        chats = chats.filter(v => v);
-
-        return chats.sort((a, b) => {
-            a = a.history && a.history.length ? a.history[a.history.length-1].timestamp : 0;
-            b = b.history && b.history.length ? b.history[b.history.length-1].timestamp : 0;
-            return b - a;
-        }).map((v, i) => {
-            if (v.id === data.user.id) return;
-            const lastMessage = v.history && v.history[0] ? v.history[v.history.length-1] : '';
-            
-            if (props.data.socket.callData.current === v.id && props.data.socket.callData.state === 2 && !callTimeInt) { 
-                setCallTimeInt(setInterval(() => {
-                    if (callTimeRef.current) callTimeRef.current.innerHTML = callTimeCount(props.data.socket.callData.timestamp);
-                }, 1000));        
-            }
-
-            if (props.data.socket.callData.state !== 2 && callTimeInt) {
-                clearInterval(callTimeInt);
-                setCallTimeInt(0);
-            }
-
-            const chatClick = () => {
-                searchRef.current.value = ''; 
-                setSearchInput('');
-                setMenu(v.id);
-            }
-
-            return (
-                <div key={i} className='sidebar-chat-col' onClick={chatClick} style={{ backgroundColor: ['contacts', 'rooms'].includes(props.menu.get.type) && v.id === props.menu.get.id ? 'var(--blue-mid)':'inherit' }}>
-                    <Avatar className='sidebar-chat-logo' room={v.id[0] === 'r' ? v.name:''} url={v.avatar_url || ''} />
-                    {v.online ? <div id='sidebar-chat-online' />:''}
-                    {v.unread && v.history.length && v.unread.count ? (v.unread.id !== data.user.id ? <div className='sidebar-unread1-col' />:<div className='sidebar-unread2-col'>{v.unread.count <= 1000 ? v.unread.count:'999+'}</div>):''}
-                    <p style={{opacity: '0', width: '0', overflowX: 'hidden'}} className='sidebar-chat-name'>{v.name || ''}{data.user.muted.includes(v.id) ? <NotifIcon2 className='sidebar-chat-muted' />:''}</p>
-                    <p style={{opacity: '0', width: '0'}} className='sidebar-chat-descr' ref={props.data.socket.callData.current === v.id && props.data.socket.callData.state === 2 ? callTimeRef : null}></p>
                 </div>
             );
         });
@@ -205,14 +162,14 @@ function SideBarM (props) {
         if (sidebar.type === 'rooms') chats = loadChats(afterSearch(searchInput, []), roomMenuSet);
     }
     // load rooms
-    else if (sidebar.type === 'rooms') chats = (collapsed ? loadCollapsedChats : loadChats)(Object.values(data.rooms), roomMenuSet);
+    else if (sidebar.type === 'rooms') chats = loadChats(Object.values(data.rooms), roomMenuSet);
     // load chats
     else chats = (() => {
         Object.values(data.chats).map(v => v.ids ? getIdFromChat(v) : '' )
         .filter(v => (canShowCallChat(v) || canShowChat(v)) && !data.profiles[v]).forEach(v => 
             { if (v) props.data.socket.loadData({ type: 'profile', id: v }); });
 
-        return (collapsed ? loadCollapsedChats : loadChats)([
+        return loadChats([
             ...data.user.contacts.map(v => {
                 const chat = data.chats[v];
                 if (data.profiles[v]) return {...chat, ...data.profiles[v]};
@@ -229,36 +186,14 @@ function SideBarM (props) {
             })], chatMenuSet);
     })();
 
-    const swiping = useSwipeable({
-        onSwipedRight: (event) => {
-            if (collapsed) setCollapsed(false);
-        },
-
-        onSwipedLeft: (event) => {
-            if (!collapsed) setCollapsed(true);
-        }
-    });
-
-    return (<><div id={collapsed ? 'sidebar-frame-col':'sidebar-frame'} onClick={() => setCollapsed(true)} /><div {...swiping}>{
-        collapsed ? 
-        <div id='sidebar-col' style={{transition: '300ms'}}>
-            <div id='sidebar-search-col' onClick={() => setCollapsed(false)}>
-                <SearchIcon id='sidebar-search-icon-col' />
-                <input id='sidebar-search-input' ref={searchRef} autoComplete='off' placeholder='Search...' maxLength='20' onChange={inputChange} style={{transition: '200ms', opacity: '0', width: '0'}} />
-            </div>
-            <div id='sidebar-chats-col'>{chats}</div>
-            {sidebar.type === 'rooms' ? <AddIcon id='sidebar-newroom' style={{opacity: '0'}} />:''}
-        </div>
-        :
-        <div id='sidebar' style={{transition: '300ms'}}>
+    return <div id='sidebar'>
             <div id='sidebar-search'>
                 <SearchIcon id='sidebar-search-icon' />
                 <input id='sidebar-search-input' ref={searchRef} autoComplete='off' placeholder='Search...' maxLength='20' onChange={inputChange} style={searchInput.indexOf('#') + searchInput.indexOf('@') >= -1 ? {fontFamily: `'DM Mono', monospace`, fontWeight: 400}:{}} />
             </div>
             {chats.length ? <div id='sidebar-chats'>{chats}</div>:<p id='sidebar-text'>{searchInput ? 'SEARCHING':(sidebar.type === 'rooms' ? 'NO ROOMS':'NO CONTACTS')}</p>}
             {sidebar.type === 'rooms' ? <AddIcon id='sidebar-newroom' onClick={() => props.data.socket.request('room', { type: 'new' })} />:''}
-        </div>
-        }</div></>);
+        </div>;
 }
 
-module.exports = SideBarM;
+module.exports = SideBar;
