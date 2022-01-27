@@ -2,6 +2,11 @@ const React = require('react');
 require('dotenv').config();
 const {isMobile} = require('react-device-detect');
 
+const MenuButtonsM = require('./mobile/MenuButtonsM.jsx');
+const ContentM = require('./mobile/ContentM.jsx');
+const SideBarM = require('./mobile/SideBarM.jsx');
+const {AlertM, PopupM} = require('./mobile/PopupM.jsx');
+
 const MenuButtons = require('./MenuButtons.jsx');
 const Content = require('./Content.jsx');
 const SideBar = require('./SideBar.jsx');
