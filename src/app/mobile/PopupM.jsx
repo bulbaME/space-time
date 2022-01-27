@@ -1,7 +1,7 @@
 const React = require('react');
-const { AttachmentsButton } = require('./Buttons.jsx');
+const { AttachmentsButton } = require('./ButtonsM.jsx');
 const Attachs = require('../Files.js');
-const Avatar = require('./Avatar.jsx');
+const Avatar = require('./AvatarM.jsx');
 const { useSwipeable } = require('react-swipeable');
 
 // icons

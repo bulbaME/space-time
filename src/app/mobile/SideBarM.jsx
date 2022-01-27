@@ -4,7 +4,7 @@ const { useSwipeable } = require('react-swipeable');
 import SearchIcon from '../graphics/icon-search.jsx';
 import NotifIcon2 from '../graphics/icon-notification2.jsx';
 import AddIcon from '../graphics/icon-add.jsx';
-const Avatar = require('./Avatar.jsx');
+const Avatar = require('./AvatarM.jsx');
 
 function SideBarM (props) {
     const data = props.data.get;

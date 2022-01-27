@@ -1,5 +1,5 @@
 const React = require('react');
-const { MenuButton } = require('./Buttons.jsx')
+const { MenuButton } = require('./ButtonsM.jsx')
 
 // import svg logos
 import LogoProfile from '../graphics/logo-profile.jsx';

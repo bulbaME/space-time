@@ -5,9 +5,9 @@ const cookie = new Cookies;
 const Auth = require('../Auth.js');
 const { logout } = require('../Auth.js');
 const Attachs = require('../Files.js');
-const { SettingsButton, AttachmentsButton } = require('./Buttons.jsx');
-const Avatar = require('./Avatar.jsx');
-const { ProfileDropDown, ContactsDropDown, RoomsDropDown } = require('./Popup.jsx');
+const { SettingsButton, AttachmentsButton } = require('./ButtonsM.jsx');
+const Avatar = require('./AvatarM.jsx');
+const { ProfileDropDown, ContactsDropDown, RoomsDropDown } = require('./PopupM.jsx');
 const DynamicTextarea = require('react-textarea-autosize').default;
 const { swipeable } = require('react-swipeable');
 
