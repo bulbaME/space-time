@@ -38,16 +38,9 @@ class Voice {
                 const skip = Math.floor(bufferLength / eqWidth);
 
                 for(let i = 0; i < eqWidth; i++) {
-                    let vol = dataArray.slice(i * skip, (i + 1) * skip).reduce((a, b) => a + b);
-                    let height = Math.abs((vol / skip) - 128);
-                    height = Math.sqrt(height);
-                    if (height < 1) height = 1;
-                    else height *= 2;
-                    if (height > 4) height = 4;
-
-                    let opacity = .1 * height + .6;
-                    bars[i].style.opacity = opacity;
-                    bars[i].style.height = `${height}vh`;
+                    let height = (Math.abs(dataArray[skip * i] - 128) / 128);
+                    height = 10 * height;
+                    bars[i].style.height = `${height < 1 ? 1:height > 4.5 ? 4.5:height}vh`;
                 }
             };
             
@@ -63,7 +56,7 @@ class Voice {
             this.recorder.start();
             eventHandler.on('stop', () => {
                 this.recorder.stop();
-                audioMediaStream.getAudioTracks().map(v => v.stop());
+                audioMediaStream.getAudioTracks()[0].stop();
                 clearTimeout(eqInterval);
             });
         })

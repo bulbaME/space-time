@@ -98,7 +98,6 @@ const init = (io, db) => {
                         case 'id':
                             const newProfileId = reqData.id;
                             if (/^[a-z0-9]{5,16}$/.test(newProfileId)) promise_ = db.user.update.profileId(userId, newProfileId);
-                            if (promise_) promise_.then((r) => clientSocket.emit('change-profile-id-status', r));
                             break;
                         case 'name':
                             const newUsername = reqData.data;
@@ -249,15 +248,15 @@ const init = (io, db) => {
                             break;
                         case 'delete':
                             db.user.post.delete(userId, reqData.id)
-                            .then(() => updateListeners(userId, db, sockets));
+                            .then(updateListeners(userId, db, sockets));
                             break;
                         case 'like':
                             db.user.post.like(userId, reqData.id)
-                            .then(() => updateListeners(reqData.id.split('-')[0], db, sockets));
+                            .then(updateListeners(reqData.id.split('-')[0], db, sockets));
                             break;
                         case 'unlike':
                             db.user.post.unLike(userId, reqData.id)
-                            .then(() => updateListeners(reqData.id.split('-')[0], db, sockets));
+                            .then(updateListeners(reqData.id.split('-')[0], db, sockets));
                     }
                 });
 
@@ -472,7 +471,8 @@ const init = (io, db) => {
 
                 // on socket disconnect
                 clientSocket.on('disconnect', () => {
-                    // deleteListener(userId, listens);
+                    deleteListener(userId, listens);
+                    delete sockets[clientId];
                     db.user.disconnect(userId, clientId);
                     updateListeners(userId, db, sockets);
 
@@ -486,8 +486,6 @@ const init = (io, db) => {
                         if (currentCall.unreqFunc) currentCall.unreqFunc();
                         if (currentCall.reqTimeout) clearTimeout(currentCall.reqTimeout);
                     }
-
-                    delete sockets[clientId];
                 });
 
             // if auth key is invalid disconnect socket
