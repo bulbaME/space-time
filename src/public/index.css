@@ -1460,7 +1460,7 @@ textarea::-moz-scrollbar-thumb:hover {
     margin-right: 1vw;
     margin-top: 1vw;
     min-width: 5vw;
-    max-width: 60vw;
+    max-width: 55vw;
     padding-top: 2vw;
     padding-bottom: .5vw;
     padding-left: 2vw;
@@ -1477,8 +1477,8 @@ textarea::-moz-scrollbar-thumb:hover {
     display: block;
     margin: auto;
     border-radius: 2vw;
-    width: 55vw;
-    height: 55vw;
+    width: 50vw;
+    height: 50vw;
     margin-bottom: 1vw;
 }
 
@@ -1486,7 +1486,7 @@ textarea::-moz-scrollbar-thumb:hover {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 55vw;
+    max-width: 50vw;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
     font-size: 4vw;
@@ -1495,7 +1495,7 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-r .images-frame {
     display: flex;
-    max-width: 55vw;
+    max-width: 50vw;
     flex-wrap: wrap;
     user-select: none;
     margin-bottom: 1vw;
@@ -1575,7 +1575,7 @@ textarea::-moz-scrollbar-thumb:hover {
     margin-left: 1vw;
     margin-top: 1vw;
     min-width: 5vw;
-    max-width: 60vw;
+    max-width: 55vw;
     padding-top: 2vw;
     padding-bottom: .5vw;
     padding-left: 2vw;
@@ -1587,8 +1587,8 @@ textarea::-moz-scrollbar-thumb:hover {
     border: 0;
     border-radius: 2vw;
     margin-bottom: -0.5vw;
-    width: 55vw;
-    height: 55vw;
+    width: 50vw;
+    height: 50vw;
     margin-bottom: 1vw;
 }
 
@@ -1596,7 +1596,7 @@ textarea::-moz-scrollbar-thumb:hover {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 55vw;
+    max-width: 50vw;
     text-align: left;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
@@ -1605,7 +1605,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .contacts-message-l .images-frame {
-    max-width: 55vw;
+    max-width: 50vw;
     display: flex;
     flex-wrap: wrap;
     user-select: none;
@@ -2397,7 +2397,7 @@ textarea::-moz-scrollbar-thumb:hover {
 /* audio message */ 
 
 .audio {
-    width: 58vw;
+    width: 50vw;
     height: 10vw;
     border-radius: 2vw;
     margin-left: -.5vw;
@@ -2422,7 +2422,7 @@ textarea::-moz-scrollbar-thumb:hover {
 .audio-time {
     position: absolute;
     width: fit-content;
-    margin-left: 48vw;
+    margin-left: 40vw;
     margin-top: 2.3vw;
     text-align: right;
     font-size: 3.5vw;
@@ -2436,7 +2436,7 @@ textarea::-moz-scrollbar-thumb:hover {
     --bar-width: 0%;
     -webkit-appearance: none;
     position: absolute;
-    width: 35vw;
+    width: 27vw;
     height: 1vw;
     border-radius: 0.5vw;
     margin-left: 10vw;

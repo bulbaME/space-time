@@ -28,7 +28,7 @@ const vhToPx = (vh) => {
 	return vh * (document.documentElement.clientHeight / 100);
 }
 
-function Alert (props) {
+function AlertM (props) {
     const [alerts, setAlerts] = React.useState({ type: '', show: '', timeout: 0, text: {} });
 
     const classes = {
@@ -76,7 +76,7 @@ function Alert (props) {
     );
 }
 
-function Popup (props) {
+function PopupM (props) {
     const data = props.popup.get;
     let incomes = props.incomes.get;
 
@@ -469,4 +469,4 @@ function RoomsDropDown (props) {
     </>);
 }
 
-module.exports = {Alert, Popup, ProfileDropDown, ContactsDropDown, RoomsDropDown, Confirm};
+module.exports = {AlertM, PopupM, ProfileDropDown, ContactsDropDown, RoomsDropDown, Confirm};

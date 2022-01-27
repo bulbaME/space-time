@@ -65,7 +65,7 @@ const formatTimeMessage = (time) => {
     return [t, d];
 }
 
-function Content (props) {
+function ContentM (props) {
     let showMenu;
     switch(props.menu.get.type) {
         case 'profile':
@@ -875,5 +875,5 @@ const roomInviteAccept = (props, id) => {
     else props.data.socket.request('room', { type: 'join', id });
 };
 
-module.exports = Content;
+module.exports = ContentM;
  

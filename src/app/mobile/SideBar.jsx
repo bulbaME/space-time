@@ -6,7 +6,7 @@ import NotifIcon2 from '../graphics/icon-notification2.jsx';
 import AddIcon from '../graphics/icon-add.jsx';
 const Avatar = require('./Avatar.jsx');
 
-function SideBar (props) {
+function SideBarM (props) {
     const data = props.data.get;
     if (!data.user) return <></>;
     const [sidebar, setSidebar] = React.useState({ type: 'contacts', id: ''});
@@ -279,4 +279,4 @@ function SideBar (props) {
         }</div></>);
 }
 
-module.exports = SideBar;
+module.exports = SideBarM;
