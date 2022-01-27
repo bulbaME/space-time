@@ -2,12 +2,12 @@ const React = require('react');
 const { MenuButton } = require('./Buttons.jsx')
 
 // import svg logos
-import LogoProfile from './graphics/logo-profile.jsx';
-import LogoContacts from './graphics/logo-contacts.jsx';
-import LogoRooms from './graphics/logo-rooms.jsx';
-import LogoSettings from './graphics/logo-settings.jsx';
+import LogoProfile from '../graphics/logo-profile.jsx';
+import LogoContacts from '../graphics/logo-contacts.jsx';
+import LogoRooms from '../graphics/logo-rooms.jsx';
+import LogoSettings from '../graphics/logo-settings.jsx';
 
-function MenuButtons (props) {
+function MenuButtonsM (props) {
     const [selected, setSelected] = React.useState(props.selected);
     const [lastChatSelected, setLastChatSelected] = React.useState({ rooms: '', chats: '' });
     if (selected !== `menu-button-${props.menu.get.type}`) setSelected(`menu-button-${props.menu.get.type}`);
@@ -72,4 +72,4 @@ function MenuButtons (props) {
     );
 }
 
-module.exports = MenuButtons;
+module.exports = MenuButtonsM;

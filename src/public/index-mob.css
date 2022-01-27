@@ -25,39 +25,64 @@
 body, #root {
     background-color: var(--blue-dimm);
     margin: 0;
-    min-width: 110vh;
     overflow: hidden;
+    max-width: 100vw;
 }
 
 #main {
-    display: flex;
-    justify-content: center;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+#sidebar-frame {
+    height: 100vh;
+    width: 85vw;
+    opacity: .7;
+    right: 0;
+    position: fixed;
+    background-color: black;
+    transition: 300ms;
+}
+
+#sidebar-frame-col {
+    display: none;
+    height: 100vh;
+    width: 85vw;
+    opacity: 0;
+    right: 0;
+    position: fixed;
+    background-color: black;
+    transition: 300ms;
 }
 
 #sidebar {
-    background-color: inherit;
-    width: 34.5vh;
-    height: 100vh;
+    background-color: var(--blue-dimm);
+    width: 60vw;
+    height: calc(100vh - 16vw);
+    border-right: 1px solid var(--blue-mid);
+    position: fixed;
+}
+
+#sidebar-col {
+    background-color: var(--blue-dimm);
+    width: 15vw;
+    height: calc(100vh - 16vw);
+    position: fixed;
+    border-right: 1px solid var(--blue-mid);   
 }
 
 #content {
+    position: fixed;
     background-color: inherit;
-    width: 70vh;
+    width: 85vw;
     height: 100vh;
-}
-
-.content-border-r {
-    border-right: 1px var(--blue-mid) solid;
+    right: 0;
 }
 
 .content-border-l {
     border-left: 1px var(--blue-mid) solid;
-}
-
-#buttons-bar {
-    width: 12vh;
-    height: 40vh;
-    padding-top: 2vh;
 }
 
 .images-frame {
@@ -80,13 +105,13 @@ body, #root {
 
 .images-file {
     vertical-align: middle;
-    border-radius: 1.5vh;
+    border-radius: 1.5vw;
     padding: 15%;
-    margin: .5vh;
-    margin-left: .4vh;
-    width: calc(70% - 2vh);
+    margin: .5vw;
+    margin-left: .4vw;
+    width: calc(70% - 2vw);
     height: max-content;
-    border: .5vh dashed var(--blue-mid);
+    border: .5vw dashed var(--blue-mid);
     fill: var(--blue-mid-light);
     transition: 200ms;
     cursor: pointer;
@@ -94,16 +119,16 @@ body, #root {
 }
 
 .images-file:hover {
-    border: 0.5vh dashed var(--light-gray);
+    border: 0.5vw dashed var(--light-gray);
     fill: var(--light-gray);
 }
 
 .images-frame img {
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
-    border: 0.5vh solid var(--blue-mid);
-    width: calc(100% - 2vh);
+    border-radius: 1.5vw;
+    margin: 0.5vw;
+    border: 0.5vw solid var(--blue-mid);
+    width: calc(100% - 2vw);
     transition: 200ms;
     cursor: pointer;
     -webkit-user-drag: none;
@@ -114,9 +139,9 @@ body, #root {
 }
 
 .eq-bar {
-    width: 0.8vh;
-    height: 0.8vh;
-    border-radius: 0.6vh;
+    width: 0.8vw;
+    height: 0.8vw;
+    border-radius: 0.6vw;
     background-color: var(--light-gray);
     transition: 100ms;
 }
@@ -129,10 +154,10 @@ body, #root {
 #version {
     position: absolute;
     font-family: 'DM Mono', monospace;
-    font-size: 2vh;
+    font-size: 2vw;
     color: var(--blue-light);
     bottom: 0;
-    right: 2vh;
+    right: 2vw;
     text-align: right;
 }
 
@@ -156,17 +181,18 @@ img {
 .alert {
     position: absolute;
     display: inline-flex;
-    margin: auto;
-    font-size: 3vh;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    padding-top: 0.5vh;
-    padding-bottom: 0.7vh;
-    padding-left: 2vh;
-    padding-right: 2vh;
-    border-radius: 4vh;
+    padding-top: 0.5vw;
+    padding-bottom: 0.7vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 4vw;
     cursor: pointer;
-    box-shadow: 0.3vh 0.3vh 1vh 0vh rgba(0, 0, 0, 0.342);
+    margin-left: 50vw;
+    transform: translateX(-50%);
+    box-shadow: 0.3vw 0.3vw 1vw 0vw rgba(0, 0, 0, 0.342);
 }
 
 .alert-t-error {
@@ -194,13 +220,13 @@ img {
 }
 
 .alert-show {
-    top: 3vh;
+    top: 3vw;
     opacity: 1;
     transition: 800ms;
 }
 
 .alert-hide {
-    top: -5vh;
+    top: -5vw;
     opacity: 0;
     transition: 800ms;
 }
@@ -208,12 +234,12 @@ img {
 .popup-income {
     top: 40%;
     position: absolute;
-    margin-left: 30vh;
-    width: 20vh;
-    height: 20vh;
+    margin-left: 30vw;
+    width: 20vw;
+    height: 20vw;
     background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 4vh;
-    box-shadow: 0 0 1vh 0.2vh rgba(0, 0, 0, 0.301);
+    border-radius: 4vw;
+    box-shadow: 0 0 1vw 0.2vw rgba(0, 0, 0, 0.301);
     user-select: none;
     -webkit-app-region: no-drag;
 }
@@ -222,21 +248,21 @@ img {
     position: absolute;
     width: 100%;
     text-align: center;
-    font-size: 2vh;
+    font-size: 2vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    margin-top: 10vh;
+    margin-top: 10vw;
     color: #fff;
 }
 
 .popup-income-accept {
     position: absolute;
-    width: 3vh;
-    height: 3vh;
-    margin-top: 13vh;
-    margin-left: 2vh;
+    width: 3vw;
+    height: 3vw;
+    margin-top: 13vw;
+    margin-left: 2vw;
     fill: #fff;
-    padding: 1vh;
+    padding: 1vw;
     background-color: var(--green);
     border-radius: 50%;
     cursor: pointer;
@@ -244,21 +270,21 @@ img {
 
 .popup-income-close {
     position: absolute;
-    margin-left: 16vh;
-    margin-top: 2vh;
-    width: 2vh;
-    height: 2vh;
+    margin-left: 16vw;
+    margin-top: 2vw;
+    width: 2vw;
+    height: 2vw;
     fill: var(--light-gray);
     cursor: pointer;
 }
 
 .popup-income-decline {
     position: absolute;
-    width: 3vh;
-    padding: 1vh;
-    height: 3vh;
-    margin-top: 13vh;
-    margin-left: 13vh;
+    width: 3vw;
+    padding: 1vw;
+    height: 3vw;
+    margin-top: 13vw;
+    margin-left: 13vw;
     fill: #fff;
     border-radius: 50%;
     background-color: var(--red);
@@ -268,11 +294,11 @@ img {
 
 .popup-income-avatar {
     position: absolute;
-    width: 8vh;
-    height: 8vh;
+    width: 8vw;
+    height: 8vw;
     border-radius: 50%;
-    margin-left: 6vh;
-    margin-top: 2vh;
+    margin-left: 6vw;
+    margin-top: 2vw;
     -webkit-user-drag: none;
     user-drag: none;
 }
@@ -288,23 +314,14 @@ img {
 }
 
 #popup-file-image-frame {
-    top: 20vh;
+    top: 40vh;
+    left: 50vw;
     position: absolute;
-    height: 60vh;
-    width: 60vw;
+    height: 40vh;
+    width: 80vw;
+    align-items: center;
     user-select: none;
-}
-
-#popup-file-prev {
-    position: absolute;
-    fill: var(--light-gray);
-    cursor: pointer;
-    transition: 200ms;
-    width: 10vh;
-    height: 10vh;
-    left: 14vw;
-    top: 45vh;
-    user-select: none;
+    transform: translate(-50%, -50%);
 }
 
 #popup-file-next {
@@ -312,10 +329,10 @@ img {
     fill: var(--light-gray);
     cursor: pointer;
     transition: 200ms;
-    width: 10vh;
-    height: 10vh;
+    width: 10vw;
+    height: 10vw;
     right: 14vw;
-    top: 45vh;
+    top: 45vw;
     user-select: none;
 }
 
@@ -334,9 +351,8 @@ img {
     min-width: 20%;
     min-height: 20%;
     border: 0;
-    border-radius: 1.5vh;
+    border-radius: 1.5vw;
     zoom: 1;
-    box-shadow: 0 0 2vh 2vh rgba(0, 0, 0, 0.201);
 }
 
 #popup-file-close {
@@ -344,10 +360,10 @@ img {
     position: absolute;
     fill: var(--light-gray);
     border-radius: 50%;
-    right: -10vh;
-    top: -3vh;
-    width: 5vh;
-    height: 5vh;
+    right: -10vw;
+    top: -3vw;
+    width: 5vw;
+    height: 5vw;
     cursor: pointer;
     transition: 200ms;
 }
@@ -362,37 +378,38 @@ img {
     left: 50%;
     width: min-content;
     height: min-content;
-    min-width: 20vh;
-    min-height: 20vh;
+    min-width: 30vw;
+    min-height: 30vw;
     transform: translate(-50%, -50%);
     border: 0;
-    border-radius: 3vh;
-    box-shadow: 0 0 2vh 2vh rgba(0, 0, 0, 0.418);
+    border-radius: 3vw;
+    background-color: var(--light-gray);
 }
 
 #popup-newpost-body {
     position: absolute;
-    margin: auto;
-    width: 50vh;
-    height: 42.5vh;
-    margin-top: 20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 60vw;
+    margin-top: 40%;
     background-color: var(--blue-dimm);    
-    border-radius: 3vh;
+    border-radius: 5vw;
 }
 
 #popup-newpost-body input {
     display: inline-block;
     background-color: var(--blue-mid);
-    height: 4vh;
-    width: 31.5vh;
+    height: 7vw;
+    width: 52vw;
     border: 0;
     color: var(--light-gray);
-    margin-top: 2vh;
-    margin-left: 2vh;
-    border-radius: 4vh;
-    padding-left: 2vh;
-    padding-right: 2vh;
-    font-size: 2vh;
+    margin-top: 2vw;
+    margin-left: 2vw;
+    border-radius: 4vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    font-size: 4vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
 }
@@ -400,19 +417,19 @@ img {
 #popup-newpost-attach {
     display: inline-block;
     position: absolute;
-    margin-left: 0.8vh;
-    margin-top: 2vh;
+    margin-left: 1.4vw;
+    margin-top: 2vw;
     cursor: pointer;
-    width: 3vh;
-    height: 3vh;
+    width: 3vw;
+    height: 3vw;
     border-radius: 50%;
 }
 
 #popup-newpost-attach #attach {
     position: absolute;
-    width: 3vh;
-    height: 3vh;
-    padding: 0.7vh;
+    width: 7vw;
+    height: 7vw;
+    padding: 0.7vw;
     border-radius: 50%;
     background-color: var(--blue-light);
     fill: var(--light-gray);
@@ -421,32 +438,32 @@ img {
 
 #popup-newpost-attach #clear {
     position: absolute;
-    width: 1.5vh;
-    height: 1.5vh;
+    width: 1.5vw;
+    height: 1.5vw;
     border-radius: 50%;
     transition: 200ms;
-    margin-top: -0.5vh;
-    margin-left: -0.5vh;
-    border: 0.3vh solid transparent;
+    margin-top: -0.5vw;
+    margin-left: -0.5vw;
+    border: 0.3vw solid transparent;
 }
 
 #popup-newpost-attach #count {
     text-align: center;
     position: absolute;
-    font-size: 1.2vh;
+    font-size: 1.2vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
     width: fit-content;
-    padding-left: 0.3vh;
-    padding-right: 0.3vh;
-    min-width: 0.9vh;
-    height: 1.5vh;
-    border-radius: 1.5vh;
+    padding-left: 0.3vw;
+    padding-right: 0.3vw;
+    min-width: 0.9vw;
+    height: 1.5vw;
+    border-radius: 1.5vw;
     transition: 200ms;
-    margin-top: -0.5vh;
-    margin-left: 3vh;
+    margin-top: -0.5vw;
+    margin-left: 3vw;
     background-color: var(--blue-light);
-    border: 0.3vh solid var(--blue-dimm);
+    border: 0.3vw solid var(--blue-dimm);
     color: var(--light-gray);
 }
 
@@ -457,7 +474,7 @@ img {
 
 #popup-newpost-attach:hover #clear {
     background-color: var(--light-gray);
-    border: 0.3vh solid var(--blue-dimm);
+    border: 0.3vw solid var(--blue-dimm);
     fill: var(--blue-dimm);
     stroke: var(--blue-dimm);
 }
@@ -475,19 +492,19 @@ img {
 
 #popup-newpost-body #submit {
     display: inline-block;
-    width: 3vh;
-    height: 3vh;
-    margin-top: 2vh;
+    width: 7vw;
+    height: 7vw;
+    margin-top: 2vw;
     position: absolute;
     margin-left: 0.8;
-    padding: 0.7vh;
+    padding: 0.7vw;
     border-radius: 50%;
     background-color: var(--blue-light);
     fill: var(--light-gray);
     stroke: var(--light-gray);
     transition: 200ms;
     cursor: pointer;
-    right: 2vh;
+    right: 2vw;
 }
 
 #popup-newpost-body #submit:hover {
@@ -498,22 +515,22 @@ img {
 
 #popup-newpost-dropfield {
     position: absolute;
-    right: 2vh;
-    bottom: 2vh;
-    height: 32.5vh;
-    width: 46vh;
+    right: 2vw;
+    bottom: 2vw;
+    height: 32.5vw;
+    width: 46vw;
 }
 
 #popup-newpost-drop {
-    right: 2vh;
-    bottom: 2vh;
+    right: 2vw;
+    bottom: 2vw;
     position: absolute;
     color: var(--light-gray);
-    border-radius: 4vh;
-    height: 32.5vh;
-    width: 46vh;
-    border-radius: 2vh;
-    font-size: 5vh;
+    border-radius: 4vw;
+    height: 32.5vw;
+    width: 46vw;
+    border-radius: 2vw;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 800;
     user-select: none;
@@ -524,39 +541,39 @@ img {
     background-color: var(--blue-mid);
     color: var(--light-gray);
     border: 0;
-    border-radius: 4vh;
-    height: 31vh;
-    width: 42vh;
-    margin-top: 1.5vh;
-    margin-left: 2vh;
-    border-radius: 2vh;
-    padding-left: 2vh;
-    padding-right: 2vh;
+    border-radius: 4vw !important;
+    height: 43.5vw;
+    width: 72vw;
+    margin-top: 3vw;
+    margin-left: 2vw;
+    border-radius: 2vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
     padding-bottom: 0;
     resize: none;
-    padding-top: 1.5vh;
-    font-size: 2vh;
+    padding-top: 1.5vw;
+    font-size: 3.5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 500;
 }
 
 #popup-newpost-submit {
     position: absolute;
-    width: 12vh;
-    height: 5vh;
+    width: 12vw;
+    height: 5vw;
     background-color: var(--blue-light);
     color: var(--light-gray);
-    font-size: 3.5vh;
+    font-size: 3.5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 800;
-    border-radius: 2vh;
+    border-radius: 2vw;
     text-align: center;
     user-select: none;
     cursor: pointer;
     transition: 200ms;
-    margin-top: 2vh;
-    margin-left: 36vh;
-    padding-top: 0.7vh;
+    margin-top: 2vw;
+    margin-left: 36vw;
+    padding-top: 0.7vw;
 }
 
 #popup-newpost-submit:hover {
@@ -578,41 +595,43 @@ img {
     position: absolute;
     margin: auto;
     width: auto;
-    height: 9vh;
-    margin-top: 35vh;
-    margin-left: 26vh;
+    height: 21vw;
+    margin-top: 40vh;
+    margin-left: 50vw;
+    transform: translateX(-50%);
     background-color: var(--blue-light);
     text-align: center;
-    padding: 2vh;
-    padding-top: 1vh;
-    padding-bottom: 3vh;
-    border-radius: 3vh;
+    padding: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 3vw;
+    border-radius: 5vw;
     user-select: none;
-    box-shadow: 1vh 1vh 2vh rgba(0, 0, 0, 0.342);
+    box-shadow: 0vw 0vw 3vw rgba(0, 0, 0, 0.5);
 }
 
 #popup-confirm-body p {
-    font-size: 3vh;
+    font-size: 6vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    margin: 0;
+    margin: 1vw;
     color: var(--light-gray);
 }
 
 #popup-confirm-no {
     position: absolute;
-    font-size: 3vh;
+    font-size: 6vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    margin-left: 0.5vh;
-    margin-top: 1.2vh;
+    margin-left: 6vw;
+    margin-top: 1.2vw;
     cursor: pointer;
     background-color: var();
-    padding: 1vh;
-    padding-left: 1.5vh;
-    padding-right: 1.5vh;
-    border-radius: 1.5vh;
-    color: var(--light-gray);
+    padding: 1vw;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
+    border-radius: 2vw;
+    background-color: var(--red);
+    color: #fff;
     transition: 200ms;
 }
 
@@ -623,14 +642,16 @@ img {
 
 #popup-confirm-yes {
     position: absolute;
-    font-size: 3vh;
+    font-size: 6vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    margin-left: 11vh;
-    margin-top: 1.2vh;
+    margin-left: 21.5vw;
+    margin-top: 1.2vw;
+    border-radius: 2vw;
     cursor: pointer;
-    padding: 1vh;
-    color: var(--light-gray);
+    padding: 1vw;
+    background-color: var(--green);
+    color: #fff;
     transition: 200ms;
 }
 
@@ -639,15 +660,15 @@ img {
 }
 
 textarea::-webkit-scrollbar {
-    width: 0.5vh;
-    padding-right: 2vh;
+    width: 0.5vw;
+    padding-right: 2vw;
     cursor: pointer;
 }
   
 textarea::-webkit-scrollbar-thumb {
-    border-radius: 1vh;
+    border-radius: 1vw;
     background-color: var(--blue-light);
-    margin-right: 2vh;
+    margin-right: 2vw;
 }
 
 textarea::-webkit-scrollbar-thumb:hover {
@@ -655,15 +676,15 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 
 textarea::-moz-scrollbar {
-    width: 0.5vh;
-    padding-right: 2vh;
+    width: 0.5vw;
+    padding-right: 2vw;
     cursor: pointer;
 }
   
 textarea::-moz-scrollbar-thumb {
-    border-radius: 1vh;
+    border-radius: 1vw;
     background-color: var(--blue-light);
-    margin-right: 2vh;
+    margin-right: 2vw;
 }
 
 textarea::-moz-scrollbar-thumb:hover {
@@ -674,9 +695,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #settings-notify {
     position: absolute;
-    margin-top: 64vh;
-    margin-left: 7vh;
-    font-size: 2.3vh;
+    margin-top: 76vw;
+    margin-left: 7vw;
+    font-size: 3.5vw;
+    line-height: 5vw;
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     color: var(--light-gray);
@@ -686,36 +708,36 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #settings-notify-button {
     position: absolute;
-    margin-left: -4vh;
-    margin-top: -0.1vh;
-    width: 2vh;
-    height: 2vh;
-    border-radius: 1vh;
+    margin-left: -4vw;
+    margin-top: -0.1vw;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 1.2vw;
 }
 
 #settings-notify .on {
     transition: 200ms;
     background-color: var(--settings-button-on);
-    border: 0.5vh solid var(--settings-button-on);
+    border: .8vw solid var(--settings-button-on);
 }
 
 #settings-notify .off {
     transition: 200ms;
-    border: 0.5vh solid var(--light-gray);
+    border: .8vw solid var(--light-gray);
 }
 
 #settings-notify .off:hover {
     background-color: var(--light-gray);
-    border: 0.5vh solid var(--light-gray);
+    border: .8vw solid var(--light-gray);
 }
 
 .settings-button {
-    width: 6.5vh;
-    height: 3.5vh;
+    width: 8vw;
+    height: 4vw;
     transition: 300ms;
-    border-radius: 3.5vh;
+    border-radius: 3.5vw;
     cursor: pointer;
-    margin-bottom: 3vh;
+    margin-bottom: 3.5vw;
 }
 
 .settings-button-on {
@@ -727,54 +749,53 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .settings-button-circle {
-    width: 3.5vh;
-    height: 3.5vh;
+    width: 4vw;
+    height: 4vw;
     fill: var(--light-gray);
     border: 0;
     transition: inherit;
-    margin-top: -0.04vh;
 }
 
 .settings-button-circle-right {
-    margin-left: 3vh;
+    margin-left: 4vw;
 }
 
 .settings-title {
-    font-size: 3vh;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     color: #fff;
-    margin-bottom: 2vh;
+    margin-bottom: 2vw;
 }
 
 .settings-text {
-    font-size: 2.3vh;
+    font-size: 3.5vw;
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
     color: var(--light-gray);
-    margin-top: 1vh;
-    margin-bottom: 3.8vh;
+    margin-top: 1vw;
+    margin-bottom: 3.8vw;
 }
 
 .settings-text-small {
     position: absolute;
-    font-size: 1.5vh;
+    font-size: 2.5vw;
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
     color: var(--blue-light);
-    margin-top: 0.8vh;
+    margin-top: 0vw;
     user-select: none;
 }
 
 #settings-text-frame {
-    margin-left: 3vh;
-    width: 30vh;
+    margin-left: 3vw;
+    width: 50vw;
 }
 
 #settings-interact-frame-1 {
-    margin-top: 8vh;
-    margin-left: 17vh;
-    width: 10vh;
+    margin-top: 14vw;
+    margin-left: 15vw;
+    width: 40vw;
 }
 
 #settings-frame {
@@ -785,45 +806,48 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     background-color: none;
     border: 0;
-    border-radius: 1vh;
-    margin-left: 41vh;
+    border-radius: 1vw;
+    margin-left: 48vw;
     font-family: 'Rubik', sans-serif;
-    font-size: 1.7vh;
-    width: 30vh;
+    font-size: 3vw;
+    width: 30vw;
     display: flex;
-    height: 3.4vh;
+    height: 4.3vw;
 }
 
 #settings-change-id {
-    margin-top: 41.5vh;
+    margin-top: 46vw;
+    width: 40vw;
 }
 
 #settings-change-input-id {
-    padding-left: 2.1vh;
-    width: 17vh;
+    padding-left: 3vw;
+    width: 22vw;
     font-family: 'DM Mono', monospace;
 }
 
 #settings-change-status {
-    margin-top: 48vh;
+    margin-top: 54vw;
+    width: 40vw;
 }
 
 #settings-change-name {
-    margin-top: 54.5vh;
+    margin-top: 62vw;
+    width: 40vw;
 }
 
 .settings-change-input {
     background-color: var(--blue-mid);
     border-radius: inherit;
-    padding-left: 1vh;
-    padding-top: 0.7vh;
-    padding-bottom: 0.7vh;
+    padding-left: 1vw;
+    padding-top: 0.7vw;
+    padding-bottom: 0.7vw;
     border: 0;
     color: var(--blue-mid-light);
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
-    width: 18.1vh;
+    width: 24vw;
 }
 
 .settings-change-input:focus {
@@ -839,19 +863,19 @@ textarea::-moz-scrollbar-thumb:hover {
     font-family: 'DM Mono', monospace;
     font-size: inherit;
     font-weight: inherit;
-    margin-top: 0.6vh;
-    margin-left: 1vh;
+    margin-top: 0.3vw;
+    margin-left: 1vw;
 }
 
 .settings-change-submit {
-    font-size: 2.2vh;
+    font-size: 3vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     margin-top: 0;
-    width: 5vh;
+    width: 6vw;
     height: inherit;
     background-color: var(--blue-light);
-    margin-left: 1.5vh;
+    margin-left: 1.5vw;
     border-radius: inherit;
     color: var(--light-gray);
     cursor: pointer;
@@ -861,7 +885,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .settings-change-submit p {
-    margin-top: 0.3vh;
+    margin-top: 0.3vw;
 }
 
 .settings-change-submit:hover {
@@ -870,7 +894,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .click {
-    margin-top: 3vh;
+    margin-top: 3vw;
 }
 
 ::placeholder {
@@ -879,24 +903,24 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #settings-logout {
     position: absolute;
-    width: 15vh;
-    height: 6vh;
-    font-size: 2.6vh;
+    width: 20.5vw;
+    height: 7.5vw;
+    font-size: 4vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     color: var(--light-gray);
     background-color: var(--blue-mid);
-    border-radius: 6vh;
-    margin-top: 62vh;
-    margin-left: 52vh;
+    border-radius: 6vw;
+    margin-top: 74vw;
+    margin-left: 60vw;
     transition: 200ms;
     cursor: pointer;
     user-select: none;
 }
 
 #settings-logout p {
-    margin-top: 1.4vh;
-    margin-left: 2.1vh;
+    margin-top: 1.4vw;
+    margin-left: 2.1vw;
 }
 
 #settings-logout:hover {
@@ -905,21 +929,27 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .settings-logout-click {
-    top: 0.2vh;
+    top: 0.2vw;
     opacity: 0.7;
 }
 
 /* buttons */
 
 .menu-button {
-    width: 8vh;
-    height: 8vh;
-    border-radius: 50%;
-    background-color: var(--blue-light);
-    margin-left: 4vh;
-    margin-top: 2vh;
+    width: 25vw;
+    height: 14vw;
     cursor: pointer;
     transition: 100ms;
+    padding: 1vw;
+}
+
+#buttons-bar {
+    position: fixed;
+    bottom: 0;
+    background-color: var(--blue-light);
+    display: flex;
+    width: 100vw;
+    justify-content: space-between;
 }
 
 .menu-button-unactive:hover {
@@ -944,13 +974,18 @@ textarea::-moz-scrollbar-thumb:hover {
     fill: var(--light-gray);
 }
 
+#menu-button-profile {
+    padding-bottom: 1vw;
+}
+
+
 /* side bar */
 
 #sidebar-text {
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 4vh;
-    width: 30vh;
+    font-size: 7vw;
+    width: 40vw;
     margin: auto;
     margin-top: 40vh;
     color: var(--blue-light);
@@ -959,62 +994,116 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 #sidebar-search {
-    width: 31vh;
-    height: 4vh;
+    width: 58vw;
+    height: 7vw;
     background-color: var(--blue-mid);
-    border-radius: 1.3vh;
+    border-radius: 3vw;
     margin: auto;
-    margin-top: 1.5vh;
+    margin-top: 1vw;
+    margin-left: 1vw;
+    transition: 300ms;
 }
 
 #sidebar-search-icon {
     fill: var(--light-gray);
-    margin-top: 0.5vh;
-    margin-left: 0.7vh;
-    width: 3vh;
-    height: 3vh;
+    margin-top: 1.2vw;
+    margin-left: 1vw;
+    width: 5vw;
+    height: 5vw;
+    transition: 300ms;
+}
+
+#sidebar-search-col {
+    width: 13vw;
+    height: 13vw;
+    background-color: var(--blue-mid);
+    border-radius: 3vw;
+    margin: auto;
+    margin-top: 1vw;   
+    transition: 300ms;
+}
+
+#sidebar-search-icon-col {
+    fill: var(--light-gray);
+    margin: 2vw;
+    width: 9vw;
+    height: 9vw;
+    transition: 300ms;
 }
 
 .sidebar-unread1 {
     position: absolute;
     background-color: var(--light-gray);
-    width: 1.5vh;
-    height: 1.5vh;
+    width: 3vw;
+    height: 3vw;
     border-radius: 50%;
-    margin-left: 28vh;
-    margin-top: 3.3vh;
+    margin-left: 50vw;
+    margin-top: 5vw;
+    transition: 300ms;
 }
 
 .sidebar-unread2 {
     position: absolute;
     background-color: var(--blue-light);
-    min-width: 1.7vh;
+    min-width: 3vw;
     width: fit-content;
-    height: 1.7vh;
-    border-radius: 0.85vh;
-    margin-left: 28vh;
-    margin-top: 3.3vh;
+    height: 3vw;
+    border-radius: 2vw;
+    margin-left: 50vw;
+    margin-top: 5vw;
     font-family: 'Quicksand', sans-serif;
-    font-size: 1.5vh;
+    font-size: 2.5vw;
     font-weight: 600;
     color: var(--light-gray);
     text-align: center;
-    padding-left: 0.5vh;
-    padding-right: 0.5vh;
+    padding-left: .7vw;
+    padding-right: .7vw;
+    transition: 300ms;
+}
+
+.sidebar-unread1-col {
+    position: absolute;
+    background-color: var(--light-gray);
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    margin-left: 8.5vw;
+    margin-top: 8.5vw;
+    transition: 300ms;
+}
+
+.sidebar-unread2-col {
+    position: absolute;
+    background-color: var(--blue-light);
+    min-width: 3vw;
+    width: fit-content;
+    height: 3vw;
+    border-radius: 2vw;
+    margin-left: 8.5vw;
+    margin-top: 8.5vw;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 2.5vw;
+    font-weight: 600;
+    color: var(--light-gray);
+    text-align: center;
+    padding-left: .7vw;
+    padding-right: .7vw;
+    transition: 300ms;
 }
 
 #sidebar-search-input {
     position: absolute;
     background-color: var(--blue-mid);
-    width: 25vh;
-    height: 3vh;
+    width: 45vw;
+    height: 6vw;
     border: 0;
     outline: none;
-    padding: 0.5vh;
+    padding: 0.5vw;
     font-family: 'Quicksand', sans-serif;
-    font-size: 1.7vh;
+    font-size: 3.2vw;
     font-weight: 600;
     color: var(--light-gray);
+    transition: 300ms;
 }
 
 #sidebar-search-input:focus {
@@ -1028,19 +1117,28 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .sidebar-chat-separator {
-    width: 31vh;
-    height: 0.1vh;
+    width: 31vw;
+    height: 0.1vw;
     background-color: var(--blue-mid);
-    margin-bottom: 2vh;
+    margin-bottom: 2vw;
 }
 
 .sidebar-chat {
-    width: 31vh;
-    height: 8vh;
-    border-radius: 2vh;
+    width: 58vw;
+    height: 13vw;
+    border-radius: 4vw;
     cursor: pointer;
-    margin-bottom: 2vh;
-    transition: 200ms;
+    margin-bottom: 1vw;
+    transition: 300ms;
+}
+
+.sidebar-chat-col {
+    width: 13vw;
+    height: 13vw;
+    border-radius: 4vw;
+    cursor: pointer;
+    margin-bottom: 1vw;
+    transition: 300ms;    
 }
 
 .sidebar-chat-selected {
@@ -1049,74 +1147,82 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .sidebar-chat-logo {
     position: absolute;
-    margin: 1.2vh;
-    height: 5.6vh;
-    width: 5.6vh;
+    margin: 1.5vw;
+    height: 10vw;
+    width: 10vw;
     border-radius: 50%;
-    font-size: 4.3vh;
+    font-size: 7.7vw;
+    transition: 200ms;
 }
 
 .sidebar-chat-muted {
     position: absolute;
     fill: var(--light-gray);
-    width: 1.5vh;
-    height: 1.5vh;
-    margin-left: 1vh;
-    margin-top: 0.5vh;
+    width: 3vw;
+    height: 3vw;
+    margin-left: 1vw;
+    margin-top: 0.5vw;
     opacity: 0.7;
 }
 
 .sidebar-chat-name {
     position: absolute;
-    font-size: 2vh;
+    font-size: 3.5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 600;
     color: #fff;
-    margin-top: 1.6vh;
-    margin-left: 8vh;
+    margin-top: 2vw;
+    margin-left: 14vw;
+    transition: 300ms;
 }
 
 .sidebar-chat-descr {
     position: absolute;
-    font-size: 1.6vh;
+    font-size: 2.5vw;
     font-family: 'Rubik', sans-serif;
     font-weight: 400;
-    margin-top: 4.5vh;
-    margin-left: 8vh;
+    margin-top: 7.5vw;
+    margin-left: 14vw;
     color: var(--light-gray);
-    width: 18vh;
-    height: 2vh;
+    width: 35vw;
+    height: 4vw;
     overflow-x: hidden;
     word-wrap: break-word;
 }
 
 #sidebar-chats {
-    width: 31vh;
-    margin: auto;
-    margin-top: 2vh;
+    width: 36vw;
+    margin-top: 2vw;
+    margin-left: 1vw;
+}
+
+#sidebar-chats-col {
+    width: 12vw;
+    margin-top: 2vw;
+    margin-left: 1vw;
 }
 
 #sidebar-chat-online {
     position: absolute;
-    width: 1.7vh;
-    height: 1.7vh;
+    width: 3vw;
+    height: 3vw;
     background-color: var(--green);
     border-radius: 50%;
-    margin-left: 5.3vh;
-    margin-top: 1.4vh;
+    margin-left: 8.5vw;
+    margin-top: 1.4vw;
 }
 
 #sidebar-newroom {
     position: absolute;
-    width: 3.5vh;
-    height: 3.5vh;
-    padding: 1.5vh;
+    width: 6vw;
+    height: 6vw;
+    padding: 2vw;
     border-radius: 50%;
     background-color: var(--blue-light);
     fill: var(--light-gray);
-    bottom: 2vh;
-    margin-left: 26vh;
-    transition: 200ms;
+    bottom: 4vw;
+    margin-left: 46vw;
+    transition: 300ms;
     cursor: pointer;
 }
 
@@ -1131,27 +1237,27 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 6vh;
+    font-size: 6vw;
     color: var(--blue-light);
     text-align: center;
-    width: 70vh;
-    margin-top: 44vh;
+    width: 70vw;
+    margin-top: 44vw;
     user-select: none;
 }
 
 #contacts-top {
     position: absolute;
-    width: 70vh;
-    height: 7vh;
+    width: 85vw;
+    height: 11.5vw;
     background-color: var(--blue-mid);
 }
 
 #contacts-dropdown-dots {
     position: absolute;
-    padding-top: 1.5vh;
-    margin-left: 2vh;
+    margin-top: 2.75vw;
+    margin-left: 3vw;
     width: auto;
-    height: 4vh;
+    height: 6vw;
     cursor: pointer;
 }
 
@@ -1171,13 +1277,12 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-dropdown-menu {
     position: absolute;
-    height: 22.3vh;
-    width: 8vh;
+    width: 12vw;
     background-color: var(--light-gray);
-    transition: 200ms;
-    padding-top: 6vh;
-    border-bottom-left-radius: 4vh;
-    border-bottom-right-radius: 4vh;
+    height: 36vw;
+    padding-top: 5vw;
+    border-bottom-left-radius: 6vw;
+    border-bottom-right-radius: 6vw;
 }
 
 .contacts-dropdown-item {
@@ -1185,10 +1290,10 @@ textarea::-moz-scrollbar-thumb:hover {
     margin: auto;
     fill: var(--blue-light);
     stroke: var(--blue-light);
-    width: 4.5vh;
-    height: 4.5vh;
+    width: 7vw;
+    height: 7vw;
     cursor: pointer;
-    margin-bottom: 2vh;
+    margin-bottom: 2vw;
     transition: 200ms;
 }
 
@@ -1198,7 +1303,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .contacts-dropdown-notify2 {
-    padding-left: 0.3vh;
+    padding-left: 0.3vw;
 }
 
 .contacts-dropdown-edit:hover, .contacts-dropdown-notify:hover, .contacts-dropdown-notify2:hover {
@@ -1212,29 +1317,29 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-dropdown-bar {
     background-color: var(--dropdown-bar);
-    width: 6vh;
+    width: 7vw;
     margin: auto;
     display: block;
-    height: 0.2vh;
-    margin-top: 1vh;
-    margin-bottom: 1.5vh;
+    height: 0.2vw;
+    margin-top: 6vw;
+    margin-bottom: 2.5vw;
 }
 
 #contacts-history {
     position: absolute;
     overflow-y: scroll;
-    width: 70vh;
-    height: 80vh;
-    margin-top: 7vh;
-    padding-bottom: 7vh;
+    width: 85vw;
+    height: calc(100vh - 40vw);
+    margin-top: 11.5vw;
+    padding-bottom: 7vw;
 }
 
 #contacts-mute {
     position: absolute;
-    margin-left: 59vh;
-    margin-top: 1.65vh;
-    width: 3.8vh;
-    height: 3.8vh;
+    margin-left: 67vw;
+    margin-top: 3vw;
+    width: 6vw;
+    height: 6vw;
     cursor: pointer;
     transition: 200ms;
     fill: var(--light-gray);
@@ -1246,16 +1351,17 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-call {
     position: absolute;
-    margin-left: 64.5vh;
-    width: 4vh;
-    height: 4vh;
+    margin-left: 76vw;
+    margin-top: 2.5vw;
+    width: 6vw;
+    height: 6vw;
     cursor: pointer;
     transition: 200ms;
 }
 
 .contacts-call-unactive {
     fill: var(--light-gray);
-    margin-top: 1.4vh;
+    margin-top: 1.4vw;
 }
 
 .contacts-call-unactive:hover {
@@ -1265,14 +1371,14 @@ textarea::-moz-scrollbar-thumb:hover {
 .contacts-call-active {
     transform: rotate(135deg);
     fill: var(--light-gray);
-    margin-top: 1.6vh;
+    margin-top: 1.6vw;
 }
 .contacts-call-active:hover {
     fill: var(--red);
 }
 
 .time {
-    padding-top: 0.2vh;
+    padding-top: 0.2vw;
     display: flex;
     cursor: default;
 }
@@ -1280,11 +1386,12 @@ textarea::-moz-scrollbar-thumb:hover {
 .contacts-message-boundary {
     transition: 200ms;
     background-color: rgba(0, 0, 0, 0);
-    padding-bottom: 4.5vh;
-    padding-top: 1.5vh;  
-    margin-left: 3vh;
-    margin-right: 3vh;
-    border-radius: 2vh;
+    padding-bottom: 4.5vw;
+    padding-top: 1vw;  
+    margin-right: 2.5vw;
+    margin-left: 2.5vw;
+    border-radius: 3vw;
+    width: 80vw;
 }
 
 .contacts-message-boundary:hover {
@@ -1292,14 +1399,14 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .contacts-date {
-    font-size: 2vh;
+    font-size: 3vw;
     width: fit-content;
     position: absolute;
     color: var(--blue-light);
     font-family: 'Rubik';
-    margin: 1.5vh;
-    margin-left: 4vh;
-    margin-top: 0vh;
+    margin: 1.5vw;
+    margin-left: 6vw;
+    margin-top: 0vw;
     transition: 200ms;
     opacity: 0;
 }
@@ -1307,12 +1414,12 @@ textarea::-moz-scrollbar-thumb:hover {
 .contacts-message-delete {
     transition: 200ms;
     fill: var(--blue-light);
-    width: 2.5vh;
-    height: 2.5vh;
+    width: 4vw;
+    height: 4vw;
     cursor: pointer;
     position: absolute;
     opacity: 0;
-    margin-left: -3vh;
+    margin-left: -4.5vw;
 }
 
 .contacts-message-delete:hover {
@@ -1329,7 +1436,7 @@ textarea::-moz-scrollbar-thumb:hover {
 
 
 .contacts-message-r .files {
-    right: 1vh;
+    right: 1vw;
 }
 
 .contacts-message-r {
@@ -1337,14 +1444,15 @@ textarea::-moz-scrollbar-thumb:hover {
     width: -moz-fit-content;
     width: fit-content;
     margin-left: auto;
-    margin-right: 1vh;
-    padding-top: 1.5vh;
-    padding-bottom: .5vh;
-    padding-left: 1.5vh;
-    padding-right: 1.5vh;
-    border-radius: 3vh;
-    min-width: 3vh;
-    max-width: 30vh;
+    margin-right: 1vw;
+    margin-top: 1vw;
+    min-width: 5vw;
+    max-width: 55vw;
+    padding-top: 2vw;
+    padding-bottom: .5vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 4vw;
 }
 
 .contacts-message-r .say {
@@ -1355,29 +1463,29 @@ textarea::-moz-scrollbar-thumb:hover {
     border: 0;
     display: block;
     margin: auto;
-    border-radius: 2vh;
-    width: 30vh;
-    height: 30vh;
-    margin-bottom: 1vh;
+    border-radius: 2vw;
+    width: 50vw;
+    height: 50vw;
+    margin-bottom: 1vw;
 }
 
 .contacts-message-r .text {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 25vh;
+    max-width: 50vw;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
-    font-size: 2.5vh;
-    margin-bottom: 1vh;
+    font-size: 4vw;
+    margin-bottom: 1vw;
 }
 
 .contacts-message-r .images-frame {
     display: flex;
-    max-width: 30vh;
+    max-width: 50vw;
     flex-wrap: wrap;
     user-select: none;
-    margin-bottom: 1vh;
+    margin-bottom: 1vw;
 }
 
 .contacts-message-r .images-main {
@@ -1395,9 +1503,9 @@ textarea::-moz-scrollbar-thumb:hover {
 .contacts-message-r .images-file {
     align-content: center;
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
-    width: 4vh;
+    border-radius: 1.5vw;
+    margin: 0.5vw;
+    width: 4vw;
     height: fit-content;
     padding: 0;
     border: 0;
@@ -1413,10 +1521,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-r img {
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
+    border-radius: 2.5vw;
+    margin: 1vw;
     border: 0;
-    width: calc(100% - 2vh);
+    width: calc(100% - 2vw);
     transition: 200ms;
     cursor: pointer;
     -webkit-user-drag: none;
@@ -1428,66 +1536,67 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-r .time {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5vh;
+    font-size: 2vw;
     font-weight: 400;
     color: var(--timestamp-message);
     position: absolute;
-    margin-top: 2vh;
+    margin-top: 1vw;
     text-align: right;
-    right: 4.5vh;
+    right: 4.5vw;
 }
 
 .contacts-message-r .unread {
     position: absolute;
-    width: 1.5vh;
-    height: 1.5vh;
+    width: 2vw;
+    height: 2vw;
     background-color: var(--light-gray);
     border-radius: 50%;
-    margin-left: -2vh;  
-    margin-top: -1vh;
+    margin-left: -2vw;  
+    margin-top: -1.5vw;
 }
 
 .contacts-message-l {
     background-color: var(--blue-mid);
     width: -moz-fit-content;
     width: fit-content;
-    margin-left: 1vh;
-    min-width: 3vh;
-    max-width: 30vh;
-    padding-top: 1.5vh;
-    padding-bottom: .5vh;
-    padding-left: 1.5vh;
-    padding-right: 1.5vh;
-    border-radius: 3vh;
+    margin-left: 1vw;
+    margin-top: 1vw;
+    min-width: 5vw;
+    max-width: 55vw;
+    padding-top: 2vw;
+    padding-bottom: .5vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 4vw;
 }
 
 .contacts-message-l .map {
     border: 0;
-    border-radius: 2vh;
-    margin-bottom: -0.5vh;
-    width: 30vh;
-    height: 30vh;
-    margin-bottom: 1vh;
+    border-radius: 2vw;
+    margin-bottom: -0.5vw;
+    width: 50vw;
+    height: 50vw;
+    margin-bottom: 1vw;
 }
 
 .contacts-message-l .text {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 25vh;
+    max-width: 50vw;
     text-align: left;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
-    font-size: 2.5vh;
-    margin-bottom: 1vh;
+    font-size: 4vw;
+    margin-bottom: 1vw;
 }
 
 .contacts-message-l .images-frame {
-    max-width: 50vh;
+    max-width: 50vw;
     display: flex;
     flex-wrap: wrap;
     user-select: none;
-    margin-bottom: 1vh;
+    margin-bottom: 1vw;
 }
 
 .contacts-message-l .images-main {
@@ -1505,9 +1614,9 @@ textarea::-moz-scrollbar-thumb:hover {
 .contacts-message-l .images-file {
     align-content: center;
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
-    width: 4vh;
+    border-radius: 1.5vw;
+    margin: 0.5vw;
+    width: 4vw;
     height: fit-content;
     padding: 0;
     border: 0;
@@ -1523,10 +1632,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-l img {
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
+    border-radius: 2.5vw;
+    margin: 1vw;
     border: 0;
-    width: calc(100% - 2vh);
+    width: calc(100% - 2vw);
     transition: 200ms;
     cursor: pointer;
     -webkit-user-drag: none;
@@ -1538,13 +1647,13 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .contacts-message-l .time {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5vh;
+    font-size: 2vw;
     font-weight: 400;
     color: var(--timestamp-message);
     position: absolute;
-    margin-top: 2vh;
+    margin-top: 1vw;
     text-align: right;
-    left: 4.5vh;
+    left: 4.5vw;
 }
 
 #contacts-dropdown-dots-up:hover {
@@ -1559,27 +1668,28 @@ textarea::-moz-scrollbar-thumb:hover {
     width: fit-content;
     user-select: none;
     cursor: pointer;
+    margin-top: .5vw;
 }
 
 #contacts-top-profile p {
     color: #fff;
-    font-size: 3.5vh;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    margin-top: 1.25vh;
-    margin-left: 0.75vh;
+    margin-top: 2.5vw;
+    margin-left: 1.5vw;
 }
 
 .contacts-top-avatar {
-    width: 4.5vh;
-    height: 4.5vh;
-    margin-top: 1.25vh;
+    width: 8vw;
+    height: 8vw;
+    margin-top: 2vw;
     border-radius: 50%;
-    font-size: 3.5vh;
+    font-size: 6vw;
 }
 
 .contacts-top-avatar-online {
-    border: 0.4vh solid var(--green);
+    border: .6vw solid var(--green);
     box-sizing: border-box;
     border-radius: 50%;
 }
@@ -1593,20 +1703,19 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-bottom {
     position: absolute;
-    width: 64vh;
-    margin-left: 3vh;
-    margin-top: 91.15vh;
+    width: 80vw;
+    margin-left: 2.5vw;
     background-color: var(--blue-mid);
-    border-radius: 3vh;
+    border-radius: 4vw;
     height: fit-content;
 }
 
 #contacts-eq {
     position: absolute;
-    width: 42vh;
-    margin-left: 10vh;
+    width: 42vw;
+    margin-left: 10vw;
     top: 0;
-    height: 6vh;
+    height: 6vw;
     vertical-align: middle;
     align-items: center;
     justify-content: space-between;
@@ -1614,18 +1723,18 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-bottom-textarea {
     font-family: 'Quicksand', sans-serif;
-    font-size: 2.5vh;
+    font-size: 4vw;
     font-weight: 500;
-    height: 3.2vh;
+    height: 4vw;
     color: var(--light-gray);
     border: 0;
     background-color: var(--blue-mid);
-    width: 50vh;
+    width: 63vw;
     resize: none;
     padding: 0;
-    margin-top: 1.5vh;
-    margin-bottom: 0.9vh;
-    margin-left: 2vh;
+    margin-top: 1.7vw;
+    margin-bottom: 0.9vw;
+    margin-left: 2vw;
 }
 
 #contacts-bottom-textarea::placeholder {
@@ -1654,25 +1763,21 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-bottom-2 {
     position: absolute;
-    right: 1.5vh;
-    margin-top: 1.3vh;
-    height: 3.5vh;
-    width: 3.5vh;
+    right: 1vw;
+    margin-top: 2vw;
+    height: 5vw;
+    width: 5vw;
     fill: var(--light-gray);
     transition: 200ms;
     cursor: pointer;
 }
 
-#contacts-bottom-2:hover {
-    opacity: 0.7;
-}
-
 #contacts-attach {
     position: absolute;
-    right: 6vh;
-    top: 0.3vh;
-    height: 4vh;
-    width: 4vh;
+    right: 7.5vw;
+    top: 1vw;
+    height: 5vw;
+    width: 5vw;
     fill: var(--light-gray);
     transition: 200ms;
     cursor: pointer;
@@ -1680,41 +1785,42 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-attach #attach {
     position: absolute;
-    width: 4vh;
-    height: 4vh;
-    padding: 0.7vh;
+    width: 5.5vw;
+    height: 5.5vw;
+    padding: 0.7vw;
     border-radius: 50%;
     fill: var(--light-gray);
     transition: 200ms;
 }
 
 #contacts-attach #clear {
+    display: none;
     position: absolute;
-    width: 1.5vh;
-    height: 1.5vh;
+    width: 1.5vw;
+    height: 1.5vw;
     border-radius: 50%;
     transition: 200ms;
-    margin-top: 0.5vh;
-    margin-left: 2.5vh;
-    border: 0.4vh solid transparent;
+    margin-top: 0.5vw;
+    margin-left: 2.5vw;
+    border: 0.4vw solid transparent;
 }
 
 #contacts-attach #count {
     text-align: center;
     position: absolute;
-    font-size: 1.2vh;
+    font-size: 2vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 1000;
     width: fit-content;
-    padding-left: 0.3vh;
-    padding-right: 0.3vh;
-    min-width: 0.9vh;
-    height: 1.5vh;
-    border-radius: 1.5vh;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    min-width: 0.9vw;
+    height: 3vw;
+    border-radius: 1.5vw;
     transition: 200ms;
-    margin-top: 0.3vh;
-    margin-left: 2.5vh;
-    border: 0.4vh solid var(--blue-mid);
+    margin-top: 0.3vw;
+    margin-left: 3.5vw;
+    border: 0.4vw solid var(--blue-mid);
     background-color: var(--blue-light);
     color: var(--light-gray);
 }
@@ -1724,25 +1830,13 @@ textarea::-moz-scrollbar-thumb:hover {
     color: var(--blue-mid);
 }
 
-#contacts-attach #clear:hover {
-    background-color: var(--red);
-    fill: #fff;
-    stroke: #fff;
-    border: 0.4vh solid var(--blue-mid);
-    border-right: 0.5vh solid var(--blue-mid);
-}
-
-#contacts-attach:hover {
-    opacity: 0.7;
-}
-
 #contacts-bottom-bar {
     position: absolute;
-    margin-left: 1vh;
-    margin-top: 1.25vh;
-    height: 3.5vh;
-    width: 0.3vh;
-    border-radius: 5vh;
+    margin-left: 1vw;
+    margin-top: 2vw;
+    height: 5.5vw;
+    width: .5vw;
+    border-radius: 5vw;
     background-color: var(--light-gray);
     opacity: 0.2;
 }
@@ -1750,7 +1844,7 @@ textarea::-moz-scrollbar-thumb:hover {
 /* rooms */
 
 .room-default-avatar {
-    margin-top: 1.25vh;
+    margin-top: 1.25vw;
     border-radius: 50%;
     background-color: var(--blue-mid-light);
     font-family: 'Quicksand', sans-serif;
@@ -1762,10 +1856,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #rooms-dropdown-dots {
     position: absolute;
-    margin-top: 1.5vh;
-    margin-left: 2vh;
+    margin-top: 2.75vw;
+    margin-left: 3vw;
     width: auto;
-    height: 4vh;
+    height: 6vw;
     cursor: pointer;
 }
 
@@ -1784,31 +1878,29 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-dropdown-menu1 {
     position: absolute;
-    height: 7vh;
-    width: 8vh;
+    height: 11.5vw;
+    width: 12vw;
     background-color: var(--light-gray);
     transition: 200ms;
-    border-top-right-radius: 4vh;
-    border-bottom-right-radius: 4vh;
 }
 
 .rooms-dropdown-menu2 {
     position: absolute;
-    height: 50vh;
-    width: 40vh;
-    left: -40vh;
+    height: 40vh;
+    width: 68vw;
     background-color: var(--light-gray);
     transition: 200ms;
-    border-radius: 3vh;
+    border-radius: 3vw;
     border-top-right-radius: 0;
 }
 
 .rooms-dropdown-avatar {
     position: absolute;
-    margin: 1vh;
-    width: 5vh;
-    height: 5vh;
-    font-size: 3.5vh;
+    margin: 1.7vw;
+    margin-left: 13vw;
+    width: 8vw;
+    height: 8vw;
+    font-size: 6vw;
     user-select: none;
     cursor: pointer;
     transition: 200ms;
@@ -1821,17 +1913,17 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #roooms-dropdown-members {
     position: absolute;
-    height: 34.5vh;
-    width: 40vh;
-    margin-top: 7vh;
+    height: calc(40vh - 10vw);
+    width: 85vw;
+    margin-top: 11.5vw;
 }
 
 .rooms-memeber {
-    width: 38vh;
-    margin: 1vh;
-    height: 8vh;
+    width: 66vw;
+    margin: 1vw;
+    height: 12vw;
     transition: 200ms;
-    border-radius: 2vh;
+    border-radius: 2vw;
 }
 
 .rooms-memeber:hover {
@@ -1840,55 +1932,55 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-memeber-avatar {
     position: absolute;
-    margin: 1.5vh;
-    margin-left: 1vh;
-    height: 5vh;
-    width: 5vh;
+    margin: 1.5vw;
+    margin-left: 1vw;
+    height: 9vw;
+    width: 9vw;
     border-radius: 50%;
     cursor: pointer;
 }
 
 .rooms-memeber-name {
     position: absolute;
-    margin-left: 8vh;
-    font-size: 3vh;
+    margin-left: 12vw;
+    font-size: 4vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     color: var(--blue-light);
-    margin-top: 2vh;
-    width: 21vh;
+    margin-top: 3.5vw;
+    width: 21vw;
     overflow: hidden;
 }
 
 .rooms-memeber-avatar-online {
-    border: 0.5vh solid var(--green);
+    border: 1vw solid var(--green);
     box-sizing: border-box;
 }
 
 .rooms-memeber-admin-on {
     fill: var(--yellow);
     position: absolute;
-    width: 4vh;
-    height: 4vh;
-    margin-left: 33vh;
-    margin-top: 2vh; 
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-left: 57vw;
+    margin-top: 2.8vw; 
 }
 
 .rooms-memeber-admin-off {
     fill: var(--blue-light);
     position: absolute;
-    width: 4vh;
-    height: 4vh;
-    margin-left: 33vh;
-    margin-top: 2vh; 
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-left: 57vw;
+    margin-top: 2.8vw; 
 }
 
 .rooms-memeber-kick {
     position: absolute;
-    width: 4vh;
-    height: 4vh;
-    margin-left: 29vh;
-    margin-top: 2vh; 
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-left: 47vw;
+    margin-top: 2.8vw;
     cursor: pointer;
     fill: var(--light-gray);
     transition: 200ms;
@@ -1899,12 +1991,12 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-dropdown-name {
     position: absolute;
-    height: 4vh;
-    width: 25vh;
-    margin-top: 1.3vh;
-    margin-left: 7vh;
+    height: 4vw;
+    width: 35vw;
+    margin-top: 3vw;
+    margin-left: 22vw;
     border: 0;
-    font-size: 3vh;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     color: var(--blue-light);
@@ -1913,10 +2005,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #rooms-dropdown-exit {
     position: absolute;
-    width: 4vh;
-    height: 4vh;
-    margin-top: 44vh;
-    margin-left: 34vh;
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-top: calc(40vh - 9vw);
+    margin-left: 58vw;
     fill: var(--dropdown-bar);
     cursor: pointer;
     transition: 200ms;
@@ -1929,20 +2021,20 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-dropdown-delete {
     position: absolute;
-    width: 5vh;
-    height: 5vh;
-    margin-top: 43vh;
-    margin-left: 2vh;
+    width: 7vw;
+    height: 7vw;
+    margin-top: calc(40vh - 9vw);
+    margin-left: 2vw;
     fill: var(--dropdown-bar);
     transition: 200ms;
 }
 
 #rooms-dropdown-add {
     position: absolute;
-    width: 4vh;
-    height: 4vh;
-    margin-top: 43.5vh;
-    margin-left: 18vh;
+    width: 6.5vw;
+    height: 6.5vw;
+    margin-top: calc(40vh - 9vw);
+    margin-left: 31vw;
     fill: var(--dropdown-bar);
     transition: 200ms;
 }
@@ -1966,32 +2058,32 @@ textarea::-moz-scrollbar-thumb:hover {
     margin: auto;
     fill: var(--blue-light);
     stroke: var(--blue-light);
-    margin-left: 35vh;
-    margin-top: 1.7vh;
-    width: 3.5vh;
-    height: 3.5vh;
+    margin-left: 60vw;
+    margin-top: 3vw;
+    width: 5vw;
+    height: 5vw;
     cursor: pointer;
-    margin-bottom: 2vh;
+    margin-bottom: 2vw;
     transition: 200ms;
 }
 
 #rooms-dropdown-bar {
     position: absolute;
-    margin-top: 7vh;
-    width: 40vh;
-    height: 0.2vh;
+    margin-top: 11.5vw;
+    width: 68vw;
+    height: 0.2vw;
     background-color: var(--dropdown-bar);
 }
 
 .rooms-date {
-    font-size: 2vh;
+    font-size: 3vw;
     width: fit-content;
     position: absolute;
     color: var(--blue-light);
     font-family: 'Rubik';
-    margin: 2.2vh;
-    margin-left: 4.5vh;
-    margin-top: -2.5vh;
+    margin: 2.2vw;
+    margin-left: 6vw;
+    margin-top: -4vw;
     transition: 200ms;
     opacity: 0;
 }
@@ -1999,12 +2091,12 @@ textarea::-moz-scrollbar-thumb:hover {
 .rooms-message-delete {
     transition: 200ms;
     fill: var(--blue-light);
-    width: 2.5vh;
-    height: 2.5vh;
+    width: 4vw;
+    height: 4vw;
     cursor: pointer;
     position: absolute;
     opacity: 0;
-    margin-left: -3vh;
+    margin-left: -4vw;
 }
 
 .rooms-message-boundary:hover .rooms-date {
@@ -2022,12 +2114,13 @@ textarea::-moz-scrollbar-thumb:hover {
 .rooms-message-boundary {
     transition: 200ms;
     background-color: rgba(0, 0, 0, 0);
-    padding-bottom: 4.5vh;
-    padding-top: 3.5vh;  
-    margin-right: 3vh;
-    margin-left: 3vh;
-    margin-top: 1vh;
-    border-radius: 3vh;
+    padding-bottom: 5vw;
+    padding-top: 5.5vw;  
+    margin-right: 3vw;
+    margin-left: 3vw;
+    margin-top: 1vw;
+    margin-bottom: 2vw;
+    border-radius: 4vw;
 }
 
 .rooms-message-boundary:hover {
@@ -2035,7 +2128,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .rooms-message-r .files {
-    right: 1vh;
+    right: 1vw;
 }
 
 .rooms-message-r {
@@ -2043,34 +2136,34 @@ textarea::-moz-scrollbar-thumb:hover {
     width: -moz-fit-content;
     width: fit-content;
     margin-left: auto;
-    margin-right: 2.5vh;
-    padding-top: 1.5vh;
-    padding-bottom: .5vh;
-    padding-right: 3vh;
-    padding-left: 1.5vh;
-    border-radius: 3vh;
+    margin-right: 4vw;
+    padding-top: 3vw;
+    padding-bottom: .5vw;
+    padding-right: 3vw;
+    padding-left: 2vw;
+    border-radius: 4vw;
     border-top-right-radius: 0;
-    max-width: 35vh;
+    max-width: 60vw;
 }
 
 .rooms-message-r .avatar {
     position: absolute;
-    margin-top: -5vh;
-    right: 2.5vh;
-    height: 6vh;
-    width: 6vh;
+    margin-top: -8vw;
+    right: 2.5vw;
+    height: 8vw;
+    width: 8vw;
     border-radius: 50%;
 }
 
 .rooms-message-r .name {
     position: absolute;
     color: var(--light-gray);
-    font-size: 2vh;
+    font-size: 3vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     text-align: right;
-    margin-top: -4.5vh;
-    right: 9.5vh;
+    margin-top: -8vw;
+    right: 12vw;
 }
 
 .rooms-message-r .say {
@@ -2081,30 +2174,31 @@ textarea::-moz-scrollbar-thumb:hover {
     border: 0;
     display: block;
     margin: auto;
-    border-radius: 2vh;
-    width: 35vh;
-    height: 30vh;
-    margin-bottom: 1vh;
+    border-radius: 2vw;
+    width: 55vw;
+    height: 55vw;
+    margin-bottom: 1vw;
 }
 
 .rooms-message-r .text {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 30vh;
+    max-width: 55vw;
     text-align: left;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
-    font-size: 2.5vh;
-    margin-bottom: 1vh;
+    font-size: 4vw;
+    margin-bottom: 1vw;
+    min-width: 5vw;
 }
 
 .rooms-message-r .images-frame {
     display: flex;
-    max-width: 50vh;
+    max-width: 55vw;
     flex-wrap: wrap;
     user-select: none;
-    margin-bottom: 1vh;
+    margin-bottom: 1vw;
 }
 
 .rooms-message-r .images-main {
@@ -2122,9 +2216,9 @@ textarea::-moz-scrollbar-thumb:hover {
 .rooms-message-r .images-file {
     align-content: center;
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
-    width: 4vh;
+    border-radius: 1.5vw;
+    margin: 0.5vw;
+    width: 25vw;
     height: fit-content;
     padding: 0;
     border: 0;
@@ -2140,10 +2234,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-message-r img {
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
+    border-radius: 3vw;
+    margin: 1vw;
     border: 0;
-    width: calc(100% - 2vh);
+    width: calc(100% - 2vw);
     transition: 200ms;
     cursor: pointer;
     -webkit-user-drag: none;
@@ -2155,85 +2249,85 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-message-r .time {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5vh;
+    font-size: 2vw;
     font-weight: 400;
     color: var(--timestamp-message);
     position: absolute;
-    margin-top: 2vh;
+    margin-top: 1vw;
     text-align: right;
-    right: 7vh;
+    right: 9vw;
 }
 
 .rooms-message-r .unread {
     position: absolute;
-    width: 1.5vh;
-    height: 1.5vh;
+    width: 1.5vw;
+    height: 1.5vw;
     background-color: var(--light-gray);
     border-radius: 50%;
-    margin-left: -2.5vh;  
+    margin-left: -2.5vw;  
 }
 
 .rooms-message-l {
     background-color: var(--blue-mid);
     width: -moz-fit-content;
     width: fit-content;
-    margin-left: 2.5vh;
-    padding-top: 1.5vh;
-    padding-bottom: .5vh;
-    padding-right: 1.5vh;
-    padding-left: 3vh;
-    border-radius: 3vh;
+    margin-left: 4vw;
+    padding-top: 3vw;
+    padding-bottom: .5vw;
+    padding-right: 2vw;
+    padding-left: 3vw;
+    border-radius: 4vw;
     border-top-left-radius: 0;
-    max-width: 35vh;
+    max-width: 60vw;
 }
 
 .rooms-message-l .map {
     border: 0;
-    border-radius: 2vh;
-    margin-bottom: -0.5vh;
-    width: 35vh;
-    height: 30vh;
-    margin-bottom: 1vh;
+    border-radius: 2vw;
+    width: 55vw;
+    height: 55vw;
+    margin-bottom: 1vw;
 }
 
 .rooms-message-l .avatar {
     position: absolute;
-    margin-top: -5vh;
-    left: 2.5vh;
-    height: 6vh;
-    width: 6vh;
+    margin-top: -8vw;
+    left: 2.5vw;
+    height: 8vw;
+    width: 8vw;
     border-radius: 50%;
 }
 
 .rooms-message-l .name {
     position: absolute;
     color: var(--light-gray);
-    font-size: 2vh;
+    font-size: 3vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     text-align: right;
-    margin-top: -4.5vh;
-    left: 9.5vh;
+    margin-top: -8vw;
+    left: 12vw;
 }
 
 .rooms-message-l .text {
     color: #fff;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 30vh;
+    max-width: 55vw;
     text-align: left;
     word-wrap: break-word;
     font-family: 'Rubik', sans-serif;
-    font-size: 2.5vh;
-    margin-bottom: 1vh;
+    font-size: 4vw;
+    margin-bottom: 1vw;
+    min-width: 5vw;
 }
 
 .rooms-message-l .images-frame {
-    max-width: 50vh;
+    max-width: 55vw;
     display: flex;
     flex-wrap: wrap;
     user-select: none;
-    margin-bottom: 1vh;
+    margin-bottom: 1vw;
 }
 
 .rooms-message-l .images-main {
@@ -2251,9 +2345,9 @@ textarea::-moz-scrollbar-thumb:hover {
 .rooms-message-l .images-file {
     align-content: center;
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
-    width: 4vh;
+    border-radius: 1.5vw;
+    margin: 0.5vw;
+    width: 4vw;
     height: fit-content;
     padding: 0;
     border: 0;
@@ -2269,10 +2363,10 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-message-l img {
     vertical-align: middle;
-    border-radius: 1.5vh;
-    margin: 0.5vh;
+    border-radius: 3vw;
+    margin: 1vw;
     border: 0;
-    width: calc(100% - 2vh);
+    width: calc(100% - 2vw);
     transition: 200ms;
     cursor: pointer;
     -webkit-user-drag: none;
@@ -2284,35 +2378,34 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .rooms-message-l .time {
     font-family: 'DM Mono', monospace;
-    font-size: 1.5vh;
+    font-size: 2vw;
     font-weight: 400;
     color: var(--timestamp-message);
     position: absolute;
-    margin-top: 2vh;
+    margin-top: 1vw;
     text-align: right;
-    left: 7vh;
+    left: 9vw;
 }
 
 
 /* audio message */ 
 
 .audio {
-    width: 43vh;
-    height: 6vh;
-    border-radius: 2vh;
-    margin-left: -.5vh;
+    width: 50vw;
+    height: 10vw;
+    border-radius: 2vw;
+    margin-left: -.5vw;
 }
 
 .audio-button {
     position: absolute;
-    margin-top: -0.5vh;
-    width: 5vh;
-    height: 5vh;
-    padding: 0.5vh;
+    width: 8vw;
+    height: 8vw;
     fill: var(--light-gray);
     border-radius: 50%;
     cursor: pointer;
     transition: 200ms;
+    margin-top: .5vw;
 }
 
 .audio-button:hover {
@@ -2323,10 +2416,10 @@ textarea::-moz-scrollbar-thumb:hover {
 .audio-time {
     position: absolute;
     width: fit-content;
-    margin-left: 25vh;
-    margin-top: 1.5vh;
+    margin-left: 40vw;
+    margin-top: 2.3vw;
     text-align: right;
-    font-size: 2vh;
+    font-size: 3.5vw;
     font-family: 'Rubik';
     font-weight: 400;
     color: var(--light-gray)
@@ -2337,72 +2430,72 @@ textarea::-moz-scrollbar-thumb:hover {
     --bar-width: 0%;
     -webkit-appearance: none;
     position: absolute;
-    width: 16vh;
-    height: 0.5vh;
-    border-radius: 0.5vh;
-    margin-left: 7vh;
-    margin-top: 2.5vh;
+    width: 27vw;
+    height: 1vw;
+    border-radius: 0.5vw;
+    margin-left: 10vw;
+    margin-top: 4vw;
     cursor: pointer;
 }
 
 .audio-bar::-webkit-slider-runnable-track {
     background: linear-gradient(90deg, var(--light-gray) 0%, var(--light-gray) var(--bar-width), var(--blue-mid-light) var(--bar-width));
-    height: 1vh;
-    border-radius: 1vh;
+    height: 1vw;
+    border-radius: 1vw;
 }
 
 .audio-bar::-webkit-slider-thumb {
     position: relative;
     -webkit-appearance: none;
     box-sizing: content-box;
-    height: 2vh;
-    width: 2vh;
+    height: 2vw;
+    width: 2vw;
     border-radius: 50%;
     background-color: var(--light-gray);
     cursor: pointer;
-    margin-top: -0.5vh;
+    margin-top: -0.5vw;
     user-select: none;
     transition: 200ms;
 }
 
 .audio-bar:active::-webkit-slider-thumb {
     background-color: #fff;
-    margin-top: -0.65vh;
-    height: 2.3vh;
-    width: 2.3vh;
+    margin-top: -0.65vw;
+    height: 2.3vw;
+    width: 2.3vw;
 }
 
 /* profile */
 
 #profile-bg {
     position: absolute;
-    width: 70vh;
-    height: 12vh;
+    width: 100%;
+    height: 15vw;
     background: linear-gradient(96.27deg, rgba(23, 89, 151, 0.5) 12.87%, rgba(80, 41, 162, 0.5) 66.53%);
 }
 
 .profile-avatar {
     position: absolute;
-    width: 15vh;
-    height: 15vh;
-    margin-top: 4.5vh;
-    margin-left: 6vh;
-    border-radius: 15vh;
+    width: 20vw;
+    height: 20vw;
+    margin-top: 5vw;
+    margin-left: 5vw;
+    border-radius: 50%;
     user-select: none;
-    /* box-shadow: 0.4vh 0.4vh 1vh rgba(0, 0, 0, 0.205); */
+    /* box-shadow: 0.4vw 0.4vw 1vw rgba(0, 0, 0, 0.205); */
 }
 
 #profile-avatar-edit {
     position: absolute;
-    width: 3vh;
-    height: 3vh;
-    padding: 0.5vh;
+    width: 3vw;
+    height: 3vw;
+    padding: 0.5vw;
     fill: var(--light-gray);
     background-color: var(--blue-light);
     border-radius: 50%;
     cursor: pointer;
-    margin-left: 17vh;
-    margin-top: 15.5vh;
+    margin-left: 17vw;
+    margin-top: 15.5vw;
     transition: 200ms;
 }
 
@@ -2414,39 +2507,39 @@ textarea::-moz-scrollbar-thumb:hover {
 #profile-name {
     display: flex;
     position: absolute;
-    font-size: 3.5vh;
+    font-size: 5vw;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    margin-top: 7.4vh;
-    margin-left: 22.5vh;
+    margin-top: 8.7vw;
+    margin-left: 27vw;
     color: #fff;
 }
 
 #profile-online {
     background-color: var(--green);
-    width: 1.6vh;
-    height: 1.6vh;
+    width: 2vw;
+    height: 2vw;
     border-radius: 50%;
-    margin-top: 1.5vh;
-    margin-left: 1vh;
+    margin-top: 2.2vw;
+    margin-left: 1.5vw;
 }
 
 #profile-id {
     position: absolute;
     color: var(--blue-mid-light);
     font-family: 'DM Mono', monospace;
-    font-size: 1.7vh;
+    font-size: 2.5vw;
     font-weight: 400;
-    margin-top: 12.7vh;
-    margin-left: 22.5vh;
+    margin-top: 15.5vw;
+    margin-left: 27vw;
 }
 
 #profile-dropdown-dots {
     position: absolute;
-    margin-top: 1vh;
-    margin-left: 64vh;
+    margin-top: 2vw;
+    margin-left: 76vw;
     width: auto;
-    height: 4vh;
+    height: 6vw;
     cursor: pointer;
 }
 
@@ -2465,14 +2558,13 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .profile-dropdown-menu {
     position: absolute;
-    width: 8vh;
+    width: 12vw;
     background-color: var(--light-gray);
-    margin-left: 62vh;
-    transition: 1400ms;
-    height: 22vh;
-    padding-top: 5vh;
-    border-bottom-left-radius: 4vh;
-    border-bottom-right-radius: 4vh;
+    margin-left: 73vw;
+    height: 36vw;
+    padding-top: 5vw;
+    border-bottom-left-radius: 6vw;
+    border-bottom-right-radius: 6vw;
 }
 
 .profile-dropdown-item {
@@ -2480,10 +2572,10 @@ textarea::-moz-scrollbar-thumb:hover {
     margin: auto;
     fill: var(--blue-light);
     stroke: var(--blue-light);
-    width: 4.5vh;
-    height: 4.5vh;
+    width: 7vw;
+    height: 7vw;
     cursor: pointer;
-    margin-bottom: 2vh;
+    margin-bottom: 2.5vw;
     transition: 200ms;
 
 }
@@ -2494,7 +2586,7 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .profile-dropdown-notify2 {
-    padding-left: 0.3vh;
+    padding-left: 0.3vw;
 }
 
 .profile-dropdown-edit:hover, .profile-dropdown-notify:hover, .profile-dropdown-notify2:hover {
@@ -2508,34 +2600,34 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-dropdown-bar {
     background-color: var(--dropdown-bar);
-    width: 6vh;
+    width: 7vw;
     margin: auto;
     display: block;
-    height: 0.2vh;
-    margin-top: 1vh;
-    margin-bottom: 1.5vh;
+    height: 0.2vw;
+    margin-top: 5vw;
+    margin-bottom: 2.5vw;
 }
 
 #profile-newpost {
     position: absolute;
-    height: 5vh;
-    width: 13.5vh;
+    height: 6vw;
+    width: 20vw;
     background-color: var(--blue-light);
     color: var(--light-gray);
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 2vh;
+    font-size: 3.2vw;
     text-align: center;
-    border-radius: 2vh;
-    margin-top: 14.5vh;
-    margin-left: 54.3vh;
+    border-radius: 2vw;
+    margin-top: 19vw;
+    margin-left: 61vw;
     cursor: pointer;
     transition: 200ms;
     user-select: none;
 }
 
 #profile-newpost p {
-    margin-top: 1.3vh;
+    margin-top: 1.3vw;
 }
 
 #profile-newpost:hover {
@@ -2545,18 +2637,18 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-write {
     position: absolute;
-    width: 4.5vh;
-    height: 3.5vh;
-    padding: 0.75vh;
-    padding-top: 0.9vh;
-    padding-bottom: 0.6vh;
-    border-radius: 2vh;
-    margin-top: 14.5vh;
-    margin-left: 54.3vh;
+    height: 5vw;
+    width: 7vw;
     background-color: var(--blue-light);
-    fill: var(--light-gray);
+    text-align: center;
+    border-radius: 2vw;
+    margin-top: 19vw;
+    margin-left: 63vw;
+    padding: .5vw;
     cursor: pointer;
     transition: 200ms;
+    user-select: none;
+    fill: var(--light-gray);
 }
 
 #profile-write:hover {
@@ -2566,16 +2658,18 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-call {
     position: absolute;
-    width: 4.5vh;
-    height: 3.5vh;
-    padding: 0.75vh;
-    border-radius: 2vh;
-    margin-top: 14.5vh;
-    margin-left: 61.8vh;
+    height: 4vw;
+    width: 6vw;
     background-color: var(--blue-light);
-    fill: var(--light-gray);
+    text-align: center;
+    border-radius: 2vw;
+    margin-top: 19vw;
+    margin-left: 73vw;
+    padding: 1vw;
     cursor: pointer;
     transition: 200ms;
+    user-select: none;
+    fill: var(--light-gray);
 }
 
 #profile-call:hover {
@@ -2585,24 +2679,24 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-add {
     position: absolute;
-    height: 5vh;
-    width: 13.5vh;
+    height: 6vw;
+    width: 12vw;
     background-color: var(--blue-light);
     color: var(--light-gray);
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 2.5vh;
+    font-size: 3.2vw;
     text-align: center;
-    border-radius: 2vh;
-    margin-top: 14.5vh;
-    margin-left: 54.3vh;
+    border-radius: 2vw;
+    margin-top: 19vw;
+    margin-left: 69vw;
     cursor: pointer;
     transition: 200ms;
     user-select: none;
 }
 
 #profile-add p {
-    margin-top: 1vh;
+    margin-top: 1vw;
 }
 
 #profile-add:hover {
@@ -2613,40 +2707,40 @@ textarea::-moz-scrollbar-thumb:hover {
 #profile-status {
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 2vh;
+    font-size: 3.3vw;
     text-align: left;
     position: absolute;
-    height: 4vh;
-    min-width: 4vh;
-    max-width: 27vh;
+    height: 6vw;
+    min-width: 4vw;
+    max-width: 35vw;
     background-color: var(--blue-mid);
     color: #fff;
-    border-radius: 4vh;
-    margin-top: 15.5vh;
-    margin-left: 22.5vh;
-    padding-left: 1.5vh;
-    padding-right: 1.5vh;
+    border-radius: 4vw;
+    margin-top: 19vw;
+    margin-left: 26vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
 }
 
 #profile-status p {
-    margin-top: 0.7vh;
+    margin-top: 0.7vw;
 }
 
 #profile-status-input {
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 2vh;
+    font-size: 2vw;
     text-align: left;
     position: absolute;
-    min-width: 4vh;
+    min-width: 4vw;
     height: auto;
-    width: 27vh;
+    width: 27vw;
     opacity: 0.3;
-    border-radius: 4vh;
-    margin-top: 15.4vh;
-    margin-left: 22.5vh;
-    padding-left: 1.5vh;
-    padding-right: 1.5vh;
+    border-radius: 4vw;
+    margin-top: 15.4vw;
+    margin-left: 22.5vw;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
     border: 0;
     resize: none;
 }
@@ -2657,10 +2751,11 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 #profile-posts-bar {
+    display: none;
     position: absolute;
-    margin-top: -1.8vh;
-    width: 62vh;
-    margin-left: 4vh;
+    margin-top: -1.8vw;
+    width: 62vw;
+    margin-left: 4vw;
     transition: 200ms;
     height: 1px;
     background-color: var(--blue-mid);
@@ -2668,32 +2763,31 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #profile-posts {
     position: absolute;
-    margin-top: 22vh;
-    width: 70vh;
-    height: 76vh;
+    margin-top: 28vw;
+    width: 85vw;
+    height: calc(100vh - 45vw);
     overflow-y: scroll;
     overflow-x: hidden;
-    padding-top: 2vh;
-    padding-bottom: 0vh;
+    padding-top: 2vw;
 }
 
 .profile-post {
     background-color: var(--blue-mid);
-    width: 60vh;
-    margin-bottom: 8vh;
-    margin-left: 4vh;
-    padding: 1vh;
-    border-radius: 2.7vh;
+    width: 75vw;
+    margin-bottom: 9vw;
+    margin-left: 4vw;
+    padding: 1vw;
+    border-radius: 4vw;
     transition: 200ms;
 }
 
 ::-webkit-scrollbar {
-    border-radius: 4vh;
-    width: 0.5vh;
+    border-radius: 4vw;
+    width: 0.5vw;
 }
 
 #profile-posts:hover::-webkit-scrollbar-thumb {
-    border-radius: 1vh;
+    border-radius: 1vw;
     background-color: var(--blue-mid);
 }
 
@@ -2702,12 +2796,12 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 ::-moz-scrollbar {
-    border-radius: 4vh;
-    width: 0.5vh;
+    border-radius: 4vw;
+    width: 0.5vw;
 }
 
 #profile-posts:hover::-moz-scrollbar-thumb {
-    border-radius: 1vh;
+    border-radius: 1vw;
     background-color: var(--blue-mid);
 }
 
@@ -2716,59 +2810,59 @@ textarea::-moz-scrollbar-thumb:hover {
 }
 
 .profile-post-avatar {
-    height: 3.5vh;
-    width: 3.5vh;
-    margin: 0.5vh;
+    height: 5vw;
+    width: 5vw;
+    margin: 1vw;
     border-radius: 50%;
 }
 
 .profile-post-time {
     position: absolute;
     display: inline-block;
-    margin-left: 5vh;
-    margin-top: -4vh;
-    margin-bottom: 0.5vh;
+    margin-left: 8vw;
+    margin-top: -6vw;
+    margin-bottom: 0.5vw;
     font-family: 'DM Mono', monospace;
     font-weight: 300;
-    font-size: 1.5vh;
+    font-size: 2.5vw;
     color: var(--blue-mid-light);
 }
 
 .profile-post-title {
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    font-size: 2.3vh;
+    font-size: 5vw;
     color: #fff;
-    margin: 2.25vh;
+    margin: 2.25vw;
     margin-top: 0;
-    margin-bottom: 0.5vh;
+    margin-bottom: 0.5vw;
     word-wrap: break-word;
 }
 
 .profile-post-text {
     font-family: 'Quicksand', sans-serif;
     font-weight: 500;
-    font-size: 1.5vh;
+    font-size: 4vw;
     color: var(--light-gray);
-    margin: 2.25vh;
+    margin: 2.25vw;
     margin-top: 0;
-    margin-bottom: 1vh;
+    margin-bottom: 1vw;
     word-wrap: break-word;
 }
 
 .profile-post-imageframe {
-    margin: 2.25vh;
+    margin: 2.25vw;
     margin-top: 0;
-    margin-bottom: 0.5vh;
+    margin-bottom: 0.5vw;
 }
 
 .profile-post-delete {
     position: absolute;
-    margin-left: 56.3vh;
-    margin-top: -4vh;
-    fill: none;
-    width: 2.5vh;
-    height: 2.5vh;
+    margin-left: 69vw;
+    margin-top: -6vw;
+    fill: var(--blue-dimm);
+    width: 4.5vw;
+    height: 4.5vw;
     cursor: pointer;
     opacity: 0.7;
     transition: 200ms;
@@ -2785,22 +2879,22 @@ textarea::-moz-scrollbar-thumb:hover {
 
 .profile-post-buttons {
     position: absolute;
-    width: 6.2vh;
-    height: 5vh;
-    margin-top: 1vh;
-    margin-left: 2vh;
+    width: 9vw;
+    height: 7vw;
+    margin-top: 1vw;
+    margin-left: 3vw;
     background-color: var(--blue-light);
-    border-bottom-left-radius: 2vh;
-    border-bottom-right-radius: 2vh;
+    border-bottom-left-radius: 2vw;
+    border-bottom-right-radius: 2vw;
 }
 
 .profile-post-share {
     position: absolute;
     fill: var(--light-gray);
-    width: 3.8vh;
-    height: 3.8vh;
-    margin-left: 6.5vh;
-    margin-top: 0.1vh;
+    width: 3.8vw;
+    height: 3.8vw;
+    margin-left: 6.5vw;
+    margin-top: 0.1vw;
     cursor: pointer;
     transition: 200ms;
 }
@@ -2808,10 +2902,10 @@ textarea::-moz-scrollbar-thumb:hover {
 .profile-post-liked {
     position: absolute;
     fill: var(--yellow);
-    width: 3.8vh;
-    height: 3.8vh;
-    margin-left: 1.2vh;
-    margin-top: 0.3vh;
+    width: 6vw;
+    height: 6vw;
+    margin-left: 1.4vw;
+    margin-top: 0.4vw;
     cursor: pointer;
     transition: 200ms;
 }
@@ -2820,15 +2914,15 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     font-family: 'Quicksand', sans-serif;
     font-weight: 1000;
-    font-size: 1.4vh;
+    font-size: 2.2vw;
     background-color: var(--light-gray);
     color: var(--blue-light);
-    border-radius: 1vh;
-    padding-left: 0.4vh;
-    padding-right: 0.4vh;
-    padding-bottom: 0.1vh;
-    line-height: 1.5vh;
-    margin-left: 3.6vh;
+    border-radius: 2vw;
+    padding-left: 0.6vw;
+    padding-right: 0.6vw;
+    padding-bottom: 0.1vw;
+    line-height: 2.2vw;
+    margin-left: 5vw;
     text-align: left;
     user-select: none;
 }
@@ -2836,10 +2930,10 @@ textarea::-moz-scrollbar-thumb:hover {
 .profile-post-unliked {
     position: absolute;
     fill: var(--light-gray);
-    width: 3.8vh;
-    height: 3.8vh;
-    margin-left: 1.2vh;
-    margin-top: 0.3vh;
+    width: 6vw;
+    height: 6vw;
+    margin-left: 1.4vw;
+    margin-top: 0.4vw;
     cursor: pointer;
     transition: 200ms;
 }
@@ -2864,12 +2958,14 @@ textarea::-moz-scrollbar-thumb:hover {
     position: absolute;
     font-family: 'Quicksand', sans-serif;
     font-weight: 900;
-    font-size: 6vh;
+    font-size: 8vw;
     color: var(--blue-light);
     user-select: none;
-    margin-top: 20vh;
-    width: 69vh;
+    width: 69vw;
     text-align: center;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30vh;
 }
 
 /* auth */
@@ -2882,16 +2978,18 @@ a {
 #auth-button {
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    font-size: 2.55vh;
+    font-size: 5vw;
     color: var(--blue-mid-light);
     margin: auto;
-    margin-top: 5vh;
-    width: 32vh;
-    height: 5vh;
-    border-radius: 5vh;
+    margin-top: 5vw;
+    margin-left: 50%;
+    transform: translateX(calc(-50% - 7.5vw));
+    width: 60vw;
+    height: 8vw;
+    border-radius: 5vw;
     background-color: var(--blue-mid);
     text-align: center;
-    line-height: 5vh;
+    line-height: 8vw;
     cursor: pointer;
     user-select: none;
     transition: 200ms;
@@ -2927,11 +3025,12 @@ a {
     color: #fff;
     font-family: 'Quicksand', sans-serif;
     font-weight: 1000;
-    font-size: 9vh;
+    font-size: 15vw;
     user-select: none;
-    width: 50vh;
     text-align: center;
-    margin-top: 15vh;
+    margin-top: 15vw;
+    margin-left: -15vw;
+    width: 100vw;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; 
     -moz-background-clip: text;

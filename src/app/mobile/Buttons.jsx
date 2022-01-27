@@ -1,10 +1,10 @@
 const React = require('react');
-const Attachs = require('./Files.js');
+const Attachs = require('../Files.js');
 
 // import svg
-import SettingsButtonCircle from './graphics/settings-button-circle.jsx';
-import AttachIcon from './graphics/icon-attach.jsx';
-import CloseIcon from './graphics/icon-close.jsx';
+import SettingsButtonCircle from '../graphics/settings-button-circle.jsx';
+import AttachIcon from '../graphics/icon-attach.jsx';
+import CloseIcon from '../graphics/icon-close.jsx';
 
 
 function MenuButton (props) {
@@ -45,8 +45,8 @@ function SettingsButton (props) {
 
     return (
         <div className={classes.join(' ')} onClick={toggle}>
-            <p className='settings-text-small' style={{marginLeft: '-6.5vh'}}>anyone</p>
-            <p className='settings-text-small' style={{marginLeft: '8vh'}}>contacts only</p>
+            <p className='settings-text-small' style={{marginLeft: '-11vw'}}>anyone</p>
+            <p className='settings-text-small' style={{marginLeft: '10vw'}}>contacts only</p>
             <SettingsButtonCircle className={circleClasses.join(' ')} />
         </div>
     ); 
