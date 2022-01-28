@@ -3052,6 +3052,7 @@ a {
 /* logo animation */
 
 .css-selector {
+    background-color: #ca99bc;
     background: linear-gradient(45deg, #ca99bc, #5764d6);
     background-size: 400% 400%;
     -webkit-animation: AnimationName 10s ease infinite;
