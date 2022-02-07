@@ -2877,6 +2877,7 @@ textarea::-moz-scrollbar-thumb:hover {
 a {
     text-decoration: none;
     color: inherit;
+    fill: inherit;
 }
 
 #auth-button {
@@ -2884,8 +2885,9 @@ a {
     font-weight: 700;
     font-size: 2.55vh;
     color: var(--blue-mid-light);
+    fill: var(--blue-mid-light);
     margin: auto;
-    margin-top: 5vh;
+    margin-top: 2vh;
     width: 32vh;
     height: 5vh;
     border-radius: 5vh;
@@ -2900,6 +2902,7 @@ a {
 #auth-button:hover {
     background-color: var(--blue-light);
     color: var(--light-gray);
+    fill: var(--light-gray);
 }
 
 #auth-button:hover .asb{
@@ -2922,6 +2925,16 @@ a {
     transition: 200ms;
 }
 
+
+#auth-mail-icon {
+    position: absolute;
+    fill: inherit;
+    margin-top: .7vh;
+    margin-left: -3.5vh;
+    width: 5vh;
+    height: 5vh;
+}
+
 #auth-logo {
     margin: auto;
     color: #fff;
@@ -2932,6 +2945,7 @@ a {
     width: 50vh;
     text-align: center;
     margin-top: 15vh;
+    margin-bottom: 4vh;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; 
     -moz-background-clip: text;

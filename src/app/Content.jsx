@@ -25,6 +25,7 @@ import SoundStopIcon from './graphics/icon-sound-stop.jsx';
 import PlayIcon from './graphics/icon-play.jsx';
 import PauseIcon from './graphics/icon-pause.jsx';
 import MessageIcon from './graphics/icon-message.jsx';
+import EmailIcon from './graphics/icon-email.jsx';
 
 const getGeo = () => {
     return new Promise((res, rej) => {
@@ -80,7 +81,7 @@ function Content (props) {
             showMenu = <SettingsFrame data={props.data} setAuth={props.setAuth} alert={props.alert} />;
             break;
         default:
-            showMenu = <AuthFrame setAuth={props.setAuth} placeholder='Type here...' />;
+            showMenu = <AuthFrame setAuth={props.setAuth} menu={props.menu} placeholder='Type here...' />;
     }
 
     return (<>
@@ -109,6 +110,9 @@ function AuthFrame (props) {
                 <span className='asg'>L</span>
                 <span className='asr'>E</span>
             </a>
+        </div>
+        <div id='auth-button' onClick={() => props.menu.set({type: 'auth', id: 'mail'})}>
+            <a style={{paddingRight: '4vh'}}>SIGN IN WITH MAIL</a><EmailIcon id='auth-mail-icon' />
         </div>
         </>
     );

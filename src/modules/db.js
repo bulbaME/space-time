@@ -277,13 +277,13 @@ class DB {
 				},
 
 				// change user avatar
-				avatar(userId, data) {
+				async avatar(userId, data) {
 					if(!data.data || !data.type) return;
 
 					const imgType = data.type.slice(6);
 					const path = `avatars/${userId}.${imgType}`;
 					user_.users.updateOne({ id: userId }, { $set: { avatar_url: path }});
-					return firestore.save(path, data.data);
+					return await firestore.save(path, data.data);
 				},
 
 				// change user status

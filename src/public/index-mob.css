@@ -40,10 +40,9 @@ body, #root {
 
 #sidebar-frame {
     height: 100vh;
-    width: 85vw;
+    width: 100vw;
     opacity: .7;
-    right: 0;
-    position: fixed;
+    position: absolute;
     background-color: black;
     transition: 300ms;
 }
@@ -1709,6 +1708,13 @@ textarea::-moz-scrollbar-thumb:hover {
     border-radius: 50%;
 }
 
+.contacts-top-avatar-call {
+    border: .6vw solid transparent;
+    box-sizing: border-box;
+    border-radius: 50%;
+    transition: 100ms;
+}
+
 #contacts-bottom {
     position: absolute;
     width: 80vw;
@@ -1720,9 +1726,9 @@ textarea::-moz-scrollbar-thumb:hover {
 
 #contacts-eq {
     position: absolute;
-    width: 42vw;
-    margin-left: 10vw;
-    top: 0;
+    width: 50vw;
+    margin-left: 14vw;
+    top: 1vw;
     height: 6vw;
     vertical-align: middle;
     align-items: center;
@@ -3027,6 +3033,17 @@ a {
 #auth-button span {
     transition: 200ms;
 }
+
+#auth-mail-icon {
+    position: absolute;
+    fill: inherit;
+    margin-top: 1.3vw;
+    margin-left: -3.5vw;
+    width: 6vw;
+    height: 6vw;
+    fill: var(--blue-mid-light);
+}
+
 
 #auth-logo {
     margin: auto;

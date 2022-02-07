@@ -23,7 +23,7 @@ function SideBar (props) {
         return `Call ${minutes.length > 1 ? minutes:`0${minutes}`}:${seconds.length > 1 ? seconds:`0${seconds}`}`;
     }
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         props.data.socket.loadData({ type: 'chats' });
         props.data.socket.loadData({ type: 'rooms' });
         // data.user.contacts.forEach(v => props.data.socket.loadData({ type: 'profile', id: v }));

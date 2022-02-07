@@ -26,6 +26,7 @@ import SoundStopIcon from '../graphics/icon-sound-stop.jsx';
 import PlayIcon from '../graphics/icon-play.jsx';
 import PauseIcon from '../graphics/icon-pause.jsx';
 import MessageIcon from '../graphics/icon-message.jsx';
+import EmailIcon from '../graphics/icon-email.jsx';
 
 const getGeo = () => {
     return new Promise((res, rej) => {
@@ -81,7 +82,7 @@ function ContentM (props) {
             showMenu = <SettingsFrame data={props.data} setAuth={props.setAuth} alert={props.alert} />;
             break;
         default:
-            showMenu = <AuthFrame setAuth={props.setAuth} placeholder='Type here...' />;
+            showMenu = <AuthFrame setAuth={props.setAuth} menu={props.menu} placeholder='Type here...' />;
     }
 
     return (<>
@@ -110,6 +111,9 @@ function AuthFrame (props) {
                 <span className='asg'>L</span>
                 <span className='asr'>E</span>
             </a>
+        </div>
+        <div id='auth-button' onClick={() => props.menu.set({type: 'auth', id: 'mail'})}>
+            <a style={{paddingRight: '5vw'}}>SIGN IN WITH MAIL</a><EmailIcon id='auth-mail-icon' />
         </div>
         </>
     );
@@ -588,7 +592,7 @@ function ContactsFrame (props) {
                 //                                                                                                                                                                                                                                                                                                                                                                                                            too long? 😯
             }
             <CallIcon id='contacts-call' className={props.data.socket.callData.current === profile.id && props.data.socket.callData.state ? 'contacts-call-active':'contacts-call-unactive'} onClick={profile.privacy.call === 'all' || profile.in_contacts || props.data.socket.callData.state === 2 ? () => props.data.socket.call(props.data.socket.callData.current === profile.id && props.data.socket.callData.state ? 'end':'start', profile.id):null} />
-            <div id='contacts-top-profile' onClick={() => props.menu.set({ type: 'profile', id: profile.id })}><Avatar className={'contacts-top-avatar' + (profile.online ? ' contacts-top-avatar-online':'')} url={profile.avatar_url} /><p>{profile.name}</p></div></div>
+            <div id='contacts-top-profile' onClick={() => props.menu.set({ type: 'profile', id: profile.id })}><Avatar className={'contacts-top-avatar' + (props.data.socket.callData.state === 2 && profile.id === props.data.socket.callData.current ? ' contacts-top-avatar-call' : profile.online ? ' contacts-top-avatar-online':'')} url={profile.avatar_url} /><p>{profile.name}</p></div></div>
         <div id='contacts-bottom'>
             <DynamicTextarea ref={inputRef} id='contacts-bottom-textarea' disabled={!data.user.contacts.includes(profile.id) || profile.blocked || rec || (!profile.in_contacts && profile.privacy.write === 'contacts')} onKeyUp={onKeyPress} maxLength='500' placeholder={!profile.in_contacts && profile.privacy.write === 'contacts' ? `${profile.name} is unreachable`:(data.user.contacts.includes(profile.id) && !profile.blocked ? 'Type here...':(profile.blocked ? `${profile.name} blocked you`:`Add ${profile.name} to write him`))} maxRows='7' onChange={inputOnChange} onHeightChange={onHeightChange} />
             <div id='contacts-eq' ref={eqElem} style={{display: rec ? 'flex':'none'}} />
